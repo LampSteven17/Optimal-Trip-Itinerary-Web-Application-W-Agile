@@ -2,4 +2,4 @@
 
 | name | eID | GitHub Username | Email |
 |------|-----|-----------------|-------|
-| First Last | eID | mygit | eID@colostate.edu |
+| Austin Soriano | asorian | asoriano12 | asorian@rams.colostate.edu or asori@mabasori.com |

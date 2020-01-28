@@ -1,4 +1,4 @@
-# t## - team name
+# t10 - Two Hands Up
 
 | name | eID | GitHub Username | Email |
 |------|-----|-----------------|-------|

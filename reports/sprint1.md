@@ -1,9 +1,9 @@
-# Sprint # - *your team number* - *your team name*
+# Sprint # - t10 - *Two Hands Up*
 
-## Goal
+## Goal: Finish About Epic and Where Am I Epic
 
 ### Where Am I?
-### Sprint Leader: *firstname lastname*
+### Sprint Leader: Austin
 
 ## Definition of Done
 
@@ -22,17 +22,17 @@
 
 Epics planned for this release.
 
-* *## title*
-*
+* 24 - Where Am I
+* 23 About
 
 
 ## Metrics
 
 | Statistic | # Planned | # Completed |
 | --- | ---: | ---: |
-| Epics | *count* | *count* |
-| Tasks |  *count*   | *count* | 
-| Story Points |  *count*  | *count* | 
+| Epics | 4 | *count* |
+| Tasks |  17   | *count* | 
+| Story Points |  20 | *count* | 
 
 
 ## Scrums
@@ -50,12 +50,28 @@ Epics planned for this release.
 * 
 
 #### Incomplete epics in Sprint Backlog 
-* *epic number and name*: explanation
-*
+* *Sprint Number*: explanation
+* Where Am I : Just started
+* About : Just started
+* Where Is : Just started
+* Server Support : Just started
+
 
 #### What went well
 * 
 *
+
+#### Problems encountered and resolutions
+* 
+*
+
+## Retrospective
+
+#### What went well
+
+#### Potential improvements
+
+#### What we will change next time
 
 #### Problems encountered and resolutions
 * 

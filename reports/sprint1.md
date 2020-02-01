@@ -31,25 +31,25 @@ Epics planned for this release.
 | Statistic | # Planned | # Completed |
 | --- | ---: | ---: |
 | Epics | 4 | *count* |
-| Tasks |  17   | *count* | 
-| Story Points |  20 | *count* | 
+| Tasks |  17   | *count* |
+| Story Points |  20 | *count* |
 
 
 ## Scrums
 
 | Date | Tasks closed  | Tasks in progress | Impediments |
 | :--- | :--- | :--- | :--- |
-| *date* | *#task, ...* | *#task, ...* | *none* | 
+| *01/21/2020* | 23 | 3 | *none* | 
 
 
 
 ## Review
 
-#### Completed epics in Sprint Backlog 
+#### Completed epics in Sprint Backlog
 * *epic number and name*:  comments
-* 
+*
 
-#### Incomplete epics in Sprint Backlog 
+#### Incomplete epics in Sprint Backlog
 * *Sprint Number*: explanation
 * Where Am I : Just started
 * About : Just started
@@ -58,11 +58,11 @@ Epics planned for this release.
 
 
 #### What went well
-* 
+*
 *
 
 #### Problems encountered and resolutions
-* 
+*
 *
 
 ## Retrospective
@@ -74,7 +74,7 @@ Epics planned for this release.
 #### What we will change next time
 
 #### Problems encountered and resolutions
-* 
+*
 *
 
 ## Retrospective

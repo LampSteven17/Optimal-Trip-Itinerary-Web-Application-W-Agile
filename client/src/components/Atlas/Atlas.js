@@ -46,7 +46,6 @@ export default class Atlas extends Component {
   }
 
   renderLeafletMap() {
-    console.log(this.getCurrentLocation());
     return (
         <Map center={MAP_CENTER_DEFAULT}
              zoom={MAP_ZOOM_MIN}

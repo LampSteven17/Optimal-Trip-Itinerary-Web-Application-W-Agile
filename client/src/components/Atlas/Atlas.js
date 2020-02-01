@@ -46,6 +46,7 @@ export default class Atlas extends Component {
   }
 
   renderLeafletMap() {
+    console.log(this.getCurrentLocation());
     return (
         <Map center={MAP_CENTER_DEFAULT}
              zoom={MAP_ZOOM_MIN}
@@ -88,8 +89,13 @@ export default class Atlas extends Component {
   }
 
   getCurrentLocation() {
-    let position = (pos) => { return {"latitude": pos.coords.latitude, "longitude": pos.coords.longitude}};
-    navigator.geolocation.getCurrentPosition(position);
+    let position = {latitude: null, longitude: null};
+    let helperFunction = (pos) => {
+      position.latitude = pos.coords.latitude;
+      position.longitude = pos.coords.longitude;
+    };
+
+    navigator.geolocation.getCurrentPosition(helperFunction);
     return position;
   }
 }

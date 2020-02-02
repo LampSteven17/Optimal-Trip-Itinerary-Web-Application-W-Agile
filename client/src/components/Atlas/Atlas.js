@@ -86,4 +86,15 @@ export default class Atlas extends Component {
       );
     }
   }
+
+  getCurrentLocation() {
+    let position = {latitude: null, longitude: null};
+    let helperFunction = (pos) => {
+      position.latitude = pos.coords.latitude;
+      position.longitude = pos.coords.longitude;
+    };
+
+    navigator.geolocation.getCurrentPosition(helperFunction);
+    return position;
+  }
 }

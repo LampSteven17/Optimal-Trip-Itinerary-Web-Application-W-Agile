@@ -62,6 +62,22 @@ export default class About extends Component {
                   </CardBody>
               </Card>
           </Col>
+
+          <Col>
+              <Card style={{
+                  width: '15rem'
+              }}>
+                  <CardImg top width="100%" src="src/components/About/teamImages/cade_image.jpg" alt="blank" />
+                  <CardBody>
+                      <CardTitle><strong>Cade McCumber</strong></CardTitle>
+                      <CardText>
+                          My name is Cade, currently a Junior undergrad at CSU pursuing Computer Science.
+                          I occasionally enjoy exercise, cooking and arguing about art and music with everyone
+                          around me.
+                      </CardText>
+                  </CardBody>
+              </Card>
+          </Col>
       </Row>
     </Container>)
   }

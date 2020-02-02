@@ -46,6 +46,22 @@ export default class About extends Component {
             </CardBody>
           </Card>
         </Col>
+
+          <Col>
+              <Card style={{
+                  width: '15rem'
+              }}>
+                  <CardImg top width="100%" src="src/components/About/teamImages/StevenLampImg.jpg" alt="blank" />
+                  <CardBody>
+                      <CardTitle><strong>Steven Lamp</strong></CardTitle>
+                      <CardText>
+                          Hello, my name is Steven! I am a Junior CS student at CSU. I
+                          avidly pursue topics in CyberSecurity. I am also a drummer for local bands
+                          and enjoy any and all nerdy things! If you see me out and about, give me a shout!
+                      </CardText>
+                  </CardBody>
+              </Card>
+          </Col>
       </Row>
     </Container>)
   }

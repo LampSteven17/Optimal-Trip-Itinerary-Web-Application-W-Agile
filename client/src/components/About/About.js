@@ -33,7 +33,7 @@ export default class About extends Component {
       <Row>
         <Col>
           <Card style={{
-              width: '18rem'
+              width: '15rem'
             }}>
             <CardImg top width="100%" src="src/components/About/teamImages/AustinSorianoImg.jpg" alt="blank" />
             <CardBody>

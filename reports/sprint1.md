@@ -39,7 +39,8 @@ Epics planned for this release.
 
 | Date | Tasks closed  | Tasks in progress | Impediments |
 | :--- | :--- | :--- | :--- |
-| *01/21/2020* | 23 | 3 | *none* | 
+| *01/21/2020* | 23 | 3 | *none* |
+| *02/03/2020* | 4 | 48 | *none* |
 
 
 

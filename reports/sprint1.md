@@ -40,7 +40,7 @@ Epics planned for this release.
 | Date | Tasks closed  | Tasks in progress | Impediments |
 | :--- | :--- | :--- | :--- |
 | *01/21/2020* | 23 | 3 | *none* |
-| *02/03/2020* | 4 | 48 | *none* |
+| *02/03/2020* | 48 | 4 | *none* |
 
 
 
@@ -51,20 +51,20 @@ Epics planned for this release.
 *
 
 #### Incomplete epics in Sprint Backlog
-* *Sprint Number*: explanation
-* Where Am I : Just started
-* About : Just started
+* *Sprint Number*: 1
+* Where Am I : almost there
+* About : should be finished by tonight
 * Where Is : Just started
 * Server Support : Just started
 
 
 #### What went well
-*
-*
+* About page
+* User Location
 
 #### Problems encountered and resolutions
-*
-*
+* How Atlas works
+* Understanding Leaflet
 
 ## Retrospective
 

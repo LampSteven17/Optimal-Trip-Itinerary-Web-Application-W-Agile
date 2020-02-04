@@ -26,7 +26,7 @@ export default class Atlas extends Component {
 
     this.addMarker = this.addMarker.bind(this);
     this.markCurrentLocation = this.markCurrentLocation.bind(this);
-
+    this.updateMarker = this.updateMarker.bind(this)
     this.state = {
       markerPosition: this.getCurrentLocation()
     };
@@ -69,7 +69,7 @@ export default class Atlas extends Component {
   }
 
   markCurrentLocation(){
-    this.setState({markerPosition: this.getCurrentLocation()});
+    this.getCurrentLocation();
   }
 
   getMarkerPosition() {
@@ -95,18 +95,12 @@ export default class Atlas extends Component {
     }
   }
 
+  updateMarker(pos){
+    this.setState({markerPosition: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
+  }
+
 
   getCurrentLocation() {
-    let position = {latitude: null, longitude: null};
-    let helperFunction = (pos) => {
-      position.latitude = pos.coords.latitude;
-      position.longitude = pos.coords.longitude;
-    };
-
-    navigator.geolocation.getCurrentPosition(helperFunction);
-    //return position;
-    ////////////////////
-    return {lat:0,lng:0};
-    ////////////////////
+    navigator.geolocation.getCurrentPosition(this.updateMarker);
   }
 }

@@ -68,7 +68,6 @@ export default class Atlas extends Component {
   }
 
   markCurrentLocation(){
-    console.log("REEE");
     this.getCurrentLocation();
   }
 

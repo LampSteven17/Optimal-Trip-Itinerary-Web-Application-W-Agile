@@ -14,6 +14,14 @@ import {
 import {CLIENT_TEAM_NAME} from "../Constants";
 import '../tcowebstyle.css';
 
+import steveImg from "./teamImages/StevenLampImg.jpg";
+import austImg from "./teamImages/AustinSorianoImg.jpg";
+import cadeImg from "./teamImages/cade_image.jpg";
+import ryanImg from "./teamImages/Ryan_Picture.jpg";
+
+
+
+
 export default class About extends Component {
 
     render() {
@@ -36,8 +44,7 @@ export default class About extends Component {
                     <Card style={{
                         width: '15rem'
                     }}>
-                        <CardImg top width="100%" src="src/components/About/teamImages/AustinSorianoImg.jpg"
-                                 alt="blank"/>
+                        <CardImg top width="100%" src={austImg} alt="blank"/>
                         <CardBody>
                             <CardTitle><strong>Austin Soriano</strong></CardTitle>
                             <CardText>
@@ -53,7 +60,7 @@ export default class About extends Component {
                     <Card style={{
                         width: '15rem'
                     }}>
-                        <CardImg top width="100%" src="src/components/About/teamImages/StevenLampImg.jpg" alt="blank"/>
+                        <CardImg top width="100%" src={steveImg} alt="blank"/>
                         <CardBody>
                             <CardTitle><strong>Steven Lamp</strong></CardTitle>
                             <CardText>
@@ -69,7 +76,7 @@ export default class About extends Component {
                     <Card style={{
                         width: '15rem'
                     }}>
-                        <CardImg top width="100%" src="src/components/About/teamImages/cade_image.jpg" alt="blank"/>
+                        <CardImg top width="100%" src={cadeImg} alt="blank"/>
                         <CardBody>
                             <CardTitle><strong>Cade McCumber</strong></CardTitle>
                             <CardText>
@@ -85,7 +92,7 @@ export default class About extends Component {
                     <Card style={{
                         width: '15rem'
                     }}>
-                        <CardImg top width="100%" src="src/components/About/teamImages/Ryan_Picture.jpg" alt="blank"/>
+                        <CardImg top width="100%" src={ryanImg} alt="blank"/>
                         <CardBody>
                             <CardTitle><strong>Ryan Kughn</strong></CardTitle>
                             <CardText>

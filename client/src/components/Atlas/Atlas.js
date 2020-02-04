@@ -99,7 +99,6 @@ export default class Atlas extends Component {
     this.setState({markerPosition: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
   }
 
-
   getCurrentLocation() {
     navigator.geolocation.getCurrentPosition(this.updateMarker);
   }

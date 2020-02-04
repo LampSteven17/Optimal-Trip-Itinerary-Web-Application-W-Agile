@@ -25,10 +25,13 @@ export default class Atlas extends Component {
     super(props);
 
     this.addMarker = this.addMarker.bind(this);
+    this.markCurrentLocation = this.markCurrentLocation.bind(this);
 
     this.state = {
-      markerPosition: null,
+      markerPosition: this.getCurrentLocation()
     };
+
+
   }
 
   render() {
@@ -38,6 +41,7 @@ export default class Atlas extends Component {
             <Row>
               <Col sm={12} md={{size: 6, offset: 3}}>
                 {this.renderLeafletMap()}
+                //ADD BUTTON HERE
               </Col>
             </Row>
           </Container>
@@ -48,7 +52,7 @@ export default class Atlas extends Component {
   renderLeafletMap() {
     return (
         <Map center={MAP_CENTER_DEFAULT}
-             zoom={MAP_ZOOM_MIN}
+             zoom={MAP_ZOOM_MAX}
              minZoom={MAP_ZOOM_MIN}
              maxZoom={MAP_ZOOM_MAX}
              maxBounds={MAP_BOUNDS}
@@ -62,6 +66,10 @@ export default class Atlas extends Component {
 
   addMarker(mapClickInfo) {
     this.setState({markerPosition: mapClickInfo.latlng});
+  }
+
+  markCurrentLocation(){
+    this.setState({markerPosition: this.getCurrentLocation()});
   }
 
   getMarkerPosition() {
@@ -87,6 +95,7 @@ export default class Atlas extends Component {
     }
   }
 
+
   getCurrentLocation() {
     let position = {latitude: null, longitude: null};
     let helperFunction = (pos) => {
@@ -95,6 +104,9 @@ export default class Atlas extends Component {
     };
 
     navigator.geolocation.getCurrentPosition(helperFunction);
-    return position;
+    //return position;
+    ////////////////////
+    return {lat:0,lng:0};
+    ////////////////////
   }
 }

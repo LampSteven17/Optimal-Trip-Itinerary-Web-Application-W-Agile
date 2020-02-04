@@ -23,6 +23,7 @@ export default class About extends Component {
                     <h2 className="font-weight-bold">
                         {CLIENT_TEAM_NAME}
                     </h2>
+                    {this.renderTeamStatement()}
                 </Col>
                 <Col id="closeAbout" xs='auto'>
                     <Button className='btn-csu w-100' onClick={this.props.closePage} xs={1}>
@@ -98,5 +99,11 @@ export default class About extends Component {
                 </Col>
             </Row>
         </Container>)
+    }
+
+    renderTeamStatement() {
+        return (
+            <strong><h4>How does team 10 count to their team's number? With Two Hands Up!! </h4></strong>
+        )
     }
 }

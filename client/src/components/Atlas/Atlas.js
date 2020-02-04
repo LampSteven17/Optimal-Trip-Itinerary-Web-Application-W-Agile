@@ -25,7 +25,6 @@ export default class Atlas extends Component {
     super(props);
 
     this.addMarker = this.addMarker.bind(this);
-    this.markCurrentLocation = this.markCurrentLocation.bind(this);
     this.updateMarker = this.updateMarker.bind(this)
     this.state = {
       markerPosition: this.getCurrentLocation()

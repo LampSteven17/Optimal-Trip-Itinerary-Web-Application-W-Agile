@@ -41,7 +41,7 @@ export default class Atlas extends Component {
             <Row>
               <Col sm={12} md={{size: 6, offset: 3}}>
                 {this.renderLeafletMap()}
-                //ADD BUTTON HERE
+                <button class='btn-csu' onClick={this.getCurrentLocation()}><strong>Home</strong></button>
               </Col>
             </Row>
           </Container>

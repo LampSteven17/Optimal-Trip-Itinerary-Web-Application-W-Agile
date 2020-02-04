@@ -40,7 +40,7 @@ export default class Atlas extends Component {
             <Row>
               <Col sm={12} md={{size: 6, offset: 3}}>
                 {this.renderLeafletMap()}
-                <button class='btn-csu' onClick={this.getCurrentLocation()}><strong>Home</strong></button>
+                <button className='btn-csu' onClick={() => this.markCurrentLocation()}><strong>Home</strong></button>
               </Col>
             </Row>
           </Container>
@@ -68,6 +68,7 @@ export default class Atlas extends Component {
   }
 
   markCurrentLocation(){
+    console.log("REEE");
     this.getCurrentLocation();
   }
 

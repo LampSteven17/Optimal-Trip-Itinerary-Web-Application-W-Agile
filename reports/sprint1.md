@@ -41,7 +41,7 @@ Epics planned for this release.
 | :--- | :--- | :--- | :--- |
 | *01/21/2020* | 23 | 3 | *none* |
 | *02/03/2020* | 48 | 4 | *none* |
-
+| *02/05/2020* | 50 | 2 | *none* |
 
 
 ## Review
@@ -53,7 +53,7 @@ Epics planned for this release.
 #### Incomplete epics in Sprint Backlog
 * *Sprint Number*: 1
 * Where Am I : almost there
-* About : should be finished by tonight
+* About : Done
 * Where Is : Just started
 * Server Support : Just started
 

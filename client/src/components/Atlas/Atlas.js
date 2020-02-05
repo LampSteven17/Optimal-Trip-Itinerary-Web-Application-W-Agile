@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Col, Container, Row} from 'reactstrap';
+import {Alert, Col, Container, Row} from 'reactstrap';
 
 import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -25,9 +25,11 @@ export default class Atlas extends Component {
     super(props);
 
     this.addMarker = this.addMarker.bind(this);
-    this.updateMarker = this.updateMarker.bind(this)
+    this.updateMarkerCallback = this.updateMarkerCallback.bind(this);
+    this.errorCallback = this.errorCallback.bind(this);
     this.state = {
-      markerPosition: this.getCurrentLocation()
+      markerPosition: this.getCurrentLocation(),
+      showLocationErrorAlert: false
     };
 
 
@@ -43,6 +45,7 @@ export default class Atlas extends Component {
                 <button className='btn-csu' onClick={() => this.markCurrentLocation()}><strong>Home</strong></button>
               </Col>
             </Row>
+            {this.alertNoLocationData()}
           </Container>
         </div>
     );
@@ -67,8 +70,10 @@ export default class Atlas extends Component {
     this.setState({markerPosition: mapClickInfo.latlng});
   }
 
-  markCurrentLocation(){
-    this.getCurrentLocation();
+  markCurrentLocation() {
+    Promise.resolve()
+    .then(() =>this.getCurrentLocation());
+
   }
 
   getMarkerPosition() {
@@ -94,11 +99,35 @@ export default class Atlas extends Component {
     }
   }
 
-  updateMarker(pos){
+  updateMarkerCallback(pos){
     this.setState({markerPosition: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
   }
 
+  errorCallback(errData){
+    this.setState({markerPosition: {lat: 40.57, lng: -105.09}});
+
+    if (errData.message === "User denied Geolocation") {
+      this.setState({showLocationErrorAlert: true})
+      this.alertNoLocationData();
+    }
+  }
+
+  alertNoLocationData(){
+    const noLocationErrMsg = "You Currently block your location. In order to \
+      show your location please allow this site to access your location.";
+
+    if (this.state.showLocationErrorAlert === true) {
+      return (
+        <Row>
+          <Col sm={12} md={{size: 6, offset: 3}}>
+            <Alert color="danger">{noLocationErrMsg}</Alert>
+          </Col>
+        </Row>
+      );
+    }
+  }
+
   getCurrentLocation() {
-    navigator.geolocation.getCurrentPosition(this.updateMarker);
+    navigator.geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
   }
 }

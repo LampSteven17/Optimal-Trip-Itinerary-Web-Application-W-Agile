@@ -26,10 +26,10 @@ export default class Atlas extends Component {
 
     this.addMarker = this.addMarker.bind(this);
     this.updateMarkerCallback = this.updateMarkerCallback.bind(this);
-    this.noLocationDataCallback = this.noLocationDataCallback.bind(this);
+    this.errorCallback = this.errorCallback.bind(this);
     this.state = {
       markerPosition: this.getCurrentLocation(),
-      alertData: ""
+      showLocationErrorAlert: false
     };
 
 
@@ -45,11 +45,7 @@ export default class Atlas extends Component {
                 <button className='btn-csu' onClick={() => this.markCurrentLocation()}><strong>Home</strong></button>
               </Col>
             </Row>
-            <Row>
-              <Col sm={12} md={{size: 6, offset: 3}}>
-                <Alert color="light">{this.state.alertData}</Alert>
-              </Col>
-            </Row>
+            {this.alertNoLocationData()}
           </Container>
         </div>
     );
@@ -107,11 +103,31 @@ export default class Atlas extends Component {
     this.setState({markerPosition: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
   }
 
-  noLocationDataCallback(data){
+  errorCallback(errData){
     this.setState({markerPosition: {lat: 40.57, lng: -105.09}});
+
+    if (errData.message === "User denied Geolocation") {
+      this.setState({showLocationErrorAlert: true})
+      this.alertNoLocationData();
+    }
+  }
+
+  alertNoLocationData(){
+    const noLocationErrMsg = "You Currently block your location. In order to \
+      show your location please allow this site to access your location.";
+
+    if (this.state.showLocationErrorAlert === true) {
+      return (
+        <Row>
+          <Col sm={12} md={{size: 6, offset: 3}}>
+            <Alert color="danger">{noLocationErrMsg}</Alert>
+          </Col>
+        </Row>
+      );
+    }
   }
 
   getCurrentLocation() {
-    navigator.geolocation.getCurrentPosition(this.updateMarkerCallback, this.noLocationDataCallback);
+    navigator.geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
   }
 }

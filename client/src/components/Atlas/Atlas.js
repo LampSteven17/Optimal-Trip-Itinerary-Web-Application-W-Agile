@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Col, Container, Row} from 'reactstrap';
+import {Alert, Col, Container, Row} from 'reactstrap';
 
 import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -25,9 +25,11 @@ export default class Atlas extends Component {
     super(props);
 
     this.addMarker = this.addMarker.bind(this);
-    this.updateMarker = this.updateMarker.bind(this)
+    this.updateMarkerCallback = this.updateMarkerCallback.bind(this);
+    this.noLocationDataCallback = this.noLocationDataCallback.bind(this);
     this.state = {
-      markerPosition: this.getCurrentLocation()
+      markerPosition: this.getCurrentLocation(),
+      alertData: ""
     };
 
 
@@ -41,6 +43,11 @@ export default class Atlas extends Component {
               <Col sm={12} md={{size: 6, offset: 3}}>
                 {this.renderLeafletMap()}
                 <button className='btn-csu' onClick={() => this.markCurrentLocation()}><strong>Home</strong></button>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={12} md={{size: 6, offset: 3}}>
+                <Alert color="light">{this.state.alertData}</Alert>
               </Col>
             </Row>
           </Container>
@@ -67,8 +74,10 @@ export default class Atlas extends Component {
     this.setState({markerPosition: mapClickInfo.latlng});
   }
 
-  markCurrentLocation(){
-    this.getCurrentLocation();
+  markCurrentLocation() {
+    Promise.resolve()
+    .then(() =>this.getCurrentLocation());
+
   }
 
   getMarkerPosition() {
@@ -94,11 +103,15 @@ export default class Atlas extends Component {
     }
   }
 
-  updateMarker(pos){
+  updateMarkerCallback(pos){
     this.setState({markerPosition: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
   }
 
+  noLocationDataCallback(data){
+    this.setState({markerPosition: {lat: 40.57, lng: -105.09}});
+  }
+
   getCurrentLocation() {
-    navigator.geolocation.getCurrentPosition(this.updateMarker);
+    navigator.geolocation.getCurrentPosition(this.updateMarkerCallback, this.noLocationDataCallback);
   }
 }

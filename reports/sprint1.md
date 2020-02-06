@@ -39,10 +39,67 @@ Epics planned for this release.
 
 | Date | Tasks closed  | Tasks in progress | Impediments |
 | :--- | :--- | :--- | :--- |
-| *01/21/2020* | 23 | 3 | *none* |
+| *01/31/2020* | 23 | 3 | *none* |
 | *02/03/2020* | 48 | 4 | *none* |
 | *02/05/2020* | 50 | 2 | *none* |
 
+
+### Scrum 01
+#### What Task did you close since our last meeting?
+* Austin: none
+* Steve: none
+* Cade: none
+* Ryan: none
+
+#### What Task are you working on now?
+* Austin: #44
+* Steve: #47
+* Cade: #48
+* Ryan: #49
+
+#### Any Impediments?
+* Austin: No
+* Steve: No
+* Cade: No
+* Ryan: No
+
+### Scrum 02
+#### What Task did you close since our last meeting?
+* Austin: #21, #39, #34, #46
+* Steve: #37, #42, #25
+* Cade: #31, #40, #26
+* Ryan: #41, #35 
+
+#### What Task are you working on now?
+* Austin: #63
+* Steve: #66
+* Cade: #71
+* Ryan: #28
+
+#### Any Impediments#28?
+* Austin: No
+* Steve: No
+* Cade: No 
+* Ryan: No
+
+### Scrum 03
+#### What Task did you close since our last meeting?
+* Austin: #63, #73, #27
+* Steve: #66
+* Cade: #71, #76
+* Ryan: #28
+
+#### What Task are you working on now?
+* Austin: #84
+* Steve: #29
+* Cade: #36
+* Ryan: #33
+
+#### Any Impediments?
+* Austin: No
+* Steve: No
+* Cade: No
+* Ryan: No
 
 ## Review
 

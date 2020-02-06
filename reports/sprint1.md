@@ -118,6 +118,7 @@ Epics planned for this release.
 * User Location
 
 #### Problems encountered and resolutions
+One problem that we encountered while developing Where Am I was understanding how to use callbacks and how asynchronous functions work. We were repeatedly getting null values when trying to get the users position, but we found that if we just wait to set the state until we're in the callback, then everything will happen in order.
 * How Atlas works
 * Understanding Leaflet
 

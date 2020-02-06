@@ -104,16 +104,14 @@ Epics planned for this release.
 ## Review
 
 #### Completed epics in Sprint Backlog
-* *epic number and name*:  comments
-*
+About (#23): About was executed just as we designed. We only encountered one problem revolving around images not being uploaded. Our design uses the built in Card component from reactstrap to organize each team members biographies and images neatly and concisely.
+
+Where Am I (#20): Where am I was a little bit tougher to complete but we ended up with a simple implementation that is easy to use and understand. We ended up using a home button clearly visible to the user below the map whilst leaving room for future additions.
 
 #### Incomplete epics in Sprint Backlog
-* *Sprint Number*: 1
-* Where Am I : almost there
-* About : DONE
-* Where Is : Just started
-* Server Support : Just started
+Where Is (#24): As a team we will be able to knock out Where Is next sprint swiftly due to it being partially completed and well planned. We have already implemented the inputs and will be able to uitlize ideas we already implemented for the Where Am I epic. We still have to create a validation function and update the marker when the user has entered valid latitude and longitude. We also might need to look into parsing entries to prevent code injections.
 
+Server Support (#32): 
 
 #### What went well
 * About page

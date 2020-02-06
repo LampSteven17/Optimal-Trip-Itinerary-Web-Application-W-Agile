@@ -5,6 +5,7 @@ import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
+import Button from "reactstrap/es/Button";
 
 const MAP_BOUNDS = [[-90, -180], [90, 180]];
 const MAP_CENTER_DEFAULT = [0, 0];
@@ -42,7 +43,7 @@ export default class Atlas extends Component {
             <Row>
               <Col sm={12} md={{size: 6, offset: 3}}>
                 {this.renderLeafletMap()}
-                <button className='btn-csu' onClick={() => this.markCurrentLocation()}><strong>Home</strong></button>
+                <Button className='btn-csu' onClick={() => this.markCurrentLocation()}><strong>Home</strong></Button>
               </Col>
             </Row>
             {this.alertNoLocationData()}

@@ -79,6 +79,18 @@ Epics planned for this release.
 * Identifying problems earlier: We must begin to understand which bugs are going to take more time, and 
     if a bug is unable to be fixed, developing a strategy to remove the buggy situation. 
 #### What we will change next time
+* Start everything just a little earlier
+
+#### Problems encountered and resolutions
+* Understanding the given code base and how it interacted with itself.
+* Understanding state
+
+#### What went well
+* Working through the given communication methods and both group and self regulating tasks
+* Asking good and coherent questions to groupmates
+* Working through things in good time 
+
+## Retrospective
 
 #### Problems encountered and resolutions
 *

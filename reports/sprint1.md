@@ -114,13 +114,13 @@ Epics planned for this release.
 **Server Support (#32):** UP
 
 #### What went well
-* About page
-* User Location
+I think the main thing that went well was team communication. Being able to communicate with each other allowed us to discuss our problems and come up with solutions in a small amount of time.
+Another thing that went well was how we divided up the work. Each of us were able to pick up tasks and find solutions that were agreed upon by the team.
 
 #### Problems encountered and resolutions
 One problem that we encountered while developing Where Am I was understanding how to use callbacks and how asynchronous functions work. We were repeatedly getting null values when trying to get the users position, but we found that if we just wait to set the state until we're in the callback, then everything will happen in order.
-* How Atlas works
-* Understanding Leaflet
+Understanding how Base works was a bit of a challenge for all of us. Through time and use of react docs we were able to get a better understanding of how most of it works.  
+Leaflet was another challenge to understand. There were a lot of functions originally in base that utilized the leaflet library that took some time to figure out..
 
 ## Retrospective
 

@@ -1,4 +1,4 @@
-# Sprint # - t10 - *Two Hands Up*
+# Sprint 1 - t10 - *Two Hands Up*
 
 ## Goal: Finish About Epic and Where Am I Epic
 
@@ -146,16 +146,3 @@ Leaflet was another challenge to understand. There were a lot of functions origi
 * Asking good and coherent questions to groupmates
 * Working through things in good time 
 
-## Retrospective
-
-#### Problems encountered and resolutions
-*
-*
-
-## Retrospective
-
-#### What went well
-
-#### Potential improvements
-
-#### What we will change next time

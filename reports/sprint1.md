@@ -109,9 +109,9 @@ Epics planned for this release.
 **Where Am I (#20):** Where am I was a little bit tougher to complete but we ended up with a simple implementation that is easy to use and understand. We ended up using a home button clearly visible to the user below the map whilst leaving room for future additions.
 
 #### Incomplete epics in Sprint Backlog
-**Where Is (#24):** As a team we will be able to knock out Where Is next sprint swiftly due to it being partially completed and well planned. We have already implemented the inputs and will be able to utilize ideas we already implemented for the Where Am I epic. We still have to create a validation function and update the marker when the user has entered valid latitude and longitude. We also might need to look into parsing entries to prevent code injections.
+**Where Is (#24):** As a team we will be able to knock out Where Is next sprint swiftly due to it being partially completed and well planned. We have already implemented the inputs and will be able to utilize ideas we already utilized for the Where Am I epic. We still have to create a validation function and update the marker when the user has entered valid latitude and longitude. We also might need to look into parsing entries to prevent code injections.
 
-Server Support (#32): UP
+**Server Support (#32):** UP
 
 #### What went well
 * About page

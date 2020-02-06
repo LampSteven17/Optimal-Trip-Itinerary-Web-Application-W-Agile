@@ -106,6 +106,17 @@ Often there are several related classes but we've listed only one to simplify th
 
 
 # Sprint 1
+![sprint1 diagram](images/SPRINT1design.jpg)
+TOP SECTION:
+* Represents our home page, with displayed map and home button features as needed. 
+* HOME button must be React, not HTML styled.
+* Zoom feature and centered not mandatory, but preferred.
+
+BOTTOM SECTION: 
+* Represents the about page, with included individual biographies.
+* Using Cards, and card bodies with associated images as necessary.
+* Using individual images, not extra group images.
+
 # Sprint 2
 # Sprint 3
 # Sprint 4 

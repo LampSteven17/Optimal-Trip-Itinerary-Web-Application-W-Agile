@@ -41,7 +41,7 @@ Epics planned for this release.
 | :--- | :--- | :--- | :--- |
 | *01/31/2020* | 23 | 3 | *none* |
 | *02/03/2020* | 48 | 4 | *none* |
-| *02/05/2020* | 50 | 2 | *none* |
+| *02/05/2020* | 72 | 2 | *none* |
 
 
 ### Scrum 01
@@ -110,7 +110,7 @@ Epics planned for this release.
 #### Incomplete epics in Sprint Backlog
 * *Sprint Number*: 1
 * Where Am I : almost there
-* About : Done
+* About : DONE
 * Where Is : Just started
 * Server Support : Just started
 
@@ -126,10 +126,28 @@ Epics planned for this release.
 ## Retrospective
 
 #### What went well
-
+* Team Cohesion and Group Dynamics: 
+    Our team worked exceptionally well at delegating group tasks,
+    understanding who needed the most help, and adapting our individual strengths around the
+    group dynamic. 
 #### Potential improvements
-
+* React.js Understanding and development: 3 of 4 members are brand new to javascript, and much more
+    learning is need to help develop our skills as programmers in Javascript. 
+* Identifying problems earlier: We must begin to understand which bugs are going to take more time, and 
+    if a bug is unable to be fixed, developing a strategy to remove the buggy situation. 
 #### What we will change next time
+* Start everything just a little earlier
+
+#### Problems encountered and resolutions
+* Understanding the given code base and how it interacted with itself.
+* Understanding state
+
+#### What went well
+* Working through the given communication methods and both group and self regulating tasks
+* Asking good and coherent questions to groupmates
+* Working through things in good time 
+
+## Retrospective
 
 #### Problems encountered and resolutions
 *

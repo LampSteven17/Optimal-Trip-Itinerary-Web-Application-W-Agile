@@ -5,6 +5,7 @@ import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
+import Button from "reactstrap/es/Button";
 
 const MAP_BOUNDS = [[-90, -180], [90, 180]];
 const MAP_CENTER_DEFAULT = [0, 0];
@@ -29,7 +30,7 @@ export default class Atlas extends Component {
     this.errorCallback = this.errorCallback.bind(this);
     this.state = {
       markerPosition: this.getCurrentLocation(),
-      showLocationErrorAlert: false
+      hideButton: false
     };
 
 
@@ -42,10 +43,9 @@ export default class Atlas extends Component {
             <Row>
               <Col sm={12} md={{size: 6, offset: 3}}>
                 {this.renderLeafletMap()}
-                <button className='btn-csu' onClick={() => this.markCurrentLocation()}><strong>Home</strong></button>
+                {this.showHomeButton()}
               </Col>
             </Row>
-            {this.alertNoLocationData()}
           </Container>
         </div>
     );
@@ -107,22 +107,15 @@ export default class Atlas extends Component {
     this.setState({markerPosition: {lat: 40.57, lng: -105.09}});
 
     if (errData.message === "User denied Geolocation") {
-      this.setState({showLocationErrorAlert: true})
+      this.setState({hideButton: true})
       this.alertNoLocationData();
     }
   }
 
-  alertNoLocationData(){
-    const noLocationErrMsg = "You Currently block your location. In order to \
-      show your location please allow this site to access your location.";
-
-    if (this.state.showLocationErrorAlert === true) {
+  showHomeButton(){
+    if (this.state.hideButton === false) {
       return (
-        <Row>
-          <Col sm={12} md={{size: 6, offset: 3}}>
-            <Alert color="danger">{noLocationErrMsg}</Alert>
-          </Col>
-        </Row>
+          <Button className='btn-csu' onClick={() => this.markCurrentLocation()}><strong>Home</strong></Button>
       );
     }
   }

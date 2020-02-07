@@ -129,6 +129,9 @@ Leaflet was another challenge to understand. There were a lot of functions origi
     Our team worked exceptionally well at delegating group tasks,
     understanding who needed the most help, and adapting our individual strengths around the
     group dynamic. 
+* Working through the given communication methods and both group and self regulating tasks
+* Asking good and coherent questions to groupmates
+* Working through things in good time 
 #### Potential improvements
 * React.js Understanding and development: 3 of 4 members are brand new to javascript, and much more
     learning is need to help develop our skills as programmers in Javascript. 
@@ -141,8 +144,4 @@ Leaflet was another challenge to understand. There were a lot of functions origi
 * Understanding the given code base and how it interacted with itself.
 * Understanding state
 
-#### What went well
-* Working through the given communication methods and both group and self regulating tasks
-* Asking good and coherent questions to groupmates
-* Working through things in good time 
 

@@ -111,7 +111,7 @@ Epics planned for this release.
 #### Incomplete epics in Sprint Backlog
 **Where Is (#24):** As a team we will be able to knock out Where Is next sprint swiftly due to it being partially completed and well planned. We have already implemented the inputs and will be able to utilize ideas we already utilized for the Where Am I epic. We still have to create a validation function and update the marker when the user has entered valid latitude and longitude. We also might need to look into parsing entries to prevent code injections.
 
-**Server Support (#32):** UP
+**Server Support (#32):** We struggled to work on this epic because we were a little confused about what the customer was asking. This epic was also at the bottom of our backlog so it was the last thing that we got to. Surely by next sprint we will be more prepared to finish this epic.
 
 #### What went well
 I think the main thing that went well was team communication. Being able to communicate with each other allowed us to discuss our problems and come up with solutions in a small amount of time.

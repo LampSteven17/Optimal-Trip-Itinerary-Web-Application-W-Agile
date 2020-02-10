@@ -4,6 +4,7 @@ import { Container } from "reactstrap";
 import ServerSettings from "./ServerSettings";
 
 import "./header-footer.css";
+import ServerConfigure from "./resources/ServerConfigure";
 
 const UNICODE_LINK_SYMBOL = "\uD83D\uDD17";
 const UNICODE_WARNING_SIGN = "\u26A0";
@@ -13,7 +14,11 @@ export default class Footer extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {serverSettingsOpen: false};
+        this.state = {
+            serverSettingsOpen: false,
+            serverConfigOpen: false
+        };
+        // put in my state var call here
     }
 
     render() {
@@ -31,11 +36,15 @@ export default class Footer extends Component {
             <div className="vertical-center tco-text">
                 <Container>
                     <div className="centered">
-                        {linkStatusSymbol} Connected to {serverName}
+                        {linkStatusSymbol} Connected to
+                        <a className="tco-text" onClick={() => this.setState({serverConfigOpen: true})}>
+                            : {serverName} (
+                        </a>
                         <a className="tco-text" onClick={() => this.setState({serverSettingsOpen: true})}>
-                            ({this.props.serverSettings.serverPort}).
+                            {this.props.serverSettings.serverPort}).
                         </a>
                     {this.renderServerSettings()}
+                    {this.renderServerConfiguration()}
                     </div>
                 </Container>
             </div>
@@ -64,5 +73,17 @@ export default class Footer extends Component {
                 updateServerConfig={this.props.updateServerConfig}
             />
         );
+    }
+
+    // work space
+    renderServerConfiguration() {
+        return (
+            <ServerConfigure
+                isOpen={this.state.serverConfigOpen}
+                toggleOpen={(isOpen = !this.state.serverConfigOpen) => this.setState({serverConfigOpen: isOpen})}
+                //serverSettings={this.props.serverSettings}
+                updateServerConfig={this.props.updateServerConfig}
+            />
+        )
     }
 }

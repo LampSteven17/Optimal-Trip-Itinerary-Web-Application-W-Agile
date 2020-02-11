@@ -118,6 +118,12 @@ BOTTOM SECTION:
 * Using individual images, not extra group images.
 
 # Sprint 2
+![sprint1 diagram](images/SPRINT2design.jpg)
+FEATURES: 
+*Our updated map is going to support the addition of as many markers as you wish. Developing for mobile means 
+we must keep a minimal UI in mind. Our markers will add with notifications, not creating a growing list as to minimize
+spacial issuie's. Alot of technical background is going to be nessecary to create the advanced UI, and we will be 
+first focusing on functionality, adding a UI layer later.
 # Sprint 3
 # Sprint 4 
 # Sprint 5

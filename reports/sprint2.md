@@ -38,8 +38,13 @@
 
 
 ## Planned Epics
-\#24 - Where Is: - STEVEN
-
+**\#24 - Where Is:**
+    This is an epic nessecary for future features, leftover from SPRINT1. We will be implementing this
+    feature as described in previous sprints. The user will be able to enter verifiable information
+    into a box, in which we will then display that selected location on the map. The location must be valid 
+    latlng format, and all other information will return nothing. We will also make sure to increase 
+    this feature adaptability for the coming features of SPRINT2.
+    
 \#32 - Server Support: - CADE
 
 **\#90 - Support Protocol Standard v2:** This epic revolves around utilizing REST API to create configuration for config and distance. The config object contains information about server such as team name, version, and the current supported requests. This will be routed through api/config. The distance object contains information about the distance between two (currently might upgrade) geographic locations. This will be routed through api/distance.
@@ -54,7 +59,10 @@ said distance.
 
 **\#98 - Standard Units:** This epic allows the user to change the units for the distance between two locations. The supported distances for this epic are miles, kilometers, and nautical miles.  
 
-\#101 - Map: - STEVEN
+**\#101 - Map:** 
+    This is an epic to be implemented in our current sprint, SPRINT2. This epic will be the graphical portion
+    of distance (\#91) and Where Is (\#24). The map must scale based on the two markers selected, and place
+    a line between them. The overlay will be transparent enough to be seen but not obstructive. 
 
 \#103 - Custom Units:  - CADE
 

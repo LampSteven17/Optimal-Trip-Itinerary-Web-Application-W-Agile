@@ -27,12 +27,11 @@ export default class Atlas extends Component {
     this.addMarker = this.addMarker.bind(this);
     this.updateMarkerCallback = this.updateMarkerCallback.bind(this);
     this.errorCallback = this.errorCallback.bind(this);
+
     this.state = {
       markerPosition: this.getCurrentLocation(),
       hideButton: false
     };
-
-
   }
 
   render() {
@@ -69,12 +68,6 @@ export default class Atlas extends Component {
     this.setState({markerPosition: mapClickInfo.latlng});
   }
 
-  markCurrentLocation() {
-    Promise.resolve()
-    .then(() =>this.getCurrentLocation());
-
-  }
-
   getMarkerPosition() {
     let markerPosition = '';
     if (this.state.markerPosition) {
@@ -98,6 +91,18 @@ export default class Atlas extends Component {
     }
   }
 
+  showHomeButton() {
+    if (this.state.hideButton === false) {
+      return (
+          <Button className='btn-csu' onClick={() => this.getCurrentLocation()}><strong>Home</strong></Button>
+      );
+    }
+  }
+
+  getCurrentLocation() {
+    navigator.geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
+  }
+
   updateMarkerCallback(pos){
     this.setState({markerPosition: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
   }
@@ -109,17 +114,5 @@ export default class Atlas extends Component {
       this.setState({hideButton: true})
       this.alertNoLocationData();
     }
-  }
-
-  showHomeButton(){
-    if (this.state.hideButton === false) {
-      return (
-          <Button className='btn-csu' onClick={() => this.markCurrentLocation()}><strong>Home</strong></Button>
-      );
-    }
-  }
-
-  getCurrentLocation() {
-    navigator.geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
   }
 }

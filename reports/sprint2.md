@@ -44,7 +44,13 @@
 
 \#90 - Support Protocol Standard v2:  - AUSTIN
 
-\#91 - Distance: - RYAN
+**#91 - Distance:**
+This epic will have us allow the user to set two points on the map
+and calculate the distance between them.  We will need to implement
+a way for the user to select the two points via clicking the map.
+We will also need allow the user to enter two points via where is.
+Finally we need to display a distance line on the map, and calculate
+said distance.
 
 \#98 - Standard Units: - AUSTIN
 

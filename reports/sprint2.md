@@ -42,11 +42,11 @@
 
 \#32 - Server Support: - CADE
 
-\#90 - Support Protocol Standard v2:  - AUSTIN
+**\#90 - Support Protocol Standard v2:** This epic revolves around utilizing REST API to create configuration for config and distance. The config object contains information about server such as team name, version, and the current supported requests. This will be routed through api/config. The distance object contains information about the distance between two (currently might upgrade) geographic locations. This will be routed through api/distance.
 
 \#91 - Distance: - RYAN
 
-\#98 - Standard Units: - AUSTIN
+**\#98 - Standard Units:** This epic allows the user to change the units for the distance between two locations. The supported distances for this epic are miles, kilometers, and nautical miles.  
 
 \#101 - Map: - STEVEN
 

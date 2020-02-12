@@ -106,7 +106,24 @@ Often there are several related classes but we've listed only one to simplify th
 
 
 # Sprint 1
+![sprint1 diagram](images/SPRINT1design.jpg)
+TOP SECTION:
+* Represents our home page, with displayed map and home button features as needed. 
+* HOME button must be React, not HTML styled.
+* Zoom feature and centered not mandatory, but preferred.
+
+BOTTOM SECTION: 
+* Represents the about page, with included individual biographies.
+* Using Cards, and card bodies with associated images as necessary.
+* Using individual images, not extra group images.
+
 # Sprint 2
+![sprint1 diagram](images/SPRINT2design.jpg)
+FEATURES: 
+*Our updated map is going to support the addition of as many markers as you wish. Developing for mobile means 
+we must keep a minimal UI in mind. Our markers will add with notifications, not creating a growing list as to minimize
+spacial issuie's. Alot of technical background is going to be nessecary to create the advanced UI, and we will be 
+first focusing on functionality, adding a UI layer later.
 # Sprint 3
 # Sprint 4 
 # Sprint 5

@@ -61,8 +61,8 @@ export default class Atlas extends Component {
               </Col>
               <Col sm={{size:'auto'}} style={{ width: "17rem" }} md={{size: 4, offset: 0}}>
                 <Form inline={true}>
-                  <Input style={{ width: "7rem" }} type="number" placeholder="latitude"/>
-                  <Input style={{ width: "7rem" }} type="number" placeholder="longitude"/>
+                  <Input style={{ width: "7rem" }} placeholder="latitude"/>
+                  <Input style={{ width: "7rem" }} placeholder="longitude"/>
                 </Form>
               </Col>
             </Row>

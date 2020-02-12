@@ -32,13 +32,7 @@ export default class Atlas extends Component {
       markerPosition: this.getCurrentLocation(),
       hideButton: false
     };
-<<<<<<< HEAD
 
-
-
-
-=======
->>>>>>> fbaf75aaddabb714404e5aae8fa68c7ae946f2f9
   }
 
   render() {

@@ -45,7 +45,7 @@
     latlng format, and all other information will return nothing. We will also make sure to increase 
     this feature adaptability for the coming features of SPRINT2.
     
-\#32 - Server Support: - CADE
+**\#32 - Server Support:** This epic is designed to show the configuration and server cabailities of the current server as well as it's state. This should be accessable by clicking on the server name in the footer.
 
 **\#90 - Support Protocol Standard v2:** This epic revolves around utilizing REST API to create configuration for config and distance. The config object contains information about server such as team name, version, and the current supported requests. This will be routed through api/config. The distance object contains information about the distance between two (currently might upgrade) geographic locations. This will be routed through api/distance.
 
@@ -64,7 +64,7 @@ said distance.
     of distance (\#91) and Where Is (\#24). The map must scale based on the two markers selected, and place
     a line between them. The overlay will be transparent enough to be seen but not obstructive. 
 
-\#103 - Custom Units:  - CADE
+**\#103 - Custom Units:**  - The intent of this Epic is to allow for users to edit the list of units. This includes adding their own via specifying a radius of the earth in those units paired with a name, delete items off the list, and editing the pre-existing items. These items will sustain over sessions, and be stored so a user does not have to enter them every time visiting the site. 
 
 
 

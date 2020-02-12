@@ -38,12 +38,11 @@ export default class Atlas extends Component {
     this.addMarker = this.addMarker.bind(this);
     this.updateMarkerCallback = this.updateMarkerCallback.bind(this);
     this.errorCallback = this.errorCallback.bind(this);
+
     this.state = {
       markerPosition: this.getCurrentLocation(),
-      showLocationErrorAlert: false
+      hideButton: false
     };
-
-
   }
 
   render() {
@@ -57,7 +56,7 @@ export default class Atlas extends Component {
             </Row>
             <Row>
               <Col sm={12} style={{ width: "7rem" }} md={{size: 1, offset: 3}}>
-                <Button className='btn-csu' onClick={() => this.markCurrentLocation()}><strong>Home</strong></Button>
+                {this.showHomeButton()}
               </Col>
               <Col sm={{size:'auto'}} style={{ width: "17rem" }} md={{size: 4, offset: 0}}>
                 <Form inline={true}>
@@ -66,7 +65,6 @@ export default class Atlas extends Component {
                 </Form>
               </Col>
             </Row>
-            {this.alertNoLocationData()}
           </Container>
         </div>
     );
@@ -89,12 +87,6 @@ export default class Atlas extends Component {
 
   addMarker(mapClickInfo) {
     this.setState({markerPosition: mapClickInfo.latlng});
-  }
-
-  markCurrentLocation() {
-    Promise.resolve()
-    .then(() =>this.getCurrentLocation());
-
   }
 
   getMarkerPosition() {
@@ -120,6 +112,18 @@ export default class Atlas extends Component {
     }
   }
 
+  showHomeButton() {
+    if (this.state.hideButton === false) {
+      return (
+          <Button className='btn-csu' onClick={() => this.getCurrentLocation()}><strong>Home</strong></Button>
+      );
+    }
+  }
+
+  getCurrentLocation() {
+    navigator.geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
+  }
+
   updateMarkerCallback(pos){
     this.setState({markerPosition: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
   }
@@ -128,27 +132,8 @@ export default class Atlas extends Component {
     this.setState({markerPosition: {lat: 40.57, lng: -105.09}});
 
     if (errData.message === "User denied Geolocation") {
-      this.setState({showLocationErrorAlert: true})
+      this.setState({hideButton: true})
       this.alertNoLocationData();
     }
-  }
-
-  alertNoLocationData(){
-    const noLocationErrMsg = "You Currently block your location. In order to \
-      show your location please allow this site to access your location.";
-
-    if (this.state.showLocationErrorAlert === true) {
-      return (
-        <Row>
-          <Col sm={12} md={{size: 6, offset: 3}}>
-            <Alert color="danger">{noLocationErrMsg}</Alert>
-          </Col>
-        </Row>
-      );
-    }
-  }
-
-  getCurrentLocation() {
-    navigator.geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
   }
 }

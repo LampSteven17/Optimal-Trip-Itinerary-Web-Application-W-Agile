@@ -81,7 +81,22 @@ said distance.
 
 | Date | Tasks closed  | Tasks in progress | Impediments |
 | :--- | :--- | :--- | :--- |
-| *date* | *#task, ...* | *#task, ...* |  | 
+| *2/12/20* | *6* | *8* |  |
+
+###Scrum 2/12 
+####CLOSED TASKS (before today): 
+* Austin: #84, #111
+* Ryan: #112 
+* Cade: #125
+* Steven: #119, #114
+
+####IN PROGRESS: 
+* Austin: #93, #105 
+* Ryan: #33
+* Cade: #36
+* Steven: #29
+
+
 
 
 ## Review

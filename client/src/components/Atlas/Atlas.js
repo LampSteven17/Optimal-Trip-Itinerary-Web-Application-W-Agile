@@ -1,5 +1,16 @@
 import React, {Component} from 'react';
-import {Alert, Button, Col, Container, Row} from 'reactstrap';
+import {
+  Alert,
+  Button,
+  Col,
+  Container,
+  Form,
+  FormGroup,
+  FormFeedback,
+  FormText,
+  Input,
+  Row
+} from 'reactstrap';
 
 import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -41,7 +52,17 @@ export default class Atlas extends Component {
             <Row>
               <Col sm={12} md={{size: 6, offset: 3}}>
                 {this.renderLeafletMap()}
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={12} style={{ width: "7rem" }} md={{size: 1, offset: 3}}>
                 {this.showHomeButton()}
+              </Col>
+              <Col sm={{size:'auto'}} style={{ width: "17rem" }} md={{size: 4, offset: 0}}>
+                <Form inline={true}>
+                  <Input style={{ width: "7rem" }} placeholder="latitude"/>
+                  <Input style={{ width: "7rem" }} placeholder="longitude"/>
+                </Form>
               </Col>
             </Row>
           </Container>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Alert, Button, Col, Container, Row} from 'reactstrap';
+import {Alert, Button, Col, Container, Row, TabContent, TabPane, Nav, NavItem, NavLink, Card, CardTitle, CardText} from 'reactstrap';
 
 import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';

@@ -4,7 +4,6 @@ import { Container } from "reactstrap";
 import ServerSettings from "./ServerSettings";
 
 import "./header-footer.css";
-import ServerConfigure from "./resources/ServerConfigure";
 
 const UNICODE_LINK_SYMBOL = "\uD83D\uDD17";
 const UNICODE_WARNING_SIGN = "\u26A0";
@@ -78,10 +77,10 @@ export default class Footer extends Component {
     // work space
     renderServerConfiguration() {
         return (
-            <ServerConfigure
+            <ServerSettings
                 isOpen={this.state.serverConfigOpen}
                 toggleOpen={(isOpen = !this.state.serverConfigOpen) => this.setState({serverConfigOpen: isOpen})}
-                //serverSettings={this.props.serverSettings}
+                serverSettings={this.props.serverSettings}
                 updateServerConfig={this.props.updateServerConfig}
             />
         )

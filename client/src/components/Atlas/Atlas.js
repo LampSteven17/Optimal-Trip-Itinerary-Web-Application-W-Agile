@@ -43,7 +43,8 @@ export default class Atlas extends Component {
 
     this.state = {
       markerPosition: this.getCurrentLocation(),
-      hideButton: false
+      hideButton: false,
+      mapCenter: [0,0]
     };
   }
 

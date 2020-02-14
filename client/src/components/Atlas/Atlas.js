@@ -124,6 +124,7 @@ export default class Atlas extends Component {
 
   getCurrentLocation() {
     Geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
+    return null;
   }
 
   updateMarkerCallback(pos){

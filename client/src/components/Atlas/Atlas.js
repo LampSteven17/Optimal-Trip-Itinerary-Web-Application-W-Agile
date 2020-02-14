@@ -11,6 +11,7 @@ import {
   Input,
   Row
 } from 'reactstrap';
+import Geolocation from 'react-native-geolocation-service';
 
 import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -121,7 +122,7 @@ export default class Atlas extends Component {
   }
 
   getCurrentLocation() {
-    navigator.geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
+    Geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
   }
 
   updateMarkerCallback(pos){

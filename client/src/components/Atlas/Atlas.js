@@ -11,12 +11,12 @@ import {
   Input,
   Row
 } from 'reactstrap';
-import Geolocation from 'react-native-geolocation-service';
 
 import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
+import Geolocation from 'react-native-geolocation-service';
 
 const MAP_BOUNDS = [[-90, -180], [90, 180]];
 const MAP_CENTER_DEFAULT = [0, 0];

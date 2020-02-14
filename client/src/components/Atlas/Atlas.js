@@ -17,6 +17,10 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
 
+
+const FALSECOLOR = "5px solid red";
+const TRUECOLOR =  "5px solid green";
+const Coordinates = require('coordinate-parser');
 const MAP_BOUNDS = [[-90, -180], [90, 180]];
 const MAP_CENTER_DEFAULT = [0, 0];
 const MAP_LAYER_ATTRIBUTION = "&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors";
@@ -41,7 +45,8 @@ export default class Atlas extends Component {
 
     this.state = {
       markerPosition: this.getCurrentLocation(),
-      hideButton: false
+      hideButton: false,
+      validLatLng: FALSECOLOR
     };
   }
 
@@ -59,9 +64,10 @@ export default class Atlas extends Component {
                 {this.showHomeButton()}
               </Col>
               <Col sm={{size:'auto'}} style={{ width: "15rem" }} md={{size: 4, offset: 0}}>
-                <Form inline={true}>
-                  <Input style={{ width: "15rem" }} placeholder="Latitude, Longitude"/>
-                </Form>
+                <Form inline={true}>{
+                    <Input style={{ width: "15rem", border: this.state.validLatLng }} placeholder="Latitude, Longitude" onInput={e => this.handleInput(e.target.value)}/>
+
+                }</Form>
               </Col>
             </Row>
           </Container>
@@ -82,6 +88,32 @@ export default class Atlas extends Component {
           {this.getMarker(this.getMarkerPosition(), this.state.markerPosition)}
         </Map>
     )
+  }
+
+  handleInput(pos) {
+    if (this.isValidPosition(pos)) {
+      this.setState({validLatLng: TRUECOLOR});
+    }else{
+      this.setState({validLatLng: FALSECOLOR});
+    }
+
+  }
+
+
+
+  /**
+   * Adapted from Coordinate-Parser isValidPosition Function
+   * @param position takes the string of charcters input in lat lng above
+   */
+  isValidPosition(position){
+    let caughtError;
+
+    try{
+      new Coordinates(position);
+      return(true);
+    }catch(caughtError){
+      return(false);
+    }
   }
 
   addMarker(mapClickInfo) {

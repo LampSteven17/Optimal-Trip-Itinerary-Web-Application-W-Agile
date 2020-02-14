@@ -1,11 +1,26 @@
 import React, {Component} from 'react';
-import {Alert, Button, Col, Container, Row} from 'reactstrap';
+import {
+  Alert,
+  Button,
+  Col,
+  Container,
+  Form,
+  FormGroup,
+  FormFeedback,
+  FormText,
+  Input,
+  Row
+} from 'reactstrap';
 
 import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
+import Geolocation from '@react-native-community/geolocation';
 
+const FALSECOLOR = "5px solid red";
+const TRUECOLOR =  "5px solid green";
+const Coordinates = require('coordinate-parser');
 const MAP_BOUNDS = [[-90, -180], [90, 180]];
 const MAP_CENTER_DEFAULT = [0, 0];
 const MAP_LAYER_ATTRIBUTION = "&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors";
@@ -30,7 +45,9 @@ export default class Atlas extends Component {
 
     this.state = {
       markerPosition: this.getCurrentLocation(),
-      hideButton: false
+      hideButton: false,
+      mapCenter: [0,0],
+      validLatLng: FALSECOLOR
     };
   }
 
@@ -41,7 +58,17 @@ export default class Atlas extends Component {
             <Row>
               <Col sm={12} md={{size: 6, offset: 3}}>
                 {this.renderLeafletMap()}
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={12} style={{ width: "7rem" }} md={{size: 1, offset: 3}}>
                 {this.showHomeButton()}
+              </Col>
+              <Col sm={{size:'auto'}} style={{ width: "15rem" }} md={{size: 4, offset: 0}}>
+                <Form inline={true}>{
+                    <Input style={{ width: "15rem", border: this.state.validLatLng }} placeholder="Latitude, Longitude" onInput={e => this.handleInput(e.target.value)}/>
+
+                }</Form>
               </Col>
             </Row>
           </Container>
@@ -62,6 +89,32 @@ export default class Atlas extends Component {
           {this.getMarker(this.getMarkerPosition(), this.state.markerPosition)}
         </Map>
     )
+  }
+
+  handleInput(pos) {
+    if (this.isValidPosition(pos)) {
+      this.setState({validLatLng: TRUECOLOR});
+    }else{
+      this.setState({validLatLng: FALSECOLOR});
+    }
+
+  }
+
+
+
+  /**
+   * Adapted from Coordinate-Parser isValidPosition Function
+   * @param position takes the string of charcters input in lat lng above
+   */
+  isValidPosition(position){
+    let caughtError;
+
+    try{
+      new Coordinates(position);
+      return(true);
+    }catch(caughtError){
+      return(false);
+    }
   }
 
   addMarker(mapClickInfo) {
@@ -100,7 +153,8 @@ export default class Atlas extends Component {
   }
 
   getCurrentLocation() {
-    navigator.geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
+    Geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
+    return null;
   }
 
   updateMarkerCallback(pos){

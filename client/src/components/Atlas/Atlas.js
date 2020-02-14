@@ -16,7 +16,7 @@ import {Map, Marker, Popup, TileLayer} from 'react-leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
-
+import Geolocation from '@react-native-community/geolocation';
 
 const FALSECOLOR = "5px solid red";
 const TRUECOLOR =  "5px solid green";
@@ -46,6 +46,7 @@ export default class Atlas extends Component {
     this.state = {
       markerPosition: this.getCurrentLocation(),
       hideButton: false,
+      mapCenter: [0,0],
       validLatLng: FALSECOLOR
     };
   }
@@ -152,7 +153,8 @@ export default class Atlas extends Component {
   }
 
   getCurrentLocation() {
-    navigator.geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
+    Geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
+    return null;
   }
 
   updateMarkerCallback(pos){

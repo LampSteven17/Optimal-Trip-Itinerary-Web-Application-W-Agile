@@ -17,8 +17,6 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
 import Geolocation from '@react-native-community/geolocation';
-// const Geolocation = require("react-native-geolocation-service");
-
 
 const FALSECOLOR = "5px solid red";
 const TRUECOLOR =  "5px solid green";

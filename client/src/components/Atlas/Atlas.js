@@ -100,8 +100,6 @@ export default class Atlas extends Component {
 
   }
 
-
-
   /**
    * Adapted from Coordinate-Parser isValidPosition Function
    * @param position takes the string of charcters input in lat lng above

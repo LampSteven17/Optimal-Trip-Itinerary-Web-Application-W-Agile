@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class RequestConfig extends RequestHeader {
   private String serverName;
-
+  private String[] supportedRequests;
   private final transient Logger log = LoggerFactory.getLogger(RequestConfig.class);
 
 

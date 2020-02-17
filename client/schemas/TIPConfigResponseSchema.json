@@ -21,8 +21,12 @@
       "minLength":3
     },
     "supportedRequests": {
-      "description":"show supported requests",
-      "type":"array"
+      "description": "a list of supported request types",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["config","distance"]
+      }
     }
   },
   "required":["requestVersion","requestType","serverName"],

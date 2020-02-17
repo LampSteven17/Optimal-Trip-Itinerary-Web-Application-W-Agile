@@ -15,9 +15,7 @@ export default class Footer extends Component {
         super(props);
         this.state = {
             serverSettingsOpen: false,
-            serverConfigOpen: false
         };
-        // put in my state var call here
     }
 
     render() {
@@ -36,14 +34,13 @@ export default class Footer extends Component {
                 <Container>
                     <div className="centered">
                         {linkStatusSymbol} Connected to
-                        <a className="tco-text" onClick={() => this.setState({serverConfigOpen: true})}>
+                        <a className="tco-text" onClick={() => this.setState({serverSettingsOpen: true})}>
                             : {serverName} (
                         </a>
                         <a className="tco-text" onClick={() => this.setState({serverSettingsOpen: true})}>
                             {this.props.serverSettings.serverPort}).
                         </a>
                     {this.renderServerSettings()}
-                    {this.renderServerConfiguration()}
                     </div>
                 </Container>
             </div>
@@ -74,14 +71,4 @@ export default class Footer extends Component {
         );
     }
 
-    renderServerConfiguration() {
-        return (
-            <ServerSettings
-                isOpen={this.state.serverConfigOpen}
-                toggleOpen={(isOpen = !this.state.serverConfigOpen) => this.setState({serverConfigOpen: isOpen})}
-                serverSettings={this.props.serverSettings}
-                updateServerConfig={this.props.updateServerConfig}
-            />
-        )
-    }
 }

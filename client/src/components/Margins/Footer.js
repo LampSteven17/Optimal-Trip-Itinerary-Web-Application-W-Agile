@@ -74,7 +74,6 @@ export default class Footer extends Component {
         );
     }
 
-    // work space
     renderServerConfiguration() {
         return (
             <ServerSettings

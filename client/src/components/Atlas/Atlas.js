@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Alert, Button, Col, Container, Row, TabContent, TabPane, Nav, NavItem, NavLink, Card, CardTitle, CardText} from 'reactstrap';
 import {
   Alert,
   Button,

@@ -41,6 +41,7 @@ export default class Atlas extends Component {
 
     this.addMarker = this.addMarker.bind(this);
     this.updateMarkerCallback = this.updateMarkerCallback.bind(this);
+    this.updateMarkerFromInput = this.updateMarkerFromInput.bind(this);
     this.errorCallback = this.errorCallback.bind(this);
 
     this.state = {
@@ -49,6 +50,7 @@ export default class Atlas extends Component {
       mapCenter: [0,0],
       validLatLng: FALSECOLOR
     };
+
   }
 
   render() {
@@ -93,11 +95,18 @@ export default class Atlas extends Component {
 
   handleInput(pos) {
     if (this.isValidPosition(pos)) {
+      //console.log(pos);
       this.setState({validLatLng: TRUECOLOR});
+      this.updateMarkerFromInput(pos);
     }else{
       this.setState({validLatLng: FALSECOLOR});
     }
 
+  }
+
+  updateMarkerFromInput(input) {
+    let position = new Coordinates(input);
+    this.setState({markerPosition: {lat: position.getLatitude(), lng: position.getLongitude()}})
   }
 
   /**
@@ -164,7 +173,6 @@ export default class Atlas extends Component {
 
     if (errData.message === "User denied Geolocation") {
       this.setState({hideButton: true})
-      this.alertNoLocationData();
     }
   }
 }

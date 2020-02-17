@@ -21,13 +21,15 @@ import java.util.List;
  */
 public class RequestConfig extends RequestHeader {
   private String serverName;
-  private String[] supportedRequests;
   private final transient Logger log = LoggerFactory.getLogger(RequestConfig.class);
-
+  private String[] supportedRequests;
 
   RequestConfig() {
     this.requestType = "config";
     this.requestVersion = RequestHeader.CURRENT_SUPPORTED_VERSION;
+    this.supportedRequests = new String[2];
+    this.supportedRequests[0] = "config";
+    this.supportedRequests[1] = "distance";
   }
 
 

@@ -56,12 +56,21 @@ class MicroServer {
   private void processRestfulAPIrequests() {
     Spark.get("/api/config", this::processConfigRequest);
     // Configure other restful API requests here
+
+    //Spark.get("/api/config",this::processDistanceRequest);
+
   }
 
   private String processConfigRequest(Request request, Response response) {
     logRequest(request);
     return processHttpRequest(RequestConfig.class, CONFIG_REQUEST_BODY, response);
   }
+
+  /*private String processDistanceRequest(Request request, Response response) {
+    logRequest(request);
+    return processHttpRequest(RequestConfig.class, DISTANCE_REQUEST_BODY, response);
+  }*/
+
 
   private String processHttpRequest(Type type, String requestBody, Response response) {
     setupResponse(response);

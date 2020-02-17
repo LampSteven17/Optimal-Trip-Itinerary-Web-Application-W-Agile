@@ -13,7 +13,9 @@ export default class Footer extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {serverSettingsOpen: false};
+        this.state = {
+            serverSettingsOpen: false,
+        };
     }
 
     render() {
@@ -31,9 +33,12 @@ export default class Footer extends Component {
             <div className="vertical-center tco-text">
                 <Container>
                     <div className="centered">
-                        {linkStatusSymbol} Connected to {serverName}
+                        {linkStatusSymbol} Connected to
                         <a className="tco-text" onClick={() => this.setState({serverSettingsOpen: true})}>
-                            ({this.props.serverSettings.serverPort}).
+                            : {serverName} (
+                        </a>
+                        <a className="tco-text" onClick={() => this.setState({serverSettingsOpen: true})}>
+                            {this.props.serverSettings.serverPort}).
                         </a>
                     {this.renderServerSettings()}
                     </div>
@@ -65,4 +70,5 @@ export default class Footer extends Component {
             />
         );
     }
+
 }

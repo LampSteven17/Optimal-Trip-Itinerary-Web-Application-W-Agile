@@ -50,6 +50,7 @@ export default class Atlas extends Component {
       mapCenter: [0,0],
       validLatLng: FALSECOLOR
     };
+
   }
 
   render() {

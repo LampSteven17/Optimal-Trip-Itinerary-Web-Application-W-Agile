@@ -1,13 +1,17 @@
 import React, { Component } from "react";
-import { Button, Col, Input, Modal, ModalBody, ModalFooter, ModalHeader, Row } from "reactstrap";
+import { Button, Col, Input, Modal, ModalBody, ModalFooter, ModalHeader, Row} from "reactstrap";
+import Tabs from 'react-bootstrap/Tabs';
+import Tab from 'react-bootstrap/Tab';
+
 
 import { sendServerRequest } from "../../utils/restfulAPI";
 import { isJsonResponseValid } from "../../utils/restfulAPI";
 
 import * as configSchema from "../../../schemas/TIPConfigResponseSchema";
-import { HTTP_OK } from "../Constants";
+import {HTTP_OK, PROTOCOL_VERSION} from "../Constants";
 
 export default class ServerSettings extends Component {
+
 
     constructor(props) {
         super(props);
@@ -19,18 +23,67 @@ export default class ServerSettings extends Component {
         }
     }
 
+
+
     render() {
-        let currentServerName = this.getCurrentServerName();
         return (
             <div>
                 <Modal isOpen={this.props.isOpen} toggle={() => this.props.toggleOpen()}>
                     <ModalHeader toggle={() => this.props.toggleOpen()}>Server Connection</ModalHeader>
-                    {this.renderSettings(currentServerName)}
+                    {this.tabs_render()}
                     {this.renderActions()}
                 </Modal>
             </div>
         );
     }
+
+    /******************************************************
+     * Code design/implementation for Tabs_render()
+     * https://react-bootstrap.github.io/components/tabs/
+     * react-bootstrap documentation tabs
+     ******************************************************/
+    tabs_render() {
+        let currentServerName = this.getCurrentServerName();
+        return (
+            <Tabs defaultActiveKey={"server-settings"} transition={false} id="server-tab">
+                <Tab eventKey={"server-settings"} title={"Server Settings"}>
+                    {this.renderSettings(currentServerName)}
+                </Tab>
+                <Tab eventKey={"server-config"} title={"Server Configuration"}>
+                    {this.render_table_server_config()}
+                </Tab>
+            </Tabs>
+        )
+    }
+
+    /******************************************************
+     * Code design/implementation for Tabs_render()
+     * https://getbootstrap.com/docs/4.4/content/tables/#bordered-table
+     * react-bootstrap documentation tables
+     ******************************************************/
+    render_table_server_config() {
+        return (
+            <div className="panel panel-default">
+            <table className={"table table-bordered"} xs={15}>
+                <tbody>
+                <tr>
+                    <th scope={"row"}>Server Name</th>
+                    <td scope={"row"}>{this.getCurrentServerName()}</td>
+                </tr>
+                <tr>
+                    <th scope={"col"}>Request Version</th>
+                    <td scope={"col"}>{PROTOCOL_VERSION}</td>
+                </tr>
+                <tr>
+                    <th scope={"col"}>Request Type</th>
+                    <td scope={"col"}>config</td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+        )
+    }
+
 
     renderSettings(currentServerName) {
         return (

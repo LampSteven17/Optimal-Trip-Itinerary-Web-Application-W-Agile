@@ -83,7 +83,7 @@ said distance.
 | :--- | :--- | :--- | :--- |
 | *2/12/20* | *6* | *8* |  |
 | *2/14/20* | *6* | *4* |  |
-
+| *2/17/20* | *5* | *4* |  |
 ###Scrum 2/12 
 ####CLOSED TASKS (before today): 
 * Austin: #84, #111
@@ -109,6 +109,21 @@ said distance.
 * Ryan: #97
 * Cade: #38
 * Steven: #100
+
+
+####Scrum 2/17 
+####CLOSED TASKS (before today): 
+* Austin: #93
+* Cade: #36
+* Ryan: 
+* Steven: #100 #132 #137
+####EPICS CLOSED: 
+* Where Is 
+####IN PROGRESS: 
+* Austin: #97
+* Cade: #38
+* Ryan: #142
+* Steven: #95
 
 
 

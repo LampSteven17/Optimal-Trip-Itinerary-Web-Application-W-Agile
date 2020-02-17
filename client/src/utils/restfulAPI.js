@@ -43,7 +43,5 @@ export function isJsonResponseValid(object, schema) {
   let Ajv = require('ajv');
   let anotherJsonValidator = new Ajv();
   let validate = anotherJsonValidator.compile(schema);
-  console.log(object);
-  console.log(schema);
   return validate(object);
 }

@@ -106,7 +106,7 @@ export default class Atlas extends Component {
 
   updateMarkerFromInput(input) {
     let position = new Coordinates(input);
-    this.setState({markerPosition: {lat: position.getLatitude(), lng: position.getLongitude()}})
+    this.addMarker({latlng: {lat: position.getLatitude(), lng: position.getLongitude()}});
   }
 
   /**
@@ -165,7 +165,7 @@ export default class Atlas extends Component {
   }
 
   updateMarkerCallback(pos){
-    this.setState({markerPosition: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
+    this.addMarker({latlng: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
   }
 
   errorCallback(errData){

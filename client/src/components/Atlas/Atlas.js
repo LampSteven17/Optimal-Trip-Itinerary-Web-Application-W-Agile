@@ -169,7 +169,7 @@ export default class Atlas extends Component {
   }
 
   errorCallback(errData){
-    this.setState({markerPosition: {lat: 40.57, lng: -105.09}});
+    this.addMarker({latlng: {lat: 40.57, lng: -105.09}});
 
     if (errData.message === "User denied Geolocation") {
       this.setState({hideButton: true})

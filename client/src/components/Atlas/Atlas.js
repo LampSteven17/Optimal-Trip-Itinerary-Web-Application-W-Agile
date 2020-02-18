@@ -112,7 +112,7 @@ export default class Atlas extends Component {
    * Adapted from Coordinate-Parser isValidPosition Function
    * @param position takes the string of charcters input in lat lng above
    */
-  isValidPosition(position){
+  isValidPosition(position) {
     let caughtError;
 
     try{
@@ -121,12 +121,6 @@ export default class Atlas extends Component {
     }catch(caughtError){
       return(false);
     }
-  }
-
-  addMarker(mapClickInfo) {
-    this.setState(prevState => ({
-      markerPosition: [...prevState.markerPosition, mapClickInfo.latlng]
-    }));
   }
 
   getMarkerPosition() {
@@ -167,15 +161,21 @@ export default class Atlas extends Component {
     return null;
   }
 
-  updateMarkerCallback(pos){
+  updateMarkerCallback(pos) {
     this.addMarker({latlng: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
   }
 
-  errorCallback(errData){
+  errorCallback(errData) {
     this.addMarker({latlng: {lat: 40.57, lng: -105.09}});
 
     if (errData.message === "User denied Geolocation") {
       this.setState({hideButton: true})
     }
+  }
+
+  addMarker(mapClickInfo) {
+    this.setState(prevState => ({
+      markerPosition: [...prevState.markerPosition, mapClickInfo.latlng]
+    }));
   }
 }

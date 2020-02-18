@@ -45,12 +45,12 @@ export default class Atlas extends Component {
     this.errorCallback = this.errorCallback.bind(this);
 
     this.state = {
-      markerPosition: this.getCurrentLocation(),
+      markerPosition: [],
       hideButton: false,
       mapCenter: [0,0],
       validLatLng: FALSECOLOR
     };
-
+    this.getCurrentLocation();
   }
 
   render() {
@@ -95,7 +95,6 @@ export default class Atlas extends Component {
 
   handleInput(pos) {
     if (this.isValidPosition(pos)) {
-      //console.log(pos);
       this.setState({validLatLng: TRUECOLOR});
       this.updateMarkerFromInput(pos);
     }else{
@@ -125,13 +124,15 @@ export default class Atlas extends Component {
   }
 
   addMarker(mapClickInfo) {
-    this.setState({markerPosition: mapClickInfo.latlng});
+    this.setState(prevState => ({
+      markerPosition: [...prevState.markerPosition, mapClickInfo.latlng]
+    }));
   }
 
   getMarkerPosition() {
     let markerPosition = '';
-    if (this.state.markerPosition) {
-      markerPosition = this.state.markerPosition.lat.toFixed(2) + ', ' + this.state.markerPosition.lng.toFixed(2);
+    if (this.state.markerPosition.length !== 0) {
+      markerPosition = this.state.markerPosition[0].lat.toFixed(2) + ', ' + this.state.markerPosition[0].lng.toFixed(2);
     }
     return markerPosition;
   }
@@ -142,9 +143,10 @@ export default class Atlas extends Component {
         ref.leafletElement.openPopup()
       }
     };
-    if (position) {
+
+    if (position.length !== 0) {
       return (
-          <Marker ref={initMarker} position={position} icon={MARKER_ICON}>
+          <Marker ref={initMarker} position={position[0]} icon={MARKER_ICON}>
             <Popup offset={[0, -18]} className="font-weight-bold">{bodyJSX}</Popup>
           </Marker>
       );

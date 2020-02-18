@@ -95,7 +95,7 @@ export default class Atlas extends Component {
 
   handleInput(pos) {
     if (this.isValidPosition(pos)) {
-      this.setState({validLatLng: TRUECOLOR});
+        this.setState({validLatLng: TRUECOLOR});
       this.updateMarkerFromInput(pos);
     }else{
       this.setState({validLatLng: FALSECOLOR});
@@ -132,7 +132,8 @@ export default class Atlas extends Component {
   getMarkerPosition() {
     let markerPosition = '';
     if (this.state.markerPosition.length !== 0) {
-      markerPosition = this.state.markerPosition[0].lat.toFixed(2) + ', ' + this.state.markerPosition[0].lng.toFixed(2);
+      let marker = this.state.markerPosition[this.state.markerPosition.length - 1];
+      markerPosition = marker.lat.toFixed(2) + ', ' + marker.lng.toFixed(2);
     }
     return markerPosition;
   }
@@ -146,7 +147,7 @@ export default class Atlas extends Component {
 
     if (position.length !== 0) {
       return (
-          <Marker ref={initMarker} position={position[0]} icon={MARKER_ICON}>
+          <Marker ref={initMarker} position={position[position.length - 1]} icon={MARKER_ICON}>
             <Popup offset={[0, -18]} className="font-weight-bold">{bodyJSX}</Popup>
           </Marker>
       );

@@ -140,9 +140,9 @@ export default class Atlas extends Component {
 
     if (markers.length !== 0) {
       let markerList = [];
-      markers.forEach(marker => {
+      markers.forEach((marker, i) => {
         markerList.push(
-          <Marker ref={initMarker} position={marker} icon={MARKER_ICON}>
+          <Marker key={i} ref={initMarker} position={marker} icon={MARKER_ICON}>
             <Popup offset={[0, -18]} className="font-weight-bold">{bodyJSX}</Popup>
           </Marker>
         );

@@ -48,6 +48,7 @@ export default class Atlas extends Component {
 
     this.state = {
       markerPosition: [],
+      id: 0,
       hideButton: false,
       mapCenter: [0,0],
       validLatLng: FALSECOLOR,
@@ -152,7 +153,8 @@ export default class Atlas extends Component {
   getMarker(bodyJSX, markers) {
     const initMarker = ref => {
       if (ref) {
-        ref.leafletElement.openPopup()
+        ref.leafletElement.openPopup();
+        ref.leafletElement.closePopup();
       }
     };
 
@@ -161,7 +163,10 @@ export default class Atlas extends Component {
       markers.forEach((marker, i) => {
         markerList.push(
           <Marker key={i} ref={initMarker} position={marker} icon={MARKER_ICON}>
-            <Popup offset={[0, -18]} className="font-weight-bold">{bodyJSX}</Popup>
+            <Popup offset={[0, -18]} style={{ width: "50" }} className="font-weight-bold">
+              {bodyJSX}
+              <Button className='btn-csu' style={{ width: "100%", backgroundColor: "red" }} onClick={() => this.deleteMarker(marker)}><strong>Delete</strong></Button>
+            </Popup>
           </Marker>
         );
       });
@@ -169,6 +174,17 @@ export default class Atlas extends Component {
       return (
           <div>{markerList}</div>
       );
+    }
+  }
+
+  deleteMarker(marker) {
+    if (this.state.markerPosition.length === 1) {
+      this.setState({markerPosition: []});
+    }
+    else {
+      this.setState({markerPosition: this.state.markerPosition.filter((mk) => {
+        return mk.id !== marker.id;
+      })});
     }
   }
 
@@ -199,6 +215,8 @@ export default class Atlas extends Component {
   }
 
   addMarker(mapClickInfo) {
+    mapClickInfo.latlng.id = this.state.id;
+    this.setState({id: this.state.id + 1})
     if(this.state.currentArrayPos === 0){
       this.setState(prevState => ({
         markerPosition: [mapClickInfo.latlng]

@@ -17,6 +17,7 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
 import Geolocation from '@react-native-community/geolocation';
+import {getOriginalServerPort, sendServerRequest, sendServerRequestWithBody} from "../../utils/restfulAPI";
 
 const FALSECOLOR = "5px solid red";
 const TRUECOLOR =  "5px solid green";
@@ -50,7 +51,9 @@ export default class Atlas extends Component {
       mapCenter: [0,0],
       validLatLng: FALSECOLOR
     };
+    
     this.getCurrentLocation();
+    this.sendDistanceRequest();
   }
 
   render() {
@@ -106,7 +109,22 @@ export default class Atlas extends Component {
     let position = new Coordinates(input);
     this.addMarker({latlng: {lat: position.getLatitude(), lng: position.getLongitude()}});
   }
+/***************************************/
+  sendDistanceRequest(){
 
+    let requestBody = {
+      requestVersion: 1,
+      requestType: "distance",
+      place1: {latitude: "40.6", longitude: "-105.1"},
+      place2: {latitude: "-33.9", longitude: "151.2"},
+      earthRadius: 6371.0};
+
+    let s = sendServerRequestWithBody('distance', requestBody, getOriginalServerPort());
+    console.log(s);
+
+
+  }
+/*************************************************/
   /**
    * Adapted from Coordinate-Parser isValidPosition Function
    * @param position takes the string of charcters input in lat lng above

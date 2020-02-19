@@ -44,13 +44,15 @@ export default class Atlas extends Component {
     this.updateMarkerCallback = this.updateMarkerCallback.bind(this);
     this.updateMarkerFromInput = this.updateMarkerFromInput.bind(this);
     this.errorCallback = this.errorCallback.bind(this);
+    this.getCurrentLocation = this.getCurrentLocation.bind(this);
 
     this.state = {
       markerPosition: [],
       id: 0,
       hideButton: false,
       mapCenter: [0,0],
-      validLatLng: FALSECOLOR
+      validLatLng: FALSECOLOR,
+      currentArrayPos: 0,
     };
 
     this.getCurrentLocation();
@@ -195,6 +197,7 @@ export default class Atlas extends Component {
   }
 
   getCurrentLocation() {
+    this.setState({currentArrayPos: 0});
     Geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
     return null;
   }
@@ -214,9 +217,17 @@ export default class Atlas extends Component {
   addMarker(mapClickInfo) {
     mapClickInfo.latlng.id = this.state.id;
     this.setState({id: this.state.id + 1})
-    this.setState(prevState => ({
-      markerPosition: [...prevState.markerPosition, mapClickInfo.latlng]
-    }));
-    console.log(this.state.markerPosition);
+    if(this.state.currentArrayPos === 0){
+      this.setState(prevState => ({
+        markerPosition: [mapClickInfo.latlng]
+      }));
+      this.setState({currentArrayPos: 1});
+    }
+    else {
+      this.setState(prevState => ({
+        markerPosition: [...prevState.markerPosition, mapClickInfo.latlng]
+      }));
+      this.setState({currentArrayPos: 0})
+    }
   }
 }

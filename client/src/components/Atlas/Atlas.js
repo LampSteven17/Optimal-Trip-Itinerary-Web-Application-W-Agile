@@ -69,7 +69,6 @@ export default class Atlas extends Component {
               <Col sm={{size:'auto'}} style={{ width: "15rem" }} md={{size: 4, offset: 0}}>
                 <Form inline={true}>{
                     <Input style={{ width: "15rem", border: this.state.validLatLng }} placeholder="Latitude, Longitude" onInput={e => this.handleInput(e.target.value)}/>
-
                 }</Form>
               </Col>
             </Row>
@@ -132,18 +131,25 @@ export default class Atlas extends Component {
     return markerPosition;
   }
 
-  getMarker(bodyJSX, position) {
+  getMarker(bodyJSX, markers) {
     const initMarker = ref => {
       if (ref) {
         ref.leafletElement.openPopup()
       }
     };
 
-    if (position.length !== 0) {
-      return (
-          <Marker ref={initMarker} position={position[position.length - 1]} icon={MARKER_ICON}>
+    if (markers.length !== 0) {
+      let markerList = [];
+      markers.forEach(marker => {
+        markerList.push(
+          <Marker ref={initMarker} position={marker} icon={MARKER_ICON}>
             <Popup offset={[0, -18]} className="font-weight-bold">{bodyJSX}</Popup>
           </Marker>
+        );
+      });
+
+      return (
+          <div>{markerList}</div>
       );
     }
   }

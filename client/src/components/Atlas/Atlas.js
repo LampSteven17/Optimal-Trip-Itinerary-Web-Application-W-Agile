@@ -44,6 +44,7 @@ export default class Atlas extends Component {
     this.updateMarkerCallback = this.updateMarkerCallback.bind(this);
     this.updateMarkerFromInput = this.updateMarkerFromInput.bind(this);
     this.errorCallback = this.errorCallback.bind(this);
+    this.getCurrentLocation = this.getCurrentLocation.bind(this);
 
     this.state = {
       markerPosition: [],
@@ -180,6 +181,7 @@ export default class Atlas extends Component {
   }
 
   getCurrentLocation() {
+    this.setState({currentArrayPos: 0});
     Geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
     return null;
   }

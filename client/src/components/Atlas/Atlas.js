@@ -49,7 +49,8 @@ export default class Atlas extends Component {
       markerPosition: [],
       hideButton: false,
       mapCenter: [0,0],
-      validLatLng: FALSECOLOR
+      validLatLng: FALSECOLOR,
+      currentArrayPos: 0,
     };
 
     this.getCurrentLocation();
@@ -196,8 +197,17 @@ export default class Atlas extends Component {
   }
 
   addMarker(mapClickInfo) {
-    this.setState(prevState => ({
-      markerPosition: [...prevState.markerPosition, mapClickInfo.latlng]
-    }));
+    if(this.state.currentArrayPos === 0){
+      this.setState(prevState => ({
+        markerPosition: [mapClickInfo.latlng]
+      }));
+      this.setState({currentArrayPos: 1});
+    }
+    else {
+      this.setState(prevState => ({
+        markerPosition: [...prevState.markerPosition, mapClickInfo.latlng]
+      }));
+      this.setState({currentArrayPos: 0})
+    }
   }
 }

@@ -51,7 +51,7 @@ export default class Atlas extends Component {
       mapCenter: [0,0],
       validLatLng: FALSECOLOR
     };
-    
+
     this.getCurrentLocation();
     this.sendDistanceRequest();
   }
@@ -119,10 +119,8 @@ export default class Atlas extends Component {
       place2: {latitude: "-33.9", longitude: "151.2"},
       earthRadius: 6371.0};
 
-    let s = sendServerRequestWithBody('distance', requestBody, getOriginalServerPort());
-    console.log(s);
-
-
+    sendServerRequestWithBody('distance', requestBody, getOriginalServerPort())
+    .then((val) => console.log(val));
   }
 /*************************************************/
   /**

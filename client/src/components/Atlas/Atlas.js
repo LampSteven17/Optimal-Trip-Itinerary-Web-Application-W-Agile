@@ -151,7 +151,8 @@ export default class Atlas extends Component {
   getMarker(bodyJSX, markers) {
     const initMarker = ref => {
       if (ref) {
-        ref.leafletElement.openPopup()
+        ref.leafletElement.openPopup();
+        ref.leafletElement.closePopup();
       }
     };
 
@@ -160,9 +161,9 @@ export default class Atlas extends Component {
       markers.forEach((marker, i) => {
         markerList.push(
           <Marker key={i} ref={initMarker} position={marker} icon={MARKER_ICON}>
-            <Popup offset={[0, -18]} className="font-weight-bold">
+            <Popup offset={[0, -18]} style={{ width: "50" }} className="font-weight-bold">
               {bodyJSX}
-              <Button className='btn-csu' style={{ width: "100%" }} onClick={() => this.deleteMarker(marker)}><strong>Delete</strong></Button>
+              <Button className='btn-csu' style={{ width: "100%", backgroundColor: "red" }} onClick={() => this.deleteMarker(marker)}><strong>Delete</strong></Button>
             </Popup>
           </Marker>
         );

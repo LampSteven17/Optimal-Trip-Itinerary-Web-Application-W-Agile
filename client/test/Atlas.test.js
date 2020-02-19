@@ -11,7 +11,7 @@ function testInitialAppState() {
   let actualMarkerPosition = app.state().markerPosition;
   let actualMapCenter = app.state().mapCenter;
 
-  let expectedMarkerPosition = null;
+  let expectedMarkerPosition = [];
   let expectedMapCenter = [0, 0];
 
   expect(actualMarkerPosition).toEqual(expectedMarkerPosition);

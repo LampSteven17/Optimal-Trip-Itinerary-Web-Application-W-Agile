@@ -46,15 +46,14 @@ export default class Atlas extends Component {
     this.errorCallback = this.errorCallback.bind(this);
 
     this.state = {
-      markerPosition: this.getCurrentLocation(),
+      markerPosition: [],
       hideButton: false,
       mapCenter: [0,0],
       validLatLng: FALSECOLOR
     };
 
-
+    this.getCurrentLocation();
     this.sendDistanceRequest();
-
   }
 
   render() {
@@ -73,7 +72,6 @@ export default class Atlas extends Component {
               <Col sm={{size:'auto'}} style={{ width: "15rem" }} md={{size: 4, offset: 0}}>
                 <Form inline={true}>{
                     <Input style={{ width: "15rem", border: this.state.validLatLng }} placeholder="Latitude, Longitude" onInput={e => this.handleInput(e.target.value)}/>
-
                 }</Form>
               </Col>
             </Row>
@@ -99,8 +97,7 @@ export default class Atlas extends Component {
 
   handleInput(pos) {
     if (this.isValidPosition(pos)) {
-      //console.log(pos);
-      this.setState({validLatLng: TRUECOLOR});
+        this.setState({validLatLng: TRUECOLOR});
       this.updateMarkerFromInput(pos);
     }else{
       this.setState({validLatLng: FALSECOLOR});
@@ -110,7 +107,7 @@ export default class Atlas extends Component {
 
   updateMarkerFromInput(input) {
     let position = new Coordinates(input);
-    this.setState({markerPosition: {lat: position.getLatitude(), lng: position.getLongitude()}})
+    this.addMarker({latlng: {lat: position.getLatitude(), lng: position.getLongitude()}});
   }
 /***************************************/
   sendDistanceRequest(){
@@ -122,17 +119,15 @@ export default class Atlas extends Component {
       place2: {latitude: "-33.9", longitude: "151.2"},
       earthRadius: 6371.0};
 
-    let s = sendServerRequestWithBody('distance', requestBody, getOriginalServerPort());
-    console.log(s);
-
-
+    sendServerRequestWithBody('distance', requestBody, getOriginalServerPort())
+    .then((val) => console.log(val));
   }
 /*************************************************/
   /**
    * Adapted from Coordinate-Parser isValidPosition Function
    * @param position takes the string of charcters input in lat lng above
    */
-  isValidPosition(position){
+  isValidPosition(position) {
     let caughtError;
 
     try{
@@ -143,29 +138,34 @@ export default class Atlas extends Component {
     }
   }
 
-  addMarker(mapClickInfo) {
-    this.setState({markerPosition: mapClickInfo.latlng});
-  }
-
   getMarkerPosition() {
     let markerPosition = '';
-    if (this.state.markerPosition) {
-      markerPosition = this.state.markerPosition.lat.toFixed(2) + ', ' + this.state.markerPosition.lng.toFixed(2);
+    if (this.state.markerPosition.length !== 0) {
+      let marker = this.state.markerPosition[this.state.markerPosition.length - 1];
+      markerPosition = marker.lat.toFixed(2) + ', ' + marker.lng.toFixed(2);
     }
     return markerPosition;
   }
 
-  getMarker(bodyJSX, position) {
+  getMarker(bodyJSX, markers) {
     const initMarker = ref => {
       if (ref) {
         ref.leafletElement.openPopup()
       }
     };
-    if (position) {
-      return (
-          <Marker ref={initMarker} position={position} icon={MARKER_ICON}>
+
+    if (markers.length !== 0) {
+      let markerList = [];
+      markers.forEach((marker, i) => {
+        markerList.push(
+          <Marker key={i} ref={initMarker} position={marker} icon={MARKER_ICON}>
             <Popup offset={[0, -18]} className="font-weight-bold">{bodyJSX}</Popup>
           </Marker>
+        );
+      });
+
+      return (
+          <div>{markerList}</div>
       );
     }
   }
@@ -183,15 +183,21 @@ export default class Atlas extends Component {
     return null;
   }
 
-  updateMarkerCallback(pos){
-    this.setState({markerPosition: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
+  updateMarkerCallback(pos) {
+    this.addMarker({latlng: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
   }
 
-  errorCallback(errData){
-    this.setState({markerPosition: {lat: 40.57, lng: -105.09}});
+  errorCallback(errData) {
+    this.addMarker({latlng: {lat: 40.57, lng: -105.09}});
 
     if (errData.message === "User denied Geolocation") {
       this.setState({hideButton: true})
     }
+  }
+
+  addMarker(mapClickInfo) {
+    this.setState(prevState => ({
+      markerPosition: [...prevState.markerPosition, mapClickInfo.latlng]
+    }));
   }
 }

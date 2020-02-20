@@ -206,24 +206,27 @@ export default class Atlas extends Component {
         pts.push([marker.lat, marker.lng])
       });
 
-      let first = pts[0], last = pts[pts.length-1];
-      if (first.x != last.x || first.y != last.y) pts.push(first);
-      let twicearea = 0;
-      let x=0, y=0;
-      let nPts = pts.length;
-      let p1, p2, f;
+      let first = pts[0], last = pts[pts.length - 1];
+      if (first.x != last.x || first.y != last.y)
+        pts.push(first);
 
-      for (let i=0, j=nPts-1 ; i<nPts ; j=i++) {
-        p1 = pts[i]; p2 = pts[j];
-        f = p1.x*p2.y - p2.x*p1.y;
+      let twicearea = 0;
+      let x = 0,y = 0;
+      let nPts = pts.length;
+      let p1,p2,f;
+
+      for (let i = 0, j = nPts - 1; i < nPts; j = i++) {
+        p1 = pts[i];
+        p2 = pts[j];
+        f = p1.x * p2.y - p2.x * p1.y;
         twicearea += f;
-        x += ( p1.x + p2.x ) * f;
-        y += ( p1.y + p2.y ) * f;
+        x += (p1.x + p2.x) * f;
+        y += (p1.y + p2.y) * f;
       }
 
       f = twicearea * 3;
-      lat = x/f;
-      lon = y/f;
+      lat = x / f;
+      lon = y / f;
     }
 
     this.adjustZoomToFitPoints();
@@ -234,8 +237,8 @@ export default class Atlas extends Component {
   }
 
   adjustZoomToFitPoints() {
-    const map = this.mapRef.current.leafletElement;  //get native Map instance
-    const group = this.groupRef.current.leafletElement; //get native featureGroup instance
+    const map = this.mapRef.current.leafletElement;
+    const group = this.groupRef.current.leafletElement;
     map.fitBounds(group.getBounds());
   }
 

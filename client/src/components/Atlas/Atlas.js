@@ -162,7 +162,7 @@ export default class Atlas extends Component {
             <Popup offset={[0, -18]} style={{ width: "50" }} className="font-weight-bold">
               {bodyJSX}
               <Button className='btn-csu' style={{ width: "100%", backgroundColor: "red" }} onClick={() => this.deleteMarker(marker)}><strong>Delete</strong></Button>
-            </Popup>
+            </Popup>getCenter
           </Marker>
         );
       });
@@ -183,53 +183,68 @@ export default class Atlas extends Component {
     }
   }
 
-  getCentroid() {
+  getCenter() {
+    let lat, lng;
     if (this.state.markerPosition.length === 1) {
-      let lat = this.state.markerPosition[0].lat;
-      let lng = this.state.markerPosition[0].lng;
-      this.updateMapCenter(lat,lng);
+      lat = this.state.markerPosition[0].lat;
+      lng = this.state.markerPosition[0].lng;
     }
     else if (this.state.markerPosition.length === 2) {
-      let lat1 = this.state.markerPosition[0].lat;
-      let lng1 = this.state.markerPosition[0].lng;
-      let lat2 = this.state.markerPosition[1].lat;
-      let lng2 = this.state.markerPosition[1].lng;
-
-      let lat = (lat1 + lat2) / 2;
-      let lng = (lng1 + lng2) / 2;
-
-      this.updateMapCenter(lat,lng);
+      let midpoint = this.getLineMidpoint();
+      lat = midpoint[0];
+      lng = midpoint[1];
     }
     else {
-      let pts = [];
-      this.state.markerPosition.forEach((marker, i) => {
-        pts.push([marker.lat, marker.lng])
-      });
-
-      let first = pts[0], last = pts[pts.length - 1];
-      if (first.x != last.x || first.y != last.y)
-        pts.push(first);
-
-      let twicearea = 0;
-      let x = 0,y = 0;
-      let nPts = pts.length;
-      let p1,p2,f;
-
-      for (let i = 0, j = nPts - 1; i < nPts; j = i++) {
-        p1 = pts[i];
-        p2 = pts[j];
-        f = p1.x * p2.y - p2.x * p1.y;
-        twicearea += f;
-        x += (p1.x + p2.x) * f;
-        y += (p1.y + p2.y) * f;
-      }
-
-      f = twicearea * 3;
-      lat = x / f;
-      lon = y / f;
+      let centroid = this.getPolygonCentroid();
+      lat = centroid[0];
+      lng = centroid[1];
     }
 
+    this.updateMapCenter(lat,lng);
     this.adjustZoomToFitPoints();
+  }
+
+  getLineMidpoint() {
+    let lat1 = this.state.markerPosition[0].lat;
+    let lng1 = this.state.markerPosition[0].lng;
+    let lat2 = this.state.markerPosition[1].lat;
+    let lng2 = this.state.markerPosition[1].lng;
+
+    let lat = (lat1 + lat2) / 2;
+    let lng = (lng1 + lng2) / 2;
+
+    return [lat, lng];
+  }
+
+  getPolygonCentroid() {
+    let points = [];
+    this.state.markerPosition.forEach((marker, i) => {
+      points.push([marker.lat, marker.lng])
+    });
+
+    let first = points[0], last = points[points.length - 1];
+    if (first.x != last.x || first.y != last.y)
+      points.push(first);
+
+    let twicearea = 0;
+    let x = 0,y = 0;
+    let npoints = points.length;
+    let p1,p2,f;
+
+    for (let i = 0, j = npoints - 1; i < npoints; j = i++) {
+      p1 = points[i];
+      p2 = points[j];
+      f = p1.x * p2.y - p2.x * p1.y;
+      twicearea += f;
+      x += (p1.x + p2.x) * f;
+      y += (p1.y + p2.y) * f;
+    }
+
+    f = twicearea * 3;
+    lat = x / f;
+    lon = y / f;
+
+    return [lat, lon];
   }
 
   updateMapCenter(lat, lng) {
@@ -285,6 +300,6 @@ export default class Atlas extends Component {
       this.setState({currentArrayPos: 0})
     }
 
-    this.getCentroid();
+    this.getCenter();
   }
 }

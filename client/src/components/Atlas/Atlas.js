@@ -60,7 +60,7 @@ export default class Atlas extends Component {
     };
 
     this.getCurrentLocation();
-    this.sendDistanceRequest();
+    this.sendDistanceRequest("40.6","-105.1","-33.9","151.2",6371);
   }
 
   render() {
@@ -116,19 +116,27 @@ export default class Atlas extends Component {
     let position = new Coordinates(input);
     this.addMarker({latlng: {lat: position.getLatitude(), lng: position.getLongitude()}});
   }
-/***************************************/
-  sendDistanceRequest(){
+
+  sendDistanceRequest(lat1,lon1,lat2,lon2,earthRad){
     let requestBody = {
       requestVersion: 1,
       requestType: "distance",
-      place1: {latitude: "40.6", longitude: "-105.1"},
-      place2: {latitude: "-33.9", longitude: "151.2"},
-      earthRadius: 6371.0};
+      place1: {latitude: lat1, longitude: lon1},
+      place2: {latitude: lat2, longitude: lon2},
+      earthRadius: earthRad
+    };
 
     sendServerRequestWithBody('distance', requestBody, getOriginalServerPort())
-    .then((val) => console.log(val));
+    .then((data) => this.promptDistance(data.body.distance));
+
   }
-/*************************************************/
+
+  promptDistance(dist){
+    console.log(dist);
+
+  }
+
+
   /**
    * Adapted from Coordinate-Parser isValidPosition Function
    * @param position takes the string of charcters input in lat lng above
@@ -286,7 +294,7 @@ export default class Atlas extends Component {
 
   addMarker(mapClickInfo) {
     mapClickInfo.latlng.id = this.state.id;
-    this.setState({id: this.state.id + 1})
+    this.setState({id: this.state.id + 1});
     if(this.state.currentArrayPos === 0){
       this.setState(prevState => ({
         markerPosition: [mapClickInfo.latlng]

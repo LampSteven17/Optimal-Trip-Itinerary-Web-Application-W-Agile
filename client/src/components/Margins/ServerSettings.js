@@ -85,6 +85,7 @@ export default class ServerSettings extends Component {
     }
 
 
+
     renderSettings(currentServerName) {
         return (
             <ModalBody>
@@ -146,6 +147,7 @@ export default class ServerSettings extends Component {
             if (this.shouldAttemptConfigRequest(value)) {
                 sendServerRequest("config", value).then(config => {
                     this.processConfigResponse(config);
+                    console.log(config);
                 });
             } else {
                 this.setState({validServer: false, validSave: false, config: {}});

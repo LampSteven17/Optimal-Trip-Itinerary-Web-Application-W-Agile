@@ -62,8 +62,7 @@ export default class ServerSettings extends Component {
      * react-bootstrap documentation tables
      ******************************************************/
     render_table_server_config() {
-        return (
-            <div className="panel panel-default">
+        return <div className="panel panel-default">
             <table className={"table table-bordered"} xs={15}>
                 <tbody>
                 <tr>
@@ -80,9 +79,9 @@ export default class ServerSettings extends Component {
                 </tr>
                 </tbody>
             </table>
-            </div>
-        )
+        </div>
     }
+
 
 
     renderSettings(currentServerName) {
@@ -146,6 +145,7 @@ export default class ServerSettings extends Component {
             if (this.shouldAttemptConfigRequest(value)) {
                 sendServerRequest("config", value).then(config => {
                     this.processConfigResponse(config);
+                    console.log(config);
                 });
             } else {
                 this.setState({validServer: false, validSave: false, config: {}});

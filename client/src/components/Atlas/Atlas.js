@@ -53,7 +53,7 @@ export default class Atlas extends Component {
       mapCenter: [0,0],
       validLatLng: FALSECOLOR,
       currentArrayPos: 0,
-      inputPosition: [0,0],
+      inputPosition: null,
     };
 
     this.getCurrentLocation();
@@ -118,7 +118,9 @@ export default class Atlas extends Component {
   }
 
   updateMarkerFromInput() {
-    this.addMarker({latlng: {lat: this.state.inputPosition.lat, lng: this.state.inputPosition.lng}});
+    if(this.state.inputPosition !== null){
+      this.addMarker({latlng: {lat: this.state.inputPosition.lat, lng: this.state.inputPosition.lng}});
+    }
   }
 /***************************************/
   sendDistanceRequest(){

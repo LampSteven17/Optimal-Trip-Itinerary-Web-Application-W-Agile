@@ -53,6 +53,7 @@ export default class Atlas extends Component {
       mapCenter: [0,0],
       validLatLng: FALSECOLOR,
       currentArrayPos: 0,
+      inputPosition: [0,0],
     };
 
     this.getCurrentLocation();
@@ -69,13 +70,16 @@ export default class Atlas extends Component {
               </Col>
             </Row>
             <Row>
-              <Col sm={12} style={{ width: "7rem" }} md={{size: 1, offset: 3}}>
+              <Col sm={{size:'auto'}} style={{ width: "4.4rem" }} md={{size: 0, offset: 3}}>
                 {this.showHomeButton()}
               </Col>
-              <Col sm={{size:'auto'}} style={{ width: "15rem" }} md={{size: 4, offset: 0}}>
+              <Col sm={{size:'auto'}} style={{ width: "11.7rem" }} md={{size: 0, offset: 0}}>
                 <Form inline={true}>{
                     <Input style={{ width: "15rem", border: this.state.validLatLng }} placeholder="Latitude, Longitude" onInput={e => this.handleInput(e.target.value)}/>
                 }</Form>
+              </Col>
+              <Col>
+                <Button className={"btn-csu"} onClick={() => this.updateMarkerFromInput()}>+</Button>
               </Col>
             </Row>
           </Container>
@@ -101,16 +105,20 @@ export default class Atlas extends Component {
   handleInput(pos) {
     if (this.isValidPosition(pos)) {
         this.setState({validLatLng: TRUECOLOR});
-      this.updateMarkerFromInput(pos);
+      this.storeInputPosition(pos);
     }else{
       this.setState({validLatLng: FALSECOLOR});
     }
 
   }
 
-  updateMarkerFromInput(input) {
+  storeInputPosition(input) {
     let position = new Coordinates(input);
-    this.addMarker({latlng: {lat: position.getLatitude(), lng: position.getLongitude()}});
+    this.setState({inputPosition: {lat: position.getLatitude(), lng: position.getLongitude()}})
+  }
+
+  updateMarkerFromInput() {
+    this.addMarker({latlng: {lat: this.state.inputPosition.lat, lng: this.state.inputPosition.lng}});
   }
 /***************************************/
   sendDistanceRequest(){

@@ -191,6 +191,53 @@ export default class Atlas extends Component {
     }
   }
 
+  showHomeButton() {
+    if (this.state.hideButton === false) {
+      return (
+          <Button className='btn-csu' onClick={() => this.getCurrentLocation()}><strong>Home</strong></Button>
+      );
+    }
+  }
+
+  getCurrentLocation() {
+    Geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
+    return null;
+  }
+
+  updateMarkerCallback(pos) {
+    this.setState({currentArrayPos: 0});
+    this.addMarker({latlng: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
+  }
+
+  errorCallback(errData) {
+    this.setState({currentArrayPos: 0});
+    this.addMarker({latlng: {lat: 40.57, lng: -105.09}});
+
+    if (errData.message === "User denied Geolocation") {
+      this.setState({hideButton: true});
+    }
+  }
+
+  addMarker(mapClickInfo) {
+    mapClickInfo.latlng.id = this.state.id;
+    this.setState({id: this.state.id + 1});
+    if(this.state.currentArrayPos === 0){
+      this.setState(prevState => ({
+        markerPosition: [mapClickInfo.latlng]
+      }));
+      this.setState({currentArrayPos: 1});
+    }
+    else {
+      this.setState(prevState => ({
+        markerPosition: [...prevState.markerPosition, mapClickInfo.latlng]
+      }));
+      this.setState({currentArrayPos: 0})
+    }
+
+    this.getCenter();
+    this.drawLineBetweenPoints();
+  }
+
   getCenter() {
     let lat, lng;
     if (this.state.markerPosition.length === 1) {
@@ -265,49 +312,7 @@ export default class Atlas extends Component {
     map.fitBounds(group.getBounds());
   }
 
-  showHomeButton() {
-    if (this.state.hideButton === false) {
-      return (
-          <Button className='btn-csu' onClick={() => this.getCurrentLocation()}><strong>Home</strong></Button>
-      );
-    }
-  }
-
-  getCurrentLocation() {
-    Geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
-    return null;
-  }
-
-  updateMarkerCallback(pos) {
-    this.setState({currentArrayPos: 0});
-    this.addMarker({latlng: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
-  }
-
-  errorCallback(errData) {
-    this.setState({currentArrayPos: 0});
-    this.addMarker({latlng: {lat: 40.57, lng: -105.09}});
-
-    if (errData.message === "User denied Geolocation") {
-      this.setState({hideButton: true});
-    }
-  }
-
-  addMarker(mapClickInfo) {
-    mapClickInfo.latlng.id = this.state.id;
-    this.setState({id: this.state.id + 1});
-    if(this.state.currentArrayPos === 0){
-      this.setState(prevState => ({
-        markerPosition: [mapClickInfo.latlng]
-      }));
-      this.setState({currentArrayPos: 1});
-    }
-    else {
-      this.setState(prevState => ({
-        markerPosition: [...prevState.markerPosition, mapClickInfo.latlng]
-      }));
-      this.setState({currentArrayPos: 0})
-    }
-
-    this.getCenter();
+  drawLineBetweenPoints() {
+    
   }
 }

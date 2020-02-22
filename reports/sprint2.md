@@ -85,6 +85,7 @@ said distance.
 | *2/14/20* | *6* | *4* |  |
 | *2/17/20* | *5* | *4* |  |
 | *2/19/20* | *6* | *4* |  |
+| *2/21/20* | *5* | *5* | *Sickness in group* |
 ###Scrum 2/12 
 ####CLOSED TASKS (before today): 
 * Austin: #84, #111
@@ -131,7 +132,7 @@ said distance.
 * Austin: #147 #148
 * Cade:
 * Ryan: #156 
-* Steven: #103 #95 #149
+* Steven: #95 #149
 ####EPICS CLOSED: 
 * Support Protocol V2
 ####IN PROGRESS: 
@@ -139,6 +140,21 @@ said distance.
 * Cade: #38
 * Ryan: #151
 * Steven: #153
+
+
+####Scrum 2/21
+####CLOSED TASKS (before today): 
+* Austin: #157 #97 #152
+* Cade: #38
+* Ryan: 
+* Steven: #160
+####EPICS CLOSED: 
+* 
+####IN PROGRESS: 
+* Austin: #102
+* Cade: #122
+* Ryan: #156
+* Steven: #153 #103
 
 
 ## Review

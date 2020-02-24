@@ -86,6 +86,7 @@ said distance.
 | *2/17/20* | *5* | *4* |  |
 | *2/19/20* | *6* | *4* |  |
 | *2/21/20* | *5* | *5* | *Sickness in group* |
+| *2/24/20* | ** | ** | *Major Illness in Class, NOT IN CLASS* |
 ###Scrum 2/12 
 ####CLOSED TASKS (before today): 
 * Austin: #84, #111
@@ -148,13 +149,29 @@ said distance.
 * Cade: #38
 * Ryan: 
 * Steven: #160
-####EPICS CLOSED: 
-* 
+
 ####IN PROGRESS: 
 * Austin: #102
 * Cade: #122
 * Ryan: #156
 * Steven: #153 #103
+
+
+####Scrum 2/24
+####CLOSED TASKS (before today): 
+* Austin: 
+* Cade: 
+* Ryan: #151 #167
+* Steven: 
+
+####IN PROGRESS: 
+* Austin: #178 #102
+* Cade: #122 #174
+* Ryan: #173
+* Steven: #103 #153
+
+
+
 
 
 ## Review

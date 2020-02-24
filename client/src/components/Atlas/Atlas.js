@@ -56,7 +56,6 @@ export default class Atlas extends Component {
       hideButton: false,
       mapCenter: [0,0],
       validLatLng: FALSECOLOR,
-      currentArrayPos: 0,
       inputPosition: null,
     };
 
@@ -191,19 +190,16 @@ export default class Atlas extends Component {
   }
 
   deleteMarker(marker) {
-
+    console.log("Before delete: " + this.state.markerPosition);
     let position = null;
-    this.state.markerPosition.filter((mk) => {
-      console.log(mk.id);
-      position = mk.id !== marker.id;
-    });
-    if (position === 1) {
-      this.setState({markerPosition: this.state.markerPosition.splice(1, 1)});
+    for(let i = 0; i < this.state.markerPosition.length; ++i){
+      if (this.state.markerPosition[i].id === marker.id) {
+        position = i;
+      }
     }
-    else{
-      this.setState({markerPosition: this.state.markerPosition.splice(0, 1)})
-    }
-    console.log(this.state.markerPosition);
+    console.log("Position" + position);
+    this.setState({markerPosition: this.state.markerPosition.splice(position, 1)});
+    console.log("After delete: " + this.state.markerPosition);
   }
 
   getCenter() {
@@ -294,12 +290,10 @@ export default class Atlas extends Component {
   }
 
   updateMarkerCallback(pos) {
-    this.setState({currentArrayPos: 0});
     this.addMarker({latlng: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
   }
 
   errorCallback(errData) {
-    this.setState({currentArrayPos: 0});
     this.addMarker({latlng: {lat: 40.57, lng: -105.09}});
 
     if (errData.message === "User denied Geolocation") {
@@ -315,6 +309,7 @@ export default class Atlas extends Component {
         markerPosition: [...prevState.markerPosition, mapClickInfo.latlng]
       }));
     }
+    console.log(this.state.markerPosition);
 
     this.getCenter();
   }

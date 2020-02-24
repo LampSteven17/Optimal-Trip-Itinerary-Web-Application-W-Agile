@@ -191,14 +191,19 @@ export default class Atlas extends Component {
   }
 
   deleteMarker(marker) {
-    if (this.state.markerPosition.length === 1) {
-      this.setState({markerPosition: []});
+
+    let position = null;
+    this.state.markerPosition.filter((mk) => {
+      console.log(mk.id);
+      position = mk.id !== marker.id;
+    });
+    if (position === 1) {
+      this.setState({markerPosition: this.state.markerPosition.splice(1, 1)});
     }
-    else {
-      this.setState({markerPosition: this.state.markerPosition.filter((mk) => {
-        return mk.id !== marker.id;
-      })});
+    else{
+      this.setState({markerPosition: this.state.markerPosition.splice(0, 1)})
     }
+    console.log(this.state.markerPosition);
   }
 
   getCenter() {
@@ -259,8 +264,8 @@ export default class Atlas extends Component {
     }
 
     f = twicearea * 3;
-    lat = x / f;
-    lon = y / f;
+    let lat = x / f;
+    let lon = y / f;
 
     return [lat, lon];
   }
@@ -305,17 +310,10 @@ export default class Atlas extends Component {
   addMarker(mapClickInfo) {
     mapClickInfo.latlng.id = this.state.id;
     this.setState({id: this.state.id + 1});
-    if(this.state.currentArrayPos === 0){
-      this.setState(prevState => ({
-        markerPosition: [mapClickInfo.latlng]
-      }));
-      this.setState({currentArrayPos: 1});
-    }
-    else {
+    if(this.state.markerPosition.length < 2){
       this.setState(prevState => ({
         markerPosition: [...prevState.markerPosition, mapClickInfo.latlng]
       }));
-      this.setState({currentArrayPos: 0})
     }
 
     this.getCenter();

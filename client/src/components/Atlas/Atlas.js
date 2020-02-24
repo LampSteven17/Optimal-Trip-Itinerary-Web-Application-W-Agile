@@ -58,16 +58,23 @@ export default class Atlas extends Component {
       validLatLng: FALSECOLOR,
       currentArrayPos: 0,
       inputPosition: null,
+      displayNum: "",
+      displayUnit: "",
     };
 
     this.getCurrentLocation();
-    this.sendDistanceRequest("40.6","-105.1","-33.9","151.2",6371);
+    //this.sendDistanceRequest("40.6","-105.1","-33.9","151.2",6371);
   }
 
   render() {
     return (
         <div>
           <Container>
+            <Row>
+              <Col sm={12} md={{size: 6, offset: 3}}>
+                <h2>Distance: {this.state.displayNum} {this.state.displayUnit}</h2>
+              </Col>
+            </Row>
             <Row>
               <Col sm={12} md={{size: 6, offset: 3}}>
                 {this.renderLeafletMap()}
@@ -137,12 +144,20 @@ export default class Atlas extends Component {
     };
 
     sendServerRequestWithBody('distance', requestBody, getOriginalServerPort())
-    .then((data) => this.promptDistance(data.body.distance));
+    .then((data) => this.promptDistance(data.body.distance,earthRad));
 
   }
 
-  promptDistance(dist){
-    console.log(dist);
+  promptDistance(dist,rad){
+    let macro;
+
+    if(6371/rad == 1){
+      macro = "KM";
+    }else{
+      macro = "NON_SUPPORTED UNIT DETECTED";
+    }
+
+    this.setState({displayNum: dist, displayUnit: macro});
 
   }
 

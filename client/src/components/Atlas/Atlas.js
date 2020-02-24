@@ -42,6 +42,8 @@ export default class Atlas extends Component {
 
     this.mapRef = createRef();
     this.groupRef = createRef();
+    this.map;
+    this.group;
 
     this.addMarker = this.addMarker.bind(this);
     this.updateMarkerCallback = this.updateMarkerCallback.bind(this);
@@ -87,6 +89,10 @@ export default class Atlas extends Component {
     );
   }
 
+  componentDidMount() {
+    this.map = this.mapRef.current.leafletElement;
+  }
+
   renderLeafletMap() {
     return (
         <Map center={this.state.mapCenter}
@@ -105,7 +111,7 @@ export default class Atlas extends Component {
 
   handleInput(pos) {
     if (this.isValidPosition(pos)) {
-        this.setState({validLatLng: TRUECOLOR});
+      this.setState({validLatLng: TRUECOLOR});
       this.updateMarkerFromInput(pos);
     }else{
       this.setState({validLatLng: FALSECOLOR});
@@ -296,8 +302,8 @@ export default class Atlas extends Component {
     }
 
     f = twicearea * 3;
-    lat = x / f;
-    lon = y / f;
+    let lat = x / f;
+    let lon = y / f;
 
     return [lat, lon];
   }
@@ -307,12 +313,11 @@ export default class Atlas extends Component {
   }
 
   adjustZoomToFitPoints() {
-    const map = this.mapRef.current.leafletElement;
-    const group = this.groupRef.current.leafletElement;
-    map.fitBounds(group.getBounds());
+    this.group = this.groupRef.current.leafletElement;
+    this.map.fitBounds(this.group.getBounds());
   }
 
   drawLineBetweenPoints() {
-    
+
   }
 }

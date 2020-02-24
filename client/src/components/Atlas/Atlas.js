@@ -290,7 +290,7 @@ export default class Atlas extends Component {
   }
 
   updateMarkerCallback(pos) {
-    this.addMarker({latlng: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
+    this.addMarker({latlng:{lat: pos.coords.latitude, lng: pos.coords.longitude}});
   }
 
   errorCallback(errData) {
@@ -305,10 +305,12 @@ export default class Atlas extends Component {
     mapClickInfo.latlng.id = this.state.id;
     this.setState({id: this.state.id + 1});
     if(this.state.markerPosition.length < 2){
+      console.log("REEEEE", mapClickInfo);
       this.setState(prevState => ({
-        markerPosition: [...prevState.markerPosition, mapClickInfo.latlng]
+        markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
       }));
     }
+
     console.log(this.state.markerPosition);
 
     this.getCenter();

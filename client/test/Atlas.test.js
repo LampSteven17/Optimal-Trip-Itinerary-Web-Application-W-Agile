@@ -17,4 +17,33 @@ function testInitialAppState() {
   expect(actualMarkerPosition).toEqual(expectedMarkerPosition);
   expect(actualMapCenter).toEqual(expectedMapCenter);
 }
+
+function testInitialHandleInput() {
+  const app = shallow(<Atlas />);
+
+  try {
+    let validCoords = Coordinates(45.9, -105.3);
+    expect(validCoords);
+    this.handleInput(validCoords);
+    expect(this.state.validLatLng).toEqual(TRUECOLOR);
+  }catch(error){
+
+  }
+
+
+  try {
+    let invalidCoords = Coordinates("sfs", "ljsjf");
+  }catch(error){
+    expect(error);
+  }
+}
+
+function testStoreInputPosition(){
+//TODO
+
+}
+
+
 test("Testing Atlas's Initial State", testInitialAppState);
+test("Testing Atlas's Handle Input", testInitialHandleInput);
+test("Testing Atlas's Store Input Position",testStoreInputPosition);

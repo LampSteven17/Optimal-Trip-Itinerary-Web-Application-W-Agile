@@ -190,16 +190,13 @@ export default class Atlas extends Component {
   }
 
   deleteMarker(marker) {
-    console.log("Before delete: " + this.state.markerPosition);
-    let position = null;
-    for(let i = 0; i < this.state.markerPosition.length; ++i){
-      if (this.state.markerPosition[i].id === marker.id) {
-        position = i;
-      }
-    }
-    console.log("Position" + position);
-    this.setState({markerPosition: this.state.markerPosition.splice(position, 1)});
-    console.log("After delete: " + this.state.markerPosition);
+    console.log(this.state.markerPosition);
+    let newArray = this.state.markerPosition.filter(function(mk) {
+      return mk.id !== marker.id;
+    });
+    console.log(newArray);
+    this.setState({markerPosition: newArray});
+    console.log(this.state.markerPosition);
   }
 
   getCenter() {
@@ -305,13 +302,11 @@ export default class Atlas extends Component {
     mapClickInfo.latlng.id = this.state.id;
     this.setState({id: this.state.id + 1});
     if(this.state.markerPosition.length < 2){
-      console.log("REEEEE", mapClickInfo);
       this.setState(prevState => ({
         markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
       }));
     }
 
-    console.log(this.state.markerPosition);
 
     this.getCenter();
   }

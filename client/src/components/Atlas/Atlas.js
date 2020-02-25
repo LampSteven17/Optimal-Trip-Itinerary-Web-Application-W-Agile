@@ -56,7 +56,6 @@ export default class Atlas extends Component {
       hideButton: false,
       mapCenter: [0,0],
       validLatLng: FALSECOLOR,
-      currentArrayPos: 0,
       inputPosition: null,
       displayNum: "",
       displayUnit: "",
@@ -206,14 +205,13 @@ export default class Atlas extends Component {
   }
 
   deleteMarker(marker) {
-    if (this.state.markerPosition.length === 1) {
-      this.setState({markerPosition: []});
-    }
-    else {
-      this.setState({markerPosition: this.state.markerPosition.filter((mk) => {
-        return mk.id !== marker.id;
-      })});
-    }
+    console.log(this.state.markerPosition);
+    let newArray = this.state.markerPosition.filter(function(mk) {
+      return mk.id !== marker.id;
+    });
+    console.log(newArray);
+    this.setState({markerPosition: newArray});
+    console.log(this.state.markerPosition);
   }
 
   getCenter() {
@@ -274,8 +272,8 @@ export default class Atlas extends Component {
     }
 
     f = twicearea * 3;
-    lat = x / f;
-    lon = y / f;
+    let lat = x / f;
+    let lon = y / f;
 
     return [lat, lon];
   }
@@ -304,12 +302,10 @@ export default class Atlas extends Component {
   }
 
   updateMarkerCallback(pos) {
-    this.setState({currentArrayPos: 0});
-    this.addMarker({latlng: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
+    this.addMarker({latlng:{lat: pos.coords.latitude, lng: pos.coords.longitude}});
   }
 
   errorCallback(errData) {
-    this.setState({currentArrayPos: 0});
     this.addMarker({latlng: {lat: 40.57, lng: -105.09}});
 
     if (errData.message === "User denied Geolocation") {
@@ -320,18 +316,12 @@ export default class Atlas extends Component {
   addMarker(mapClickInfo) {
     mapClickInfo.latlng.id = this.state.id;
     this.setState({id: this.state.id + 1});
-    if(this.state.currentArrayPos === 0){
+    if(this.state.markerPosition.length < 2){
       this.setState(prevState => ({
-        markerPosition: [mapClickInfo.latlng]
+        markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
       }));
-      this.setState({currentArrayPos: 1});
     }
-    else {
-      this.setState(prevState => ({
-        markerPosition: [...prevState.markerPosition, mapClickInfo.latlng]
-      }));
-      this.setState({currentArrayPos: 0})
-    }
+
 
     this.getCenter();
   }

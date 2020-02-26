@@ -141,20 +141,6 @@ export default class Atlas extends Component {
     }
   }
 
-  sendDistanceRequest(lat1,lon1,lat2,lon2,earthRad){
-    let requestBody = {
-      requestVersion: 1,
-      requestType: "distance",
-      place1: {latitude: lat1, longitude: lon1},
-      place2: {latitude: lat2, longitude: lon2},
-      earthRadius: earthRad
-    };
-
-    sendServerRequestWithBody('distance', requestBody, getOriginalServerPort())
-    .then((data) => this.promptDistance(data.body.distance,earthRad));
-
-  }
-
   promptDistance(dist,rad){
     let macro;
 
@@ -382,6 +368,20 @@ export default class Atlas extends Component {
         points[1][1].toString(),
         6371);
     }
+  }
+
+  sendDistanceRequest(lat1,lon1,lat2,lon2,earthRad){
+    let requestBody = {
+      requestVersion: 1,
+      requestType: "distance",
+      place1: {latitude: lat1, longitude: lon1},
+      place2: {latitude: lat2, longitude: lon2},
+      earthRadius: earthRad
+    };
+
+    sendServerRequestWithBody('distance', requestBody, getOriginalServerPort())
+    .then((data) => this.promptDistance(data.body.distance,earthRad));
+
   }
 
   getPositions() {

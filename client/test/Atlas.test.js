@@ -4,17 +4,8 @@ import {shallow} from 'enzyme';
 
 import Atlas from '../src/components/Atlas/Atlas';
 
-var createElementNSOrig = global.document.createElementNS
-global.document.createElementNS = function(namespaceURI, qualifiedName) {
-  if (namespaceURI==='http://www.w3.org/2000/svg' && qualifiedName==='svg'){
-    var element = createElementNSOrig.apply(this,arguments)
-    element.createSVGRect = function(){};
-    return element;
-  }
-  return createElementNSOrig.apply(this,arguments)
-}
-
 function testInitialAppState() {
+  jest.mock('leaflet');
   const app = shallow(<Atlas />);
 
   let actualMarkerPosition = app.state().markerPosition;
@@ -28,6 +19,7 @@ function testInitialAppState() {
 }
 
 function testInitialHandleInput() {
+  jest.mock('leaflet');
   const app = shallow(<Atlas />);
 
   try {

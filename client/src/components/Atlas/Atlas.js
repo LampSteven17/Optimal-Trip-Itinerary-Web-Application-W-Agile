@@ -99,7 +99,9 @@ export default class Atlas extends Component {
   }
 
   componentDidMount() {
-    this.map = this.mapRef.current.leafletElement;
+    if (this.mapRef.current) {
+      this.map = this.mapRef.current.leafletElement;
+    }
   }
 
   renderLeafletMap() {

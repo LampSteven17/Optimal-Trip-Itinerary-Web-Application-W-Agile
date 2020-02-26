@@ -64,7 +64,6 @@ export default class Atlas extends Component {
     };
 
     this.getCurrentLocation();
-    //this.sendDistanceRequest("40.6","-105.1","-33.9","151.2",6371);
   }
 
   render() {
@@ -377,8 +376,17 @@ export default class Atlas extends Component {
       }));
     }
 
-
     this.getCenter();
+    if (this.state.markerPosition.length > 1) {
+      let points = this.getPositions();
+      console.log(points);
+      this.sendDistanceRequest(
+        points[0][0].toString(),
+        points[0][1].toString(),
+        points[1][0].toString(),
+        points[1][1].toString(),
+        6371);
+    }
   }
 
   getPositions() {

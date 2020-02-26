@@ -208,13 +208,10 @@ export default class Atlas extends Component {
   }
 
   deleteMarker(marker) {
-    console.log(this.state.markerPosition);
     let newArray = this.state.markerPosition.filter(function(mk) {
       return mk.id !== marker.id;
     });
-    console.log(newArray);
     this.setState({markerPosition: newArray});
-    console.log(this.state.markerPosition);
   }
 
   showHomeButton() {
@@ -376,7 +373,6 @@ export default class Atlas extends Component {
     this.getCenter();
     if (this.state.markerPosition.length > 1) {
       let points = this.getPositions();
-      console.log(points);
       this.sendDistanceRequest(
         points[0][0].toString(),
         points[0][1].toString(),

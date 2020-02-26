@@ -112,9 +112,9 @@ export default class Atlas extends Component {
              ref={this.mapRef}
              onClick={this.addMarker}
              style={{height: MAP_STYLE_LENGTH, maxWidth: MAP_STYLE_LENGTH}}>
-          <TileLayer url={MAP_LAYER_URL} attribution={MAP_LAYER_ATTRIBUTION}/>
-          {this.getMarker(this.getMarkerPosition(), this.state.markerPosition)}
-          <Polyline color="red" positions={this.getPositions()} />
+              <TileLayer url={MAP_LAYER_URL} attribution={MAP_LAYER_ATTRIBUTION}/>
+              {this.getMarker()}
+              <Polyline color="red" positions={this.getPositions()} />
         </Map>
     )
   }
@@ -182,23 +182,20 @@ export default class Atlas extends Component {
     }
   }
 
-  getMarkerPosition() {
+  formatPosition(position) {
     let markerPosition = '';
-    if (this.state.markerPosition.length !== 0) {
-      let marker = this.state.markerPosition[this.state.markerPosition.length - 1];
-      markerPosition = marker.lat.toFixed(2) + ', ' + marker.lng.toFixed(2);
-    }
+    markerPosition = position.lat.toFixed(2) + ', ' + position.lng.toFixed(2);
     return markerPosition;
   }
 
-  getMarker(bodyJSX, markers) {
-    if (markers.length !== 0) {
+  getMarker() {
+    if (this.state.markerPosition.length !== 0) {
       let markerList = [];
-      markers.forEach((marker, i) => {
+      this.state.markerPosition.forEach((marker, i) => {
         markerList.push(
           <Marker key={i}  position={marker} icon={MARKER_ICON}>
             <Popup offset={[0, -18]} style={{ width: "50" }} className="font-weight-bold">
-              {bodyJSX}
+              {this.formatPosition(marker)}
               <Button className='btn-csu' style={{ width: "100%", backgroundColor: "red" }} onClick={() => this.deleteMarker(marker)}><strong>Delete</strong></Button>
             </Popup>getCenter
           </Marker>

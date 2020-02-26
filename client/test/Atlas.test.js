@@ -4,8 +4,17 @@ import {shallow} from 'enzyme';
 
 import Atlas from '../src/components/Atlas/Atlas';
 
-function testInitialAppState() {
+var createElementNSOrig = global.document.createElementNS
+global.document.createElementNS = function(namespaceURI, qualifiedName) {
+  if (namespaceURI==='http://www.w3.org/2000/svg' && qualifiedName==='svg'){
+    var element = createElementNSOrig.apply(this,arguments)
+    element.createSVGRect = function(){};
+    return element;
+  }
+  return createElementNSOrig.apply(this,arguments)
+}
 
+function testInitialAppState() {
   const app = shallow(<Atlas />);
 
   let actualMarkerPosition = app.state().markerPosition;

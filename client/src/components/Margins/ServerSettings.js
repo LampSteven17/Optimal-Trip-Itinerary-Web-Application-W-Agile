@@ -19,7 +19,9 @@ export default class ServerSettings extends Component {
             inputText: this.props.serverSettings.serverPort,
             validServer: true,
             validSave: false,
-            config: {}
+            config: {},
+            configRequestVersion: "",
+            configRequestType: ""
         }
     }
 
@@ -140,12 +142,24 @@ export default class ServerSettings extends Component {
         return currentServerName;
     }
 
+    getServerSettings() {
+        sendServerRequest("config", this.state.inputText).then(config => {
+            this.stateSetter(config);
+            console.log("here");
+        });
+    }
+
+    stateSetter (config) {
+        this.setState({configRequestVersion: config.body.requestVersion})
+    }
+    //console.log("herhehrhehrh");
+    //console.log(config.body.requestVersion);
+
     updateInput(value) {
         this.setState({inputText: value}, () => {
             if (this.shouldAttemptConfigRequest(value)) {
                 sendServerRequest("config", value).then(config => {
                     this.processConfigResponse(config);
-                    console.log(config);
                 });
             } else {
                 this.setState({validServer: false, validSave: false, config: {}});

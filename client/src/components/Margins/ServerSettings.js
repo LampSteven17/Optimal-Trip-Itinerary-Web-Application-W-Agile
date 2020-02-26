@@ -64,6 +64,7 @@ export default class ServerSettings extends Component {
      * react-bootstrap documentation tables
      ******************************************************/
     render_table_server_config() {
+        let request_version = this.getRequestType();
         return <div className="panel panel-default">
             <table className={"table table-bordered"} xs={15}>
                 <tbody>
@@ -82,6 +83,11 @@ export default class ServerSettings extends Component {
                 </tbody>
             </table>
         </div>
+    }
+
+    getRequestType() {
+        let requestTyper = this.state.body.requestType;
+        return requestTyper;
     }
 
 
@@ -142,18 +148,6 @@ export default class ServerSettings extends Component {
         return currentServerName;
     }
 
-    getServerSettings() {
-        sendServerRequest("config", this.state.inputText).then(config => {
-            this.stateSetter(config);
-            console.log("here");
-        });
-    }
-
-    stateSetter (config) {
-        this.setState({configRequestVersion: config.body.requestVersion})
-    }
-    //console.log("herhehrhehrh");
-    //console.log(config.body.requestVersion);
 
     updateInput(value) {
         this.setState({inputText: value}, () => {
@@ -162,7 +156,9 @@ export default class ServerSettings extends Component {
                     this.processConfigResponse(config);
                 });
             } else {
-                this.setState({validServer: false, validSave: false, config: {}});
+                this.setState({validServer: false,
+                    validSave: false,
+                    config: {}});
             }
         });
     }
@@ -177,8 +173,7 @@ export default class ServerSettings extends Component {
             this.setState({validServer: false, validSave: false, config: false});
         } else {
             this.setState({validServer: true, validSave: true, config: config});
-        }
-    }
+    }}
 
     resetServerSettingsState() {
         this.props.toggleOpen();

@@ -12,7 +12,7 @@ import {
   Row
 } from 'reactstrap';
 
-import {FeatureGroup, Map, Marker, Popup, TileLayer} from 'react-leaflet';
+import {FeatureGroup, Map, Marker, Polyline, Popup, TileLayer} from 'react-leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
@@ -105,6 +105,7 @@ export default class Atlas extends Component {
              style={{height: MAP_STYLE_LENGTH, maxWidth: MAP_STYLE_LENGTH}}>
           <TileLayer url={MAP_LAYER_URL} attribution={MAP_LAYER_ATTRIBUTION}/>
           {this.getMarker(this.getMarkerPosition(), this.state.markerPosition)}
+          <Polyline color="red" positions={this.getPositions()} />
         </Map>
     )
   }
@@ -241,7 +242,9 @@ export default class Atlas extends Component {
     }
 
     this.getCenter();
-    this.drawLineBetweenPoints();
+    if (this.state.markerPosition.length > 1) {
+
+    }
   }
 
   getCenter() {
@@ -317,7 +320,12 @@ export default class Atlas extends Component {
     this.map.fitBounds(this.group.getBounds());
   }
 
-  drawLineBetweenPoints() {
+  getPositions() {
+    let latlngArray = [];
+    this.state.markerPosition.forEach((marker, i) => {
+      latlngArray.push([marker.lat, marker.lng]);
+    });
 
+    return latlngArray;
   }
 }

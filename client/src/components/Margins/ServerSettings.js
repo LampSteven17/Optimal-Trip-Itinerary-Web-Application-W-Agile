@@ -20,8 +20,6 @@ export default class ServerSettings extends Component {
             validServer: true,
             validSave: false,
             config: {},
-            configRequestVersion: "",
-            configRequestType: ""
         }
     }
 
@@ -64,7 +62,7 @@ export default class ServerSettings extends Component {
      * react-bootstrap documentation tables
      ******************************************************/
     render_table_server_config() {
-        let request_version = this.getRequestType();
+        this.process_config_body(this.props.serverSettings.serverConfig);
         return <div className="panel panel-default">
             <table className={"table table-bordered"} xs={15}>
                 <tbody>
@@ -78,19 +76,19 @@ export default class ServerSettings extends Component {
                 </tr>
                 <tr>
                     <th scope={"col"}>Request Type</th>
-                    <td scope={"col"}>config</td>
+                    <td scope={"col"}>{}</td>
                 </tr>
                 </tbody>
             </table>
         </div>
     }
 
-    getRequestType() {
-        let requestTyper = this.state.body.requestType;
-        return requestTyper;
+    process_config_body(config_obj){
+        console.log(config_obj);
+        let JSONstring = JSON.stringify(config_obj);
+        let testRequest = Object.keys(JSONstring);
+        console.log(testRequest.length);
     }
-
-
 
     renderSettings(currentServerName) {
         return (

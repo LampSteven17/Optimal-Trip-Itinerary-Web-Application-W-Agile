@@ -12,7 +12,7 @@ import {
   Row
 } from 'reactstrap';
 
-import {FeatureGroup, Map, Marker, Popup, TileLayer} from 'react-leaflet';
+import {FeatureGroup, Map, Marker, Polyline, Popup, TileLayer} from 'react-leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
@@ -42,6 +42,8 @@ export default class Atlas extends Component {
 
     this.mapRef = createRef();
     this.groupRef = createRef();
+    this.map;
+    this.group;
 
     this.addMarker = this.addMarker.bind(this);
     this.updateMarkerCallback = this.updateMarkerCallback.bind(this);
@@ -62,7 +64,6 @@ export default class Atlas extends Component {
     };
 
     this.getCurrentLocation();
-    //this.sendDistanceRequest("40.6","-105.1","-33.9","151.2",6371);
   }
 
   render() {
@@ -97,6 +98,12 @@ export default class Atlas extends Component {
     );
   }
 
+  componentDidMount() {
+    if (this.mapRef.current) {
+      this.map = this.mapRef.current.leafletElement;
+    }
+  }
+
   renderLeafletMap() {
     return (
         <Map center={this.state.mapCenter}
@@ -107,8 +114,9 @@ export default class Atlas extends Component {
              ref={this.mapRef}
              onClick={this.addMarker}
              style={{height: MAP_STYLE_LENGTH, maxWidth: MAP_STYLE_LENGTH}}>
-          <TileLayer url={MAP_LAYER_URL} attribution={MAP_LAYER_ATTRIBUTION}/>
-          {this.getMarker()}
+              <TileLayer url={MAP_LAYER_URL} attribution={MAP_LAYER_ATTRIBUTION}/>
+              {this.getMarker()}
+              <Polyline color="red" positions={this.getPositions()} />
         </Map>
     )
   }
@@ -131,20 +139,6 @@ export default class Atlas extends Component {
     if(this.state.inputPosition !== null){
       this.addMarker({latlng: {lat: this.state.inputPosition.lat, lng: this.state.inputPosition.lng}});
     }
-  }
-
-  sendDistanceRequest(lat1,lon1,lat2,lon2,earthRad){
-    let requestBody = {
-      requestVersion: 1,
-      requestType: "distance",
-      place1: {latitude: lat1, longitude: lon1},
-      place2: {latitude: lat2, longitude: lon2},
-      earthRadius: earthRad
-    };
-
-    sendServerRequestWithBody('distance', requestBody, getOriginalServerPort())
-    .then((data) => this.promptDistance(data.body.distance,earthRad));
-
   }
 
   promptDistance(dist,rad){
@@ -202,13 +196,59 @@ export default class Atlas extends Component {
   }
 
   deleteMarker(marker) {
-    console.log(this.state.markerPosition);
     let newArray = this.state.markerPosition.filter(function(mk) {
       return mk.id !== marker.id;
     });
-    console.log(newArray);
     this.setState({markerPosition: newArray});
-    console.log(this.state.markerPosition);
+  }
+
+  showHomeButton() {
+    if (this.state.hideButton === false) {
+      return (
+          <Button className='btn-csu' onClick={() => this.getCurrentLocation()}><strong>Home</strong></Button>
+      );
+    }
+  }
+
+  getCurrentLocation() {
+    Geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
+    return null;
+  }
+
+  updateMarkerCallback(pos) {
+    this.setState({currentArrayPos: 0});
+    this.addMarker({latlng: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
+  }
+
+  errorCallback(errData) {
+    this.setState({currentArrayPos: 0});
+    this.addMarker({latlng: {lat: 40.57, lng: -105.09}});
+
+    if (errData.message === "User denied Geolocation") {
+      this.setState({hideButton: true});
+    }
+  }
+
+  addMarker(mapClickInfo) {
+    mapClickInfo.latlng.id = this.state.id;
+    this.setState({id: this.state.id + 1});
+    if(this.state.currentArrayPos === 0){
+      this.setState(prevState => ({
+        markerPosition: [mapClickInfo.latlng]
+      }));
+      this.setState({currentArrayPos: 1});
+    }
+    else {
+      this.setState(prevState => ({
+        markerPosition: [...prevState.markerPosition, mapClickInfo.latlng]
+      }));
+      this.setState({currentArrayPos: 0})
+    }
+
+    this.getCenter();
+    if (this.state.markerPosition.length > 1) {
+
+    }
   }
 
   getCenter() {
@@ -280,9 +320,8 @@ export default class Atlas extends Component {
   }
 
   adjustZoomToFitPoints() {
-    const map = this.mapRef.current.leafletElement;
     const group = this.groupRef.current.leafletElement;
-    map.fitBounds(group.getBounds());
+    this.map.fitBounds(group.getBounds());
   }
 
   showHomeButton() {
@@ -319,7 +358,38 @@ export default class Atlas extends Component {
       }));
     }
 
-
     this.getCenter();
+    if (this.state.markerPosition.length > 1) {
+      let points = this.getPositions();
+      this.sendDistanceRequest(
+        points[0][0].toString(),
+        points[0][1].toString(),
+        points[1][0].toString(),
+        points[1][1].toString(),
+        6371);
+    }
+  }
+
+  sendDistanceRequest(lat1,lon1,lat2,lon2,earthRad){
+    let requestBody = {
+      requestVersion: 1,
+      requestType: "distance",
+      place1: {latitude: lat1, longitude: lon1},
+      place2: {latitude: lat2, longitude: lon2},
+      earthRadius: earthRad
+    };
+
+    sendServerRequestWithBody('distance', requestBody, getOriginalServerPort())
+    .then((data) => this.promptDistance(data.body.distance,earthRad));
+
+  }
+
+  getPositions() {
+    let latlngArray = [];
+    this.state.markerPosition.forEach((marker, i) => {
+      latlngArray.push([marker.lat, marker.lng]);
+    });
+
+    return latlngArray;
   }
 }

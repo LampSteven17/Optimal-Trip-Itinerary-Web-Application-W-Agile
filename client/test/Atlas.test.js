@@ -5,7 +5,7 @@ import {shallow} from 'enzyme';
 import Atlas from '../src/components/Atlas/Atlas';
 
 function testInitialAppState() {
-
+  jest.mock('leaflet');
   const app = shallow(<Atlas />);
 
   let actualMarkerPosition = app.state().markerPosition;
@@ -19,6 +19,7 @@ function testInitialAppState() {
 }
 
 function testInitialHandleInput() {
+  jest.mock('leaflet');
   const app = shallow(<Atlas />);
 
   try {

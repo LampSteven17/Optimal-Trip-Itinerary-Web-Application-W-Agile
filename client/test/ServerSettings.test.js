@@ -12,7 +12,7 @@ const startProperties = {
     toggleOpen: jest.fn(),
     updateServerConfig: jest.fn(),
 };
-
+jest.mock('react-leaflet');
 function testRender() {
 
     const footer = mount(
@@ -69,7 +69,7 @@ test("onChangeEvent should update the component's state", testUpdateInputText);
 
 function testUpdateServerPort() {
     mockConfigResponse();
-
+    jest.mock('react-leaflet');
     const app = mount(<App />);
     const settings = shallow(
         <ServerSettings
@@ -103,4 +103,3 @@ function mockConfigResponse() {
 }
 
 test('onClick event for Save Button should update server port in App component', testUpdateServerPort);
-

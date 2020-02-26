@@ -58,81 +58,43 @@ export default class About extends Component {
 
 
     renderRyanCard() {
-        return(
-            <Card style={{
-                width: '15rem'
-            }}>
-                <CardImg top width="100%" src={ryanImg} alt="blank"/>
-                <CardBody>
-                    <CardTitle><strong>Ryan Kughn</strong></CardTitle>
-                    <CardText>
-                        My name is Ryan and I am currently a junior at CSU.  I am
-                        majoring in computer science with a minor in mathematics.  I am
-                        currently working towards becoming a software engineer in the future.
-                        I enjoy skateboarding, music, and video games in my free time.
-                    </CardText>
-                </CardBody>
-            </Card>
-        )
+        let ryanDescrip = "My name is Ryan and I am currently a junior at CSU.  I am majoring in computer science with a minor in mathematics.  I am currently working towards becoming a software engineer in the future.";
+        return this.renderAboutCard("Ryan Kughn", ryanDescrip, ryanImg);
     }
 
     renderSteveCard() {
-        return (
-            <Card style={{
-                width: '15rem'
-            }}>
-                <CardImg top width="100%" src={steveImg} alt="blank"/>
-                <CardBody>
-                    <CardTitle><strong>Steven Lamp</strong></CardTitle>
-                    <CardText>
-                        Hello, my name is Steven! I am a Junior CS student at CSU. I
-                        avidly pursue topics in CyberSecurity. I am also a drummer for local bands
-                        and enjoy any and all nerdy things! If you see me out and about, give me a shout!
-                    </CardText>
-                </CardBody>
-            </Card>
-        )
+        let steveDescrip = "Hello, my name is Steven! I am a Junior CS student at CSU. I avidly pursue topics in CyberSecurity. I am also a drummer for local bands and enjoy any and all nerdy things!";
+        return this.renderAboutCard("Steven Lamp", steveDescrip, steveImg);
     }
 
     renderAustinCard() {
-        return (
-            <Card style={{
-                width: '15rem'
-            }}>
-                <CardImg top width="100%" src={austImg} alt="blank"/>
-                <CardBody>
-                    <CardTitle><strong>Austin Soriano</strong></CardTitle>
-                    <CardText>
-                        Hello my name is Austin. I am currently a Junior at Colorado
-                        State University and Majoring in Computer Science. In my free
-                        time I enjoy Snowboarding and Mountain Biking.
-                    </CardText>
-                </CardBody>
-            </Card>
-        )
+        let austinDescrip = "Hello my name is Austin. I am currently a Junior at Colorado State University and Majoring in Computer Science. In my free time I enjoy Snowboarding and Mountain Biking.";
+        return this.renderAboutCard("Austin Soriano", austinDescrip, austImg);
     }
 
     renderCadeCard() {
+        let cadeDescrip = "My name is Cade, currently a Junior undergrad at CSU pursuing Computer Science. I occasionally enjoy exercise, cooking and arguing about art and music with everyone around me.";
+        return this.renderAboutCard("Cade McCumber", cadeDescrip, cadeImg);
+    }
+
+    renderTeamStatement() {
+        return(
+            <strong><h4>How does team 10 count to their team's number? With Two Hands Up!! </h4></strong>
+        )
+    }
+
+    renderAboutCard(name,descrip,img){
         return (
             <Card style={{
                 width: '15rem'
             }}>
-                <CardImg top width="100%" src={cadeImg} alt="blank"/>
+                <CardImg top width="100%" src={img} alt="blank"/>
                 <CardBody>
-                    <CardTitle><strong>Cade McCumber</strong></CardTitle>
-                    <CardText>
-                        My name is Cade, currently a Junior undergrad at CSU pursuing Computer Science.
-                        I occasionally enjoy exercise, cooking and arguing about art and music with everyone
-                        around me.
-                    </CardText>
+                    <CardTitle><strong>{name}</strong></CardTitle>
+                    <CardText>{descrip}</CardText>
                 </CardBody>
             </Card>
         )
     }
 
-    renderTeamStatement() {
-        return (
-            <strong><h4>How does team 10 count to their team's number? With Two Hands Up!! </h4></strong>
-        )
-    }
 }

@@ -58,11 +58,13 @@ export default class Atlas extends Component {
       hideButton: false,
       mapCenter: [0,0],
       validLatLng: FALSECOLOR,
-      currentArrayPos: 0
+      inputPosition: null,
+      displayNum: "",
+      displayUnit: "",
     };
 
     this.getCurrentLocation();
-    this.sendDistanceRequest("40.6","-105.1","-33.9","151.2",6371);
+    //this.sendDistanceRequest("40.6","-105.1","-33.9","151.2",6371);
   }
 
   render() {
@@ -71,17 +73,25 @@ export default class Atlas extends Component {
           <Container>
             <Row>
               <Col sm={12} md={{size: 6, offset: 3}}>
+                <h2>Distance: {this.state.displayNum} {this.state.displayUnit}</h2>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={12} md={{size: 6, offset: 3}}>
                 {this.renderLeafletMap()}
               </Col>
             </Row>
             <Row>
-              <Col sm={12} style={{ width: "7rem" }} md={{size: 1, offset: 3}}>
+              <Col sm={{size:'auto'}} style={{ width: "4.4rem" }} md={{size: 0, offset: 3}}>
                 {this.showHomeButton()}
               </Col>
-              <Col sm={{size:'auto'}} style={{ width: "15rem" }} md={{size: 4, offset: 0}}>
+              <Col sm={{size:'auto'}} style={{ width: "11.7rem" }} md={{size: 0, offset: 0}}>
                 <Form inline={true}>{
                     <Input style={{ width: "15rem", border: this.state.validLatLng }} placeholder="Latitude, Longitude" onInput={e => this.handleInput(e.target.value)}/>
                 }</Form>
+              </Col>
+              <Col>
+                <Button className={"btn-csu"} onClick={() => this.updateMarkerFromInput()}>+</Button>
               </Col>
             </Row>
           </Container>
@@ -112,16 +122,22 @@ export default class Atlas extends Component {
 
   handleInput(pos) {
     if (this.isValidPosition(pos)) {
-      this.setState({validLatLng: TRUECOLOR});
-      this.updateMarkerFromInput(pos);
+        this.setState({validLatLng: TRUECOLOR});
+      this.storeInputPosition(pos);
     }else{
       this.setState({validLatLng: FALSECOLOR});
     }
   }
 
-  updateMarkerFromInput(input) {
+  storeInputPosition(input) {
     let position = new Coordinates(input);
-    this.addMarker({latlng: {lat: position.getLatitude(), lng: position.getLongitude()}});
+    this.setState({inputPosition: {lat: position.getLatitude(), lng: position.getLongitude()}})
+  }
+
+  updateMarkerFromInput() {
+    if(this.state.inputPosition !== null){
+      this.addMarker({latlng: {lat: this.state.inputPosition.lat, lng: this.state.inputPosition.lng}});
+    }
   }
 
   sendDistanceRequest(lat1,lon1,lat2,lon2,earthRad){
@@ -134,12 +150,20 @@ export default class Atlas extends Component {
     };
 
     sendServerRequestWithBody('distance', requestBody, getOriginalServerPort())
-    .then((data) => this.promptDistance(data.body.distance));
+    .then((data) => this.promptDistance(data.body.distance,earthRad));
 
   }
 
-  promptDistance(dist){
-    console.log(dist);
+  promptDistance(dist,rad){
+    let macro;
+
+    if(6371/rad == 1){
+      macro = "KM";
+    }else{
+      macro = "NON_SUPPORTED UNIT DETECTED";
+    }
+
+    this.setState({displayNum: dist, displayUnit: macro});
 
   }
 
@@ -188,14 +212,13 @@ export default class Atlas extends Component {
   }
 
   deleteMarker(marker) {
-    if (this.state.markerPosition.length === 1) {
-      this.setState({markerPosition: []});
-    }
-    else {
-      this.setState({markerPosition: this.state.markerPosition.filter((mk) => {
-        return mk.id !== marker.id;
-      })});
-    }
+    console.log(this.state.markerPosition);
+    let newArray = this.state.markerPosition.filter(function(mk) {
+      return mk.id !== marker.id;
+    });
+    console.log(newArray);
+    this.setState({markerPosition: newArray});
+    console.log(this.state.markerPosition);
   }
 
   showHomeButton() {
@@ -316,8 +339,46 @@ export default class Atlas extends Component {
   }
 
   adjustZoomToFitPoints() {
-    this.group = this.groupRef.current.leafletElement;
-    this.map.fitBounds(this.group.getBounds());
+    const group = this.groupRef.current.leafletElement;
+    this.map.fitBounds(group.getBounds());
+  }
+
+  showHomeButton() {
+    if (this.state.hideButton === false) {
+      return (
+          <Button className='btn-csu' onClick={() => this.getCurrentLocation()}><strong>Home</strong></Button>
+      );
+    }
+  }
+
+  getCurrentLocation() {
+    Geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
+    return null;
+  }
+
+  updateMarkerCallback(pos) {
+    this.addMarker({latlng:{lat: pos.coords.latitude, lng: pos.coords.longitude}});
+  }
+
+  errorCallback(errData) {
+    this.addMarker({latlng: {lat: 40.57, lng: -105.09}});
+
+    if (errData.message === "User denied Geolocation") {
+      this.setState({hideButton: true});
+    }
+  }
+
+  addMarker(mapClickInfo) {
+    mapClickInfo.latlng.id = this.state.id;
+    this.setState({id: this.state.id + 1});
+    if(this.state.markerPosition.length < 2){
+      this.setState(prevState => ({
+        markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
+      }));
+    }
+
+
+    this.getCenter();
   }
 
   getPositions() {

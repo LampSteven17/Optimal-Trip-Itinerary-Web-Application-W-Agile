@@ -42,7 +42,6 @@
     "earthRadius":{
       "description":"the radius of the earth in some unit of measure",
       "type":"number",
-      "exclusiveMinimum":true,
       "minimum":0
     },
     "distance":{

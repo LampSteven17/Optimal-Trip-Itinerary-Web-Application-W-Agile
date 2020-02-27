@@ -124,6 +124,22 @@ FEATURES:
 we must keep a minimal UI in mind. Our markers will add with notifications, not creating a growing list as to minimize
 spacial issuie's. Alot of technical background is going to be nessecary to create the advanced UI, and we will be 
 first focusing on functionality, adding a UI layer later.
+
+**LATITUDE LONGITUDE BOX:** We will be using a single input box, formatted for input using Coordinate Parser package
+referenced in the included documentation. 
+
+**ADDITION BUTTON:** We will be using a manual click + button on the right bottom edge. This button will ensure that while
+the verification is with every keystroke, the marker will not, making it easier to enter a location and not have things 
+buzzing around the screen. 
+
+**DISTANCE DISPLAY:** We will be using a basic display above the map, as we are worried about the time constraints required
+for making a pop up along the drawn line. We have decided that a simple but functional display is the best possible option.
+We hope that if, given the chance, we can update our distance display to be more efficient and easier to read.
+
+**LINE:** Keeping in mind people of different visual capabilities, we will make sure that the line is drawn in a complimentary
+color, so that it is especially easy to see on the map. The line will connect two markers of the same color, we may implement
+other colors if time permits.
+
 # Sprint 3
 # Sprint 4 
 # Sprint 5

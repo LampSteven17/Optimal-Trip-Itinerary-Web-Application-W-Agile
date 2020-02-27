@@ -19,7 +19,7 @@ export default class ServerSettings extends Component {
             inputText: this.props.serverSettings.serverPort,
             validServer: true,
             validSave: false,
-            config: {}
+            config: {},
         }
     }
 
@@ -61,28 +61,38 @@ export default class ServerSettings extends Component {
      * https://getbootstrap.com/docs/4.4/content/tables/#bordered-table
      * react-bootstrap documentation tables
      ******************************************************/
+
     render_table_server_config() {
+        let configurationSettings = this.process_config_body();
         return <div className="panel panel-default">
             <table className={"table table-bordered"} xs={15}>
                 <tbody>
-                <tr>
-                    <th scope={"row"}>Server Name</th>
-                    <td scope={"row"}>{this.getCurrentServerName()}</td>
-                </tr>
-                <tr>
-                    <th scope={"col"}>Request Version</th>
-                    <td scope={"col"}>{PROTOCOL_VERSION}</td>
-                </tr>
-                <tr>
-                    <th scope={"col"}>Request Type</th>
-                    <td scope={"col"}>config</td>
-                </tr>
+                {this.render_table_because_code_climate_said_so("Server Name", this.getCurrentServerName())}
+                {this.render_table_because_code_climate_said_so("Request Version", configurationSettings[0])}
+                {this.render_table_because_code_climate_said_so("Request Type", configurationSettings[1])}
                 </tbody>
             </table>
         </div>
     }
 
+    render_table_because_code_climate_said_so(title, configSettings) {
+        return (
+            <tr>
+                <th scope={"col"}>{title}</th>
+                <td scope={"col"}>{configSettings}</td>
+            </tr>
+        );
+    }
 
+    process_config_body(){
+        if (this.props.serverSettings.serverConfig && this.state.validServer) {
+           let currentRequestVersion = this.props.serverSettings.serverConfig.requestVersion;
+           let currentRequestType = this.props.serverSettings.serverConfig.requestType;
+            return [currentRequestVersion, currentRequestType ];
+        } else {
+            return ["", ""];
+        }
+    }
 
     renderSettings(currentServerName) {
         return (
@@ -140,15 +150,17 @@ export default class ServerSettings extends Component {
         return currentServerName;
     }
 
+
     updateInput(value) {
         this.setState({inputText: value}, () => {
             if (this.shouldAttemptConfigRequest(value)) {
                 sendServerRequest("config", value).then(config => {
                     this.processConfigResponse(config);
-                    console.log(config);
                 });
             } else {
-                this.setState({validServer: false, validSave: false, config: {}});
+                this.setState({validServer: false,
+                    validSave: false,
+                    config: {}});
             }
         });
     }
@@ -163,8 +175,7 @@ export default class ServerSettings extends Component {
             this.setState({validServer: false, validSave: false, config: false});
         } else {
             this.setState({validServer: true, validSave: true, config: config});
-        }
-    }
+    }}
 
     resetServerSettingsState() {
         this.props.toggleOpen();

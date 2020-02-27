@@ -84,9 +84,13 @@ export default class ServerSettings extends Component {
     }
 
     process_config_body(){
-        let currentRequestType = this.props.serverSettings.serverConfig && this.state.validServer ? this.props.serverSettings.serverConfig.requestType : '';
-        let currentRequestVersion = this.props.serverSettings.serverConfig && this.state.validServer ? this.props.serverSettings.serverConfig.requestVersion : '';
-        return [currentRequestVersion, currentRequestType, ];
+        if (this.props.serverSettings.serverConfig && this.state.validServer) {
+           let currentRequestVersion = this.props.serverSettings.serverConfig.requestVersion;
+           let currentRequestType = this.props.serverSettings.serverConfig.requestType;
+            return [currentRequestVersion, currentRequestType ];
+        } else {
+            return ["", ""];
+        }
     }
 
     renderSettings(currentServerName) {

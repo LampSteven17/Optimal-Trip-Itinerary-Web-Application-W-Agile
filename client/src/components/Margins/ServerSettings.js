@@ -61,26 +61,27 @@ export default class ServerSettings extends Component {
      * https://getbootstrap.com/docs/4.4/content/tables/#bordered-table
      * react-bootstrap documentation tables
      ******************************************************/
+
     render_table_server_config() {
         let configurationSettings = this.process_config_body();
         return <div className="panel panel-default">
             <table className={"table table-bordered"} xs={15}>
                 <tbody>
-                <tr>
-                    <th scope={"row"}>Server Name</th>
-                    <td scope={"row"}>{this.getCurrentServerName()}</td>
-                </tr>
-                <tr>
-                    <th scope={"col"}>Request Version</th>
-                    <td scope={"col"}>{configurationSettings[0]}</td>
-                </tr>
-                <tr>
-                    <th scope={"col"}>Request Type</th>
-                    <td scope={"col"}>{configurationSettings[1]}</td>
-                </tr>
+                {this.render_table_because_code_climate_said_so("Server Name", this.getCurrentServerName())}
+                {this.render_table_because_code_climate_said_so("Request Version", configurationSettings[0])}
+                {this.render_table_because_code_climate_said_so("Request Type", configurationSettings[1])}
                 </tbody>
             </table>
         </div>
+    }
+
+    render_table_because_code_climate_said_so(title, configSettings) {
+        return (
+            <tr>
+                <th scope={"col"}>{title}</th>
+                <td scope={"col"}>{configSettings}</td>
+            </tr>
+        );
     }
 
     process_config_body(){

@@ -185,7 +185,7 @@ export default class Atlas extends Component {
             <Popup offset={[0, -18]} style={{ width: "50" }} className="font-weight-bold">
               {this.formatPosition(marker)}
               <Button className='btn-csu' style={{ width: "100%", backgroundColor: "red" }} onClick={() => this.deleteMarker(marker)}><strong>Delete</strong></Button>
-            </Popup>getCenter
+            </Popup>
           </Marker>
         );
       });
@@ -232,27 +232,27 @@ export default class Atlas extends Component {
   addMarker(mapClickInfo) {
     mapClickInfo.latlng.id = this.state.id;
     this.setState({id: this.state.id + 1});
-    if(this.state.currentArrayPos === 0){
+    if(this.state.markerPosition.length < 2){
       this.setState(prevState => ({
-        markerPosition: [mapClickInfo.latlng]
-      }));
-      this.setState({currentArrayPos: 1});
+        markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
+      }), () => {
+        this.getCenter();
+      });
     }
-    else {
-      this.setState(prevState => ({
-        markerPosition: [...prevState.markerPosition, mapClickInfo.latlng]
-      }));
-      this.setState({currentArrayPos: 0})
-    }
-
-    this.getCenter();
     if (this.state.markerPosition.length > 1) {
-
+      let points = this.getPositions();
+      this.sendDistanceRequest(
+        points[0][0].toString(),
+        points[0][1].toString(),
+        points[1][0].toString(),
+        points[1][1].toString(),
+        6371);
     }
   }
 
   getCenter() {
     let lat, lng;
+
     if (this.state.markerPosition.length === 1) {
       lat = this.state.markerPosition[0].lat;
       lng = this.state.markerPosition[0].lng;
@@ -338,6 +338,7 @@ export default class Atlas extends Component {
   }
 
   updateMarkerCallback(pos) {
+    this.setState({markerPosition: []});
     this.addMarker({latlng:{lat: pos.coords.latitude, lng: pos.coords.longitude}});
   }
 
@@ -346,27 +347,6 @@ export default class Atlas extends Component {
 
     if (errData.message === "User denied Geolocation") {
       this.setState({hideButton: true});
-    }
-  }
-
-  addMarker(mapClickInfo) {
-    mapClickInfo.latlng.id = this.state.id;
-    this.setState({id: this.state.id + 1});
-    if(this.state.markerPosition.length < 2){
-      this.setState(prevState => ({
-        markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
-      }));
-    }
-
-    this.getCenter();
-    if (this.state.markerPosition.length > 1) {
-      let points = this.getPositions();
-      this.sendDistanceRequest(
-        points[0][0].toString(),
-        points[0][1].toString(),
-        points[1][0].toString(),
-        points[1][1].toString(),
-        6371);
     }
   }
 

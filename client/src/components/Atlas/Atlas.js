@@ -237,16 +237,17 @@ export default class Atlas extends Component {
         markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
       }), () => {
         this.getCenter();
+
+        if (this.state.markerPosition.length > 1) {
+          let points = this.getPositions();
+          this.sendDistanceRequest(
+            points[0][0].toString(),
+            points[0][1].toString(),
+            points[1][0].toString(),
+            points[1][1].toString(),
+            6371);
+        }
       });
-    }
-    if (this.state.markerPosition.length > 1) {
-      let points = this.getPositions();
-      this.sendDistanceRequest(
-        points[0][0].toString(),
-        points[0][1].toString(),
-        points[1][0].toString(),
-        points[1][1].toString(),
-        6371);
     }
   }
 

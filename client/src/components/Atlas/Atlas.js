@@ -229,29 +229,31 @@ export default class Atlas extends Component {
     }
   }
 
-  addMarker(mapClickInfo) {
-    mapClickInfo.latlng.id = this.state.id;
-    this.setState({id: this.state.id + 1});
-    if(this.state.markerPosition.length < 2){
-      this.setState(prevState => ({
-        markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
-      }), () => {
-        this.getCenter();
-
-        if (this.state.markerPosition.length > 1) {
-          let points = this.getPositions();
-          this.sendDistanceRequest(
-            points[0][0].toString(),
-            points[0][1].toString(),
-            points[1][0].toString(),
-            points[1][1].toString(),
-            6371);
-        }
-      });
-    }
+  async addMarker(mapClickInfo) {
+    Promise.resolve()
+    .then(() => {
+      mapClickInfo.latlng.id = this.state.id;
+      this.setState({id: this.state.id + 1});
+      if(this.state.markerPosition.length < 2){
+        this.setState(prevState => ({
+          markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
+        }), () => {
+          if (this.state.markerPosition.length > 1) {
+            let points = this.getPositions();
+            this.sendDistanceRequest(
+              points[0][0].toString(),
+              points[0][1].toString(),
+              points[1][0].toString(),
+              points[1][1].toString(),
+              6371);
+            }
+          });
+      }
+    })
+    .then(() => this.getCenter())
   }
 
-  getCenter() {
+  async getCenter() {
     let lat, lng;
 
     if (this.state.markerPosition.length === 1) {
@@ -320,7 +322,8 @@ export default class Atlas extends Component {
     this.setState({mapCenter: [lat, lng]});
   }
 
-  adjustZoomToFitPoints() {
+  async adjustZoomToFitPoints() {
+    console.log("REE");
     const group = this.groupRef.current.leafletElement;
     this.map.fitBounds(group.getBounds());
   }

@@ -272,7 +272,7 @@ export default class Atlas extends Component {
     }
 
     this.updateMapCenter(lat,lng);
-    this.adjustZoomToFitPoints();
+    await this.adjustZoomToFitPoints();
   }
 
   getLineMidpoint() {

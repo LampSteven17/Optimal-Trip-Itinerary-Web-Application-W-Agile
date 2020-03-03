@@ -50,7 +50,6 @@ export default class Atlas extends Component {
     this.updateMarkerFromInput = this.updateMarkerFromInput.bind(this);
     this.errorCallback = this.errorCallback.bind(this);
     this.getCurrentLocation = this.getCurrentLocation.bind(this);
-    this.updateMapCenter = this.updateMapCenter.bind(this);
 
     this.state = {
       markerPosition: [],
@@ -234,92 +233,25 @@ export default class Atlas extends Component {
     .then(() => {
       mapClickInfo.latlng.id = this.state.id;
       this.setState({id: this.state.id + 1});
-      if(this.state.markerPosition.length < 2){
-        this.setState(prevState => ({
-          markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
-        }), () => {
-          if (this.state.markerPosition.length > 1) {
-            let points = this.getPositions();
-            this.sendDistanceRequest(
-              points[0][0].toString(),
-              points[0][1].toString(),
-              points[1][0].toString(),
-              points[1][1].toString(),
-              6371000000);/////////////////////////////////////CONVERT TO WHATEVER NESSECARY////////////////////////////////////////////////
-            }
-          });
-      }
+      this.setState(prevState => ({
+        markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
+      }), () => {
+        if (this.state.markerPosition.length > 1) {
+          let points = this.getPositions();
+          this.sendDistanceRequest(
+            points[0][0].toString(),
+            points[0][1].toString(),
+            points[1][0].toString(),
+            points[1][1].toString(),
+            6371000000);/////////////////////////////////////CONVERT TO WHATEVER NESSECARY////////////////////////////////////////////////
+        }
+      });
     })
     .then(() => this.getCenter())
   }
 
   async getCenter() {
-    let lat, lng;
-
-    if (this.state.markerPosition.length === 1) {
-      lat = this.state.markerPosition[0].lat;
-      lng = this.state.markerPosition[0].lng;
-    }
-    else if (this.state.markerPosition.length === 2) {
-      let midpoint = this.getLineMidpoint();
-      lat = midpoint[0];
-      lng = midpoint[1];
-    }
-    else {
-      let centroid = this.getPolygonCentroid();
-      lat = centroid[0];
-      lng = centroid[1];
-    }
-
-    this.updateMapCenter(lat,lng);
     this.adjustZoomToFitPoints();
-  }
-
-  getLineMidpoint() {
-    let lat1 = this.state.markerPosition[0].lat;
-    let lng1 = this.state.markerPosition[0].lng;
-    let lat2 = this.state.markerPosition[1].lat;
-    let lng2 = this.state.markerPosition[1].lng;
-
-    let lat = (lat1 + lat2) / 2;
-    let lng = (lng1 + lng2) / 2;
-
-    return [lat, lng];
-  }
-
-  getPolygonCentroid() {
-    let points = [];
-    this.state.markerPosition.forEach((marker, i) => {
-      points.push([marker.lat, marker.lng])
-    });
-
-    let first = points[0], last = points[points.length - 1];
-    if (first.x != last.x || first.y != last.y)
-      points.push(first);
-
-    let twicearea = 0;
-    let x = 0,y = 0;
-    let npoints = points.length;
-    let p1,p2,f;
-
-    for (let i = 0, j = npoints - 1; i < npoints; j = i++) {
-      p1 = points[i];
-      p2 = points[j];
-      f = p1.x * p2.y - p2.x * p1.y;
-      twicearea += f;
-      x += (p1.x + p2.x) * f;
-      y += (p1.y + p2.y) * f;
-    }
-
-    f = twicearea * 3;
-    let lat = x / f;
-    let lon = y / f;
-
-    return [lat, lon];
-  }
-
-  updateMapCenter(lat, lng) {
-    this.setState({mapCenter: [lat, lng]});
   }
 
   async adjustZoomToFitPoints() {

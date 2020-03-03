@@ -51,16 +51,16 @@ public class RequestDistance extends RequestHeader {
        Double latDist = Math.toRadians(dist2Lat - dist1Lat);
        Double lngDist = Math.toRadians(dist2Lng - dist1Lng);
 
-       Double a = Math.sin(latDist/2)
-               * Math.sin(latDist/2)
+       Double a = Math.sin(latDist/2.0)
+               * Math.sin(latDist/2.0)
                + Math.cos(Math.toRadians(dist1Lat))
                * Math.cos(Math.toRadians(dist2Lat))
-               * Math.sin(lngDist/2)
-               * Math.sin(lngDist/2);
+               * Math.sin(lngDist/2.0)
+               * Math.sin(lngDist/2.0);
 
-       Double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+       Double c = 2.0 * Math.atan2(Math.sqrt(a), Math.sqrt(1.0-a));
 
-       return (long)(earthRad * c);
+       return Math.round(earthRad * c);
     }
 
 

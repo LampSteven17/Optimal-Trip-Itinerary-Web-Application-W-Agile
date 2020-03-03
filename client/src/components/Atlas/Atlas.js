@@ -147,7 +147,7 @@ export default class Atlas extends Component {
     if(6371/rad == 1){
       macro = "KM";
     }else{
-      macro = "NON_SUPPORTED UNIT DETECTED";
+      macro = "";
     }
 
     this.setState({displayNum: dist, displayUnit: macro});
@@ -245,7 +245,7 @@ export default class Atlas extends Component {
               points[0][1].toString(),
               points[1][0].toString(),
               points[1][1].toString(),
-              6371);
+              6371000000);/////////////////////////////////////CONVERT TO WHATEVER NESSECARY////////////////////////////////////////////////
             }
           });
       }
@@ -323,7 +323,6 @@ export default class Atlas extends Component {
   }
 
   async adjustZoomToFitPoints() {
-    console.log("REE");
     const group = this.groupRef.current.leafletElement;
     this.map.fitBounds(group.getBounds());
   }

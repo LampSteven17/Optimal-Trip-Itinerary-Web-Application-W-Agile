@@ -141,5 +141,44 @@ color, so that it is especially easy to see on the map. The line will connect tw
 other colors if time permits.
 
 # Sprint 3
+![sprint3 diagram](images/SPRINT3design.jpg)
+**FEATURES:**
+Our new and updated design will implement a variety of new features as instructed by SPRINT 3. These will be implemented
+over various epics detailed below. We will be adding a small button in the upper right corner of the map, which will allow
+for loading and saving various files. The bottom section will consist of all destinations, note that if the destinations 
+are expansive, the user will have to scroll. We will make sure the total trip distance is displayed at the top as it was 
+last sprint. 
+
+
+**User Story:** As a high profile travel agency, we create a lot of trips. We need an efficient and fast design 
+that allows us to input large trips and respond with the correct distances as necessary. Our patrons would like to know
+the farthest individual distances they may be traveling, and the total mileage of the trip is a fun way to inspire our
+guests. 
+
+**Tripmaster Trip and Distance Table**
+This will be implemented in the Tripmaster box shown above. Using airport style departure/arrival itineraries, we 
+will show each leg of the journey and then show the total cumulative distance. The total distance will also be shown
+at the top for added convenience. 
+
+**User Story:**
+One of our newest features for added travel accessibility is allowing our clients to tour on their own time! Want to 
+go checkout the local bar? Add it! Want to go to a neighboring country? No problem, as you can easily update your trip
+in the tripmaster, with updating live displays as you enter more destinations. (Destination wrapping is included in classic
+Mario style edge warping).
+
+**Tripmaster Destination and Modification:** 
+The tripmaster will be highly modifiable, allowing you to enter new points into both the map and table, featuring appropriate
+scaling as needed. Users may also click on the map to add markers if preferred. 
+
+**User Story:** 
+Most of all, our clients prefer that HAPPY TOURS USA has the number one in friendly user interfaces. You may add and delete 
+destinations at will, create unique memories, and least of all worry about having a hard time navigating to your destination. 
+
+**Tripmaster GUI Behavior and File Loading:** 
+This will likely be the hardest part of the design. A user should be able to intuitively click and drag on their individual
+locations to arrange and place each location in an ideal order. A big part of this will be modularizing each location. If 
+this is not possible, we will make sure that users are capable of adding and deleting markers, and resizing the map respectively. 
+Last but not least, the tripmaster will allow you to load various file types in case of premade tours. The files can then be
+saved and exported from our map in the specified format. 
 # Sprint 4 
 # Sprint 5

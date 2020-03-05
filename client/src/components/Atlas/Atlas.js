@@ -294,7 +294,8 @@ export default class Atlas extends Component {
       earthRadius: earthRad
     };
 
-    sendServerRequestWithBody('distance', requestBody, getOriginalServerPort())
+    //console.log(this.props.serverPort);
+    sendServerRequestWithBody('distance', requestBody,this.props.serverPort)
     .then((data) => this.promptDistance(data.body.distance,earthRad));
 
   }

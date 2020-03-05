@@ -63,6 +63,7 @@ export default class App extends Component {
             <Collapse isOpen={!this.state.showAbout}>
                 <Atlas
                     modify={(state, value) => this.setState({[state]: value})}
+                    serverPort = {this.state.serverSettings.serverPort}
                 />
             </Collapse>
         );
@@ -84,7 +85,7 @@ export default class App extends Component {
     }
 
     updateServerConfig(config, port=this.state.serverSettings.serverPort) {
-        log.info("Switching to server ", this.state.serverSettings.serverPort);
+        //log.info("Switching to server ", this.state.serverSettings.serverPort);
         let updatedSettings = {
             serverConfig: config,
             serverPort: port

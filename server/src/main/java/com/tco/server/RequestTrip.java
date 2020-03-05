@@ -10,7 +10,7 @@ import t10.server.src.main.java.com.tco.server.RequestDistance;
 
 
 /*
-This class defines the Trip response used with Restul API services
+This class defines the Trip response used with Restful API services
  */
 
 public class RequestTrip extends RequestHeader{
@@ -32,10 +32,10 @@ public class RequestTrip extends RequestHeader{
 
     @Override
     public void buildResponse() {
-        if (distances.length < 1) {
-            // Then we need to calculate
+            /* Everything else is required in the client request
+               Also need to check if the given distances mean anything
+             */
             distances = calculateDistances(places);
-        }
     }
 
     private Long[] calculateDistances(List< Map<String, String> > places) {
@@ -54,7 +54,6 @@ public class RequestTrip extends RequestHeader{
                 dists[dists.length-1] = RequestDistance.calculateDistance(places.get(0), places.get(places.size()-1), earthRadius);
             }
             // do last and first outside of loop
-
         return dists;
     }
 

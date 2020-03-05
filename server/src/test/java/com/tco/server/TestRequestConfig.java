@@ -18,15 +18,18 @@ public class TestRequestConfig {
 
   @Test
   public void testType() {
-    String type = "config"; //conf.getType();
+    String type = conf.getType();
     assertEquals("config requestType", "config", type);
   }
 
+  /*
   @Test
   public void testVersion() {
-    int version = 1; //conf.getVersion();
+    int version = conf.getVersion();
     assertEquals("config requestVersion", 1, version);
   }
+
+   */
 
   @Test
   public void testServerName() {

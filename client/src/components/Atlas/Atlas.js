@@ -293,6 +293,13 @@ export default class Atlas extends Component {
       place2: {latitude: lat2, longitude: lon2},
       earthRadius: earthRad
     };
+    //TODO
+    // clean up comments
+    // text steve on making distance public and static
+    sendTripRequest() {
+      //so we need to send this a list of maps
+      // not sure how do this in javascript
+    }
 
     //console.log(this.props.serverPort);
     sendServerRequestWithBody('distance', requestBody,this.props.serverPort)

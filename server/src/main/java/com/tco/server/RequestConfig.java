@@ -44,4 +44,6 @@ public class RequestConfig extends RequestHeader {
   String getServerName() {
     return this.serverName;
   }
+  Integer getVersion() { return this.requestVersion; }
+  String getType() { return this.requestType;}
 }

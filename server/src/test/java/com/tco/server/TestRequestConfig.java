@@ -22,18 +22,21 @@ public class TestRequestConfig {
     assertEquals("config requestType", "config", type);
   }
 
-  /*
   @Test
   public void testVersion() {
     int version = conf.getVersion();
     assertEquals("config requestVersion", 1, version);
   }
 
-   */
-
   @Test
   public void testServerName() {
     String name = conf.getServerName();
     assertEquals("config name", "t10 Two Hands Up", name);
+  }
+
+  @Test
+  public void testNumberOfRequests() {
+    int num = conf.getSupportedRequestLength();
+    assertEquals("config supported requests", 3, num);
   }
 }

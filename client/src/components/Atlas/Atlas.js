@@ -296,10 +296,10 @@ export default class Atlas extends Component {
     //TODO
     // clean up comments
     // text steve on making distance public and static
-    sendTripRequest() {
+    //sendTripRequest() {
       //so we need to send this a list of maps
       // not sure how do this in javascript
-    }
+   // }
 
     //console.log(this.props.serverPort);
     sendServerRequestWithBody('distance', requestBody,this.props.serverPort)

@@ -46,4 +46,5 @@ public class RequestConfig extends RequestHeader {
   }
   Integer getVersion() { return this.requestVersion; }
   String getType() { return this.requestType;}
+  int getSupportedRequestLength() { return this.supportedRequests.length;}
 }

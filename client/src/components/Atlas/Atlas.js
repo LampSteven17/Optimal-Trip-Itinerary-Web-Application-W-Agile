@@ -243,7 +243,7 @@ export default class Atlas extends Component {
             points[0][1].toString(),
             points[1][0].toString(),
             points[1][1].toString(),
-            6371000000);/////////////////////////////////////CONVERT TO WHATEVER NESSECARY////////////////////////////////////////////////
+            6371.0);/////////////////////////////////////CONVERT TO WHATEVER NESSECARY////////////////////////////////////////////////
         }
       });
     })

@@ -15,10 +15,17 @@ public class TestRequestTrip {
     }
 
     @Test
-    public void testRequestTypeAndVersion() {
-        int version = trip.getVersion();
+    public void testType() {
         String type = trip.getType();
         assertEquals("config requestType", "trip", type);
-        assertEquals("config requestVersion", 3, version);
+
     }
+
+    @Test
+    public void testVersion() {
+        int version = trip.getVersion();
+        assertEquals("config requestVersion", 1, version); // TODO update
+    }
+
+
 }

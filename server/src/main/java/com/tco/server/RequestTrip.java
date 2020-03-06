@@ -17,14 +17,13 @@ public class RequestTrip extends RequestHeader{
     private Map<String, String> options;
     private List<Map < String, String> > places;
     private Long[] distances;
-    private Double earthRadius; // maybe some capital D Doubles here
+    private Double earthRadius;
 
     private final transient Logger log = LoggerFactory.getLogger(RequestDistance.class);
 
-    // CONSTRUCTOR
     RequestTrip() {
         this.requestType = "trip";
-        this.requestVersion = RequestHeader.CURRENT_SUPPORTED_VERSION; // TODO is this right?
+        this.requestVersion = RequestHeader.CURRENT_SUPPORTED_VERSION; // TODO update
     }
 
     @Override
@@ -32,7 +31,8 @@ public class RequestTrip extends RequestHeader{
             /* Everything else is required in the client request
                Also need to check if the given distances mean anything
              */
-        distances = calculateDistances(places);
+        //distances = calculateDistances(places); // TODO wait till distance requests are going through to implement and write last test case
+        log.trace("buildResponse -> {}", this);
     }
 
     private Long[] calculateDistances(List< Map<String, String> > places) {

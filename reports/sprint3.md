@@ -64,8 +64,8 @@ destinations.
 | Statistic | # Planned | # Completed |
 | --- | ---: | ---: |
 | Epics | 5 | *count* |
-| Tasks |  *count*   | *count* | 
-| Story Points |  *sum*  | *sum* | 
+| Tasks |  21   | *count* | 
+| Story Points |  38  | *sum* | 
 
 
 ## Scrums

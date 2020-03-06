@@ -180,5 +180,19 @@ locations to arrange and place each location in an ideal order. A big part of th
 this is not possible, we will make sure that users are capable of adding and deleting markers, and resizing the map respectively. 
 Last but not least, the tripmaster will allow you to load various file types in case of premade tours. The files can then be
 saved and exported from our map in the specified format. 
+
+![sprint3 diagram](images/SPRINT3design1.jpg)
+
+**Client State and Props Hierarchy:**
+
+App.js -> Atlas.js (Passing Props: Server Port, Distance) 
+
+States: Server Port is set in App.js, but is used within atlas to set and call other states. 
+
+Distance is set in Atlas.js, and called by using the server request with body to successfully calculate and return the state value.
+
+
+
+
 # Sprint 4 
 # Sprint 5

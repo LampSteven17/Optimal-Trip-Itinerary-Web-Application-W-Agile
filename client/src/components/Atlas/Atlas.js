@@ -60,6 +60,7 @@ export default class Atlas extends Component {
       inputPosition: null,
       displayNum: "",
       displayUnit: "",
+      totalDistance: 0
     };
 
     this.getCurrentLocation();
@@ -139,20 +140,6 @@ export default class Atlas extends Component {
       this.addMarker({latlng: {lat: this.state.inputPosition.lat, lng: this.state.inputPosition.lng}});
     }
   }
-
-  promptDistance(dist,rad){
-    let macro;
-
-    if(6371/rad == 1){
-      macro = "KM";
-    }else{
-      macro = "";
-    }
-
-    this.setState({displayNum: dist, displayUnit: macro});
-
-  }
-
 
   /**
    * Adapted from Coordinate-Parser isValidPosition Function
@@ -238,12 +225,8 @@ export default class Atlas extends Component {
       }), () => {
         if (this.state.markerPosition.length > 1) {
           let points = this.getPositions();
-          this.sendDistanceRequest(
-            points[0][0].toString(),
-            points[0][1].toString(),
-            points[1][0].toString(),
-            points[1][1].toString(),
-            6371000000);/////////////////////////////////////CONVERT TO WHATEVER NESSECARY////////////////////////////////////////////////
+          this.sendDistanceRequest()/////////////////////////////////////CONVERT TO WHATEVER NESSECARY////////////////////////////////////////////////
+          .then((distance) => this.promptDistance(distance, 6371000000));
         }
       });
     })
@@ -285,18 +268,47 @@ export default class Atlas extends Component {
     }
   }
 
-  sendDistanceRequest(lat1,lon1,lat2,lon2,earthRad){
-    let requestBody = {
-      requestVersion: 1,
-      requestType: "distance",
-      place1: {latitude: lat1, longitude: lon1},
-      place2: {latitude: lat2, longitude: lon2},
-      earthRadius: earthRad
+  async sendDistanceRequest(){
+    let points = this.getPositions();
+    let requestArray = [];
+
+
+    points.forEach((point, i) => {
+      if (i !== points.length - 1) {
+        let requestBody = {
+          requestVersion: 1,
+          requestType: "distance",
+          place1: {latitude: points[i][0].toString(), longitude: points[i][1].toString()},
+          place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
+          earthRadius: 6371000000
+        };
+        requestArray.push(requestBody);
+      }
+    });
+
+    let totalDistance = 0;
+    for(let i = 0; i < requestArray.length - 1; i++) {
+      let response = await sendServerRequestWithBody('distance', requestArray[i], getOriginalServerPort())
+      .then(() => console.log(response));
+      console.log(response);
+      totalDistance += response.body.distance;
     };
 
-    sendServerRequestWithBody('distance', requestBody, getOriginalServerPort())
-    .then((data) => this.promptDistance(data.body.distance,earthRad));
 
+    return totalDistance;
+  }
+
+
+  promptDistance(dist,rad){
+    let macro;
+
+    if(6371/rad == 1){
+      macro = "KM";
+    }else{
+      macro = "";
+    }
+
+    this.setState({displayNum: dist, displayUnit: macro});
   }
 
   getPositions() {

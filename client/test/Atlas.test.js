@@ -44,10 +44,6 @@ function testStoreInputPosition(){
 
 }
 
-function testRoundTripLine() {
-  let
-}
-
 
 test("Testing Atlas's Initial State", testInitialAppState);
 test("Testing Atlas's Handle Input", testInitialHandleInput);

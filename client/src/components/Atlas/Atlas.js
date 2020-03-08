@@ -306,10 +306,7 @@ export default class Atlas extends Component {
       latlngArray.push([marker.lat, marker.lng]);
     });
 
-    if (this.state.markerPosition.length >= 2){
-      latlngArray.push(latlngArray[0]);
-    }
-
+   
 
     return latlngArray;
   }

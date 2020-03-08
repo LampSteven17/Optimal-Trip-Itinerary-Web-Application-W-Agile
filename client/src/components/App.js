@@ -75,7 +75,6 @@ export default class App extends Component {
     }
 
     processConfigResponse(configResponse) {
-        console.log(configResponse);
         if(!isJsonResponseValid(configResponse.body, configSchema)) {
             this.processServerConfigError("INVALID_RESPONSE", HTTP_BAD_REQUEST, `Configuration response not valid`);
         } else if(configResponse.statusCode === HTTP_OK) {

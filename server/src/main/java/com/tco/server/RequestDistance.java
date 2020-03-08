@@ -41,7 +41,7 @@ public class RequestDistance extends RequestHeader {
  * https://stackoverflow.com/questions/3694380/calculating-distance-between-two-points-using-latitude-longitude
  *
  */
-    private Long calculateDistance(Map<String, String> place1, Map<String, String> place2, Double earthRad) {
+    protected static Long calculateDistance(Map<String, String> place1, Map<String, String> place2, Double earthRad) {
        Double dist1Lat = Double.parseDouble(place1.get("latitude")); //PARSE PLACE 1 and 2
        Double dist1Lng = Double.parseDouble(place1.get("longitude"));
 

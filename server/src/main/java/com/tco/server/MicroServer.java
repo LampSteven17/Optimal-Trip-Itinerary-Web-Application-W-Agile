@@ -60,6 +60,7 @@ class MicroServer {
 
     Spark.post("/api/distance",this::processPostDistanceRequest);
 
+    Spark.post("/api/trip",this::processPostDistanceRequest);
   }
 
   private String processPostConfigRequest(Request request, Response response) {

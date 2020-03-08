@@ -1,6 +1,7 @@
 import './enzyme.config.js';
 import React from 'react';
-import {shallow} from 'enzyme';
+import {shallow, mount} from 'enzyme';
+import {Polyline} from 'react-leaflet';
 
 import Atlas from '../src/components/Atlas/Atlas';
 
@@ -44,11 +45,29 @@ function testStoreInputPosition(){
 
 }
 
-function testRoundTripLine() {
-  let
+function testRoundTripPolylineExists() {
+  const atlas = shallow(<Atlas />);
+  expect(atlas.contains(<Polyline />)).toEqual(true);
+
+}
+
+function testGetPositionsOutput() {
+  let testPosAtlas = mount(<Atlas />);
+
+  let markerPositions = [{lat: 38.83418, lng: -104.82497, id: 0},
+    {lat: 40.586345, lng: -105.075813, id: 1},
+    {lat: 40.14055556, lng: -105.13111111, id: 2}];
+
+  let expectedOutput = markerPositions;
+  expectedOutput.push(markerPositions[2]);
+
+  testPosAtlas.state().markerPosition = markerPositions;
+  let actualOutput = Atlas.instance().getPositions();
+  expect(actualOutput).toEqual(expectedOutput);
 }
 
 
 test("Testing Atlas's Initial State", testInitialAppState);
 test("Testing Atlas's Handle Input", testInitialHandleInput);
 test("Testing Atlas's Store Input Position",testStoreInputPosition);
+test('Testing to see if a round trip Polyline is rendered with Atlas', testRoundTripPolylineExists);

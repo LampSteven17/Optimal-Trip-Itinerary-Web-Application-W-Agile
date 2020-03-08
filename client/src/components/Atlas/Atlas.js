@@ -243,7 +243,7 @@ export default class Atlas extends Component {
             points[0][1].toString(),
             points[1][0].toString(),
             points[1][1].toString(),
-            6371000000);/////////////////////////////////////CONVERT TO WHATEVER NESSECARY////////////////////////////////////////////////
+            6371.0);/////////////////////////////////////CONVERT TO WHATEVER NESSECARY////////////////////////////////////////////////
         }
       });
     })
@@ -293,6 +293,13 @@ export default class Atlas extends Component {
       place2: {latitude: lat2, longitude: lon2},
       earthRadius: earthRad
     };
+    //TODO
+    // clean up comments
+    // text steve on making distance public and static
+    //sendTripRequest() {
+      //so we need to send this a list of maps
+      // not sure how do this in javascript
+   // }
 
     //console.log(this.props.serverPort);
     sendServerRequestWithBody('distance', requestBody,this.props.serverPort)

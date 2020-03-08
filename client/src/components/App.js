@@ -85,7 +85,7 @@ export default class App extends Component {
     }
 
     updateServerConfig(config, port=this.state.serverSettings.serverPort) {
-        //log.info("Switching to server ", this.state.serverSettings.serverPort);
+        log.info("Switching to server ", this.state.serverSettings.serverPort);
         let updatedSettings = {
             serverConfig: config,
             serverPort: port

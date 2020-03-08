@@ -25,7 +25,7 @@ public class TestRequestConfig {
   @Test
   public void testVersion() {
     int version = conf.getVersion();
-    assertEquals("config requestVersion", 1, version);
+    assertEquals("config requestVersion", 3, version);
   }
 
   @Test

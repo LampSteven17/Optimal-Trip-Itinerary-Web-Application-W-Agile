@@ -24,7 +24,7 @@ public class TestRequestTrip {
     @Test
     public void testVersion() {
         int version = trip.getVersion();
-        assertEquals("config requestVersion", 1, version); // TODO update
+        assertEquals("config requestVersion", 3, version); // TODO update
     }
 
 

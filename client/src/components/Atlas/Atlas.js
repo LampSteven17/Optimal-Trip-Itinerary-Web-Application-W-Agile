@@ -306,7 +306,6 @@ export default class Atlas extends Component {
       latlngArray.push([marker.lat, marker.lng]);
     });
 
-  
     return latlngArray;
   }
 }

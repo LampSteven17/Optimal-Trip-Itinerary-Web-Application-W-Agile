@@ -2,6 +2,7 @@ import './enzyme.config.js';
 import React from 'react';
 import {shallow, mount} from 'enzyme';
 import {Polyline} from 'react-leaflet';
+import {Row} from 'reactstrap';
 
 import Atlas from '../src/components/Atlas/Atlas';
 
@@ -46,12 +47,21 @@ function testStoreInputPosition(){
 }
 
 function testRoundTripPolylineExists() {
-  const atlas = shallow(<Atlas />);
+  jest.mock('leaflet');
+  const atlas = mount(<Atlas />);
+  let x = atlas.contains(<Row />);
+  let markerPositions = [{lat: 38.83418, lng: -104.82497, id: 0},
+    {lat: 40.586345, lng: -105.075813, id: 1},
+    {lat: 40.14055556, lng: -105.13111111, id: 2}];
+
+  atlas.setState({markerPosition: markerPositions});
+
   expect(atlas.contains(<Polyline />)).toEqual(true);
 
 }
 
 function testGetPositionsOutput() {
+  jest.mock('leaflet');
   let testPosAtlas = mount(<Atlas />);
 
   let markerPositions = [{lat: 38.83418, lng: -104.82497, id: 0},

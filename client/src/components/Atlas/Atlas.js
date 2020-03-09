@@ -59,6 +59,7 @@ export default class Atlas extends Component {
       mapCenter: [0,0],
       validLatLng: FALSECOLOR,
       inputPosition: null,
+      distance: 0,
       displayNum: "",
       displayUnit: "",
       totalDistance: 0
@@ -236,7 +237,7 @@ export default class Atlas extends Component {
   }
 
   updateDistance() {
-    this.setState({displayNum: 0});
+    this.setState({distance: 0});
     let points = this.getPositions();
     let requestArray = [];
 
@@ -252,7 +253,7 @@ export default class Atlas extends Component {
         requestArray.push(requestBody);
       }
     });
-    
+
     for (let i = 0; i < requestArray.length; i++) {
       this.sendDistanceRequest(requestArray[i]);
     }
@@ -316,7 +317,8 @@ export default class Atlas extends Component {
       macro = "";
     }
 
-    this.setState({displayNum: this.state.displayNum + dist, displayUnit: macro});
+    this.setState({distance: this.state.distance + dist});
+    this.setState({displayNum: this.state.distance, displayUnit: macro});
   }
 
   getPositions() {

@@ -64,6 +64,7 @@ export default class App extends Component {
                 <Atlas
                     modify={(state, value) => this.setState({[state]: value})}
                     serverPort = {this.state.serverSettings.serverPort}
+                    serverVers = {this.state.serverSettings.serverConfig}
                 />
             </Collapse>
         );

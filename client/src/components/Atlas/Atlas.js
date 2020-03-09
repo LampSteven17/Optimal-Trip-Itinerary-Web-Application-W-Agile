@@ -50,6 +50,7 @@ export default class Atlas extends Component {
     this.updateMarkerFromInput = this.updateMarkerFromInput.bind(this);
     this.errorCallback = this.errorCallback.bind(this);
     this.getCurrentLocation = this.getCurrentLocation.bind(this);
+    this.updateDistance = this.updateDistance.bind(this);
 
     this.state = {
       markerPosition: [],
@@ -185,7 +186,9 @@ export default class Atlas extends Component {
     let newArray = this.state.markerPosition.filter(function(mk) {
       return mk.id !== marker.id;
     });
-    this.setState({markerPosition: newArray});
+    Promise.resolve()
+    .then(() => this.setState({markerPosition: newArray}))
+    .then(() => this.updateDistance())
   }
 
   showHomeButton() {
@@ -224,28 +227,33 @@ export default class Atlas extends Component {
         markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
       }), () => {
         if (this.state.markerPosition.length > 1) {
-          let points = this.getPositions();
-          let requestArray = [];
-
-          points.forEach((point, i) => {
-            if (i !== points.length - 1) {
-              let requestBody = {
-                requestVersion: 1,
-                requestType: "distance",
-                place1: {latitude: points[i][0].toString(), longitude: points[i][1].toString()},
-                place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
-                earthRadius: 6371.0
-              };
-              requestArray.push(requestBody);
-            }
-          });
-
-          this.sendDistanceRequest(request)/////////////////////////////////////CONVERT TO WHATEVER NESSECARY////////////////////////////////////////////////
-          .then((distance) => this.promptDistance(distance, 6371.0));
+          this.updateDistance();
         }
       });
     })
     .then(() => this.getCenter())
+  }
+
+  updateDistance() {
+    this.setState({displayNum: 0});
+    let points = this.getPositions();
+    let requestArray = [];
+
+    points.forEach((point, i) => {
+      if (i !== points.length - 1) {
+        let requestBody = {
+          requestVersion: 1,
+          requestType: "distance",
+          place1: {latitude: points[i][0].toString(), longitude: points[i][1].toString()},
+          place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
+          earthRadius: 6371.0
+        };
+        requestArray.push(requestBody);
+      }
+    });
+    for (let i = 0; i < requestArray.length; i++) {
+      this.sendDistanceRequest(requestArray[i]);/////////////////////////////////////CONVERT TO WHATEVER NESSECARY////////////////////////////////////////////////
+    }
   }
 
   async getCenter() {
@@ -293,9 +301,7 @@ export default class Atlas extends Component {
    // }
 
     sendServerRequestWithBody('distance', request, this.props.serverPort)
-    .then((data) => this.promptDistance(data.body.distance,earthRad));
-
-    return totalDistance;
+    .then((data) => this.promptDistance(data.body.distance, 6371.0));
   }
 
 
@@ -308,7 +314,7 @@ export default class Atlas extends Component {
       macro = "";
     }
 
-    this.setState({displayNum: dist, displayUnit: macro});
+    this.setState({displayNum: this.state.displayNum + dist, displayUnit: macro});
   }
 
   getPositions() {

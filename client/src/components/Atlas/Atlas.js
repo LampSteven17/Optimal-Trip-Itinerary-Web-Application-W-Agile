@@ -225,7 +225,22 @@ export default class Atlas extends Component {
       }), () => {
         if (this.state.markerPosition.length > 1) {
           let points = this.getPositions();
-          this.sendDistanceRequest()/////////////////////////////////////CONVERT TO WHATEVER NESSECARY////////////////////////////////////////////////
+          let requestArray = [];
+
+          points.forEach((point, i) => {
+            if (i !== points.length - 1) {
+              let requestBody = {
+                requestVersion: 1,
+                requestType: "distance",
+                place1: {latitude: points[i][0].toString(), longitude: points[i][1].toString()},
+                place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
+                earthRadius: 6371.0
+              };
+              requestArray.push(requestBody);
+            }
+          });
+
+          this.sendDistanceRequest(request)/////////////////////////////////////CONVERT TO WHATEVER NESSECARY////////////////////////////////////////////////
           .then((distance) => this.promptDistance(distance, 6371.0));
         }
       });
@@ -268,31 +283,7 @@ export default class Atlas extends Component {
     }
   }
 
-  async sendDistanceRequest(){
-    let points = this.getPositions();
-    let requestArray = [];
-
-
-    points.forEach((point, i) => {
-      if (i !== points.length - 1) {
-        let requestBody = {
-          requestVersion: 1,
-          requestType: "distance",
-          place1: {latitude: points[i][0].toString(), longitude: points[i][1].toString()},
-          place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
-          earthRadius: 6371000000
-        };
-        requestArray.push(requestBody);
-      }
-    });
-
-    let totalDistance = 0;
-    for(let i = 0; i < requestArray.length - 1; i++) {
-      let response = await sendServerRequestWithBody('distance', requestArray[i], getOriginalServerPort())
-      .then(() => console.log(response));
-      console.log(response);
-      totalDistance += response.body.distance;
-    };
+  async sendDistanceRequest(request){
     //TODO
     // clean up comments
     // text steve on making distance public and static
@@ -301,8 +292,7 @@ export default class Atlas extends Component {
       // not sure how do this in javascript
    // }
 
-    //console.log(this.props.serverPort);
-    sendServerRequestWithBody('distance', requestBody,this.props.serverPort)
+    sendServerRequestWithBody('distance', request, this.props.serverPort)
     .then((data) => this.promptDistance(data.body.distance,earthRad));
 
     return totalDistance;

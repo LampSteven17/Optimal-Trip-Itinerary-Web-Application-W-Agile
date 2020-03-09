@@ -190,7 +190,7 @@ export default class Atlas extends Component {
 
     Promise.resolve()
     .then(() => this.setState({markerPosition: newArray}))
-    .then(() => this.updateDistance())
+    .then(() => this.updateDistance());
   }
 
   async addMarker(mapClickInfo) {
@@ -206,13 +206,12 @@ export default class Atlas extends Component {
         }
       });
     })
-    .then(() => this.getCenter())
+    .then(() => this.getCenter());
   }
 
   updateDistance() {
     this.distance = 0;
     let points = this.getPositions();
-    let requestArray = [];
 
     points.forEach((point, i) => {
       if (i !== points.length - 1) {
@@ -223,13 +222,9 @@ export default class Atlas extends Component {
           place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
           earthRadius: 6371.0
         };
-        requestArray.push(requestBody);
+        this.sendDistanceRequest(requestBody);
       }
     });
-
-    for (let i = 0; i < requestArray.length; i++) {
-      this.sendDistanceRequest(requestArray[i]);
-    }
   }
 
   async getCenter() {
@@ -296,7 +291,6 @@ export default class Atlas extends Component {
     }
 
     this.distance = this.distance + dist;
-    console.log(this.distance);
     this.setState({displayNum: this.distance, displayUnit: macro});
   }
 

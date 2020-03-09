@@ -42,6 +42,7 @@ export default class Atlas extends Component {
 
     this.mapRef = createRef();
     this.groupRef = createRef();
+    this.distance = 0;
     this.map;
     this.group;
 
@@ -50,7 +51,7 @@ export default class Atlas extends Component {
     this.updateMarkerFromInput = this.updateMarkerFromInput.bind(this);
     this.errorCallback = this.errorCallback.bind(this);
     this.getCurrentLocation = this.getCurrentLocation.bind(this);
-    this.updateDistance = this.updateDistance.bind(this);
+    this.handleHomeClick = this.handleHomeClick.bind(this);
 
     this.state = {
       markerPosition: [],
@@ -59,7 +60,6 @@ export default class Atlas extends Component {
       mapCenter: [0,0],
       validLatLng: FALSECOLOR,
       inputPosition: null,
-      distance: 0,
       displayNum: "",
       displayUnit: "",
       totalDistance: 0
@@ -193,33 +193,6 @@ export default class Atlas extends Component {
     .then(() => this.updateDistance())
   }
 
-  showHomeButton() {
-    if (this.state.hideButton === false) {
-      return (
-          <Button className='btn-csu' onClick={() => this.getCurrentLocation()}><strong>Home</strong></Button>
-      );
-    }
-  }
-
-  getCurrentLocation() {
-    Geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
-    return null;
-  }
-
-  updateMarkerCallback(pos) {
-    this.setState({currentArrayPos: 0});
-    this.addMarker({latlng: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
-  }
-
-  errorCallback(errData) {
-    this.setState({currentArrayPos: 0});
-    this.addMarker({latlng: {lat: 40.57, lng: -105.09}});
-
-    if (errData.message === "User denied Geolocation") {
-      this.setState({hideButton: true});
-    }
-  }
-
   async addMarker(mapClickInfo) {
     Promise.resolve()
     .then(() => {
@@ -237,7 +210,7 @@ export default class Atlas extends Component {
   }
 
   updateDistance() {
-    this.setState({distance: 0});
+    this.distance = 0;
     let points = this.getPositions();
     let requestArray = [];
 
@@ -271,9 +244,14 @@ export default class Atlas extends Component {
   showHomeButton() {
     if (this.state.hideButton === false) {
       return (
-          <Button className='btn-csu' onClick={() => this.getCurrentLocation()}><strong>Home</strong></Button>
+          <Button className='btn-csu' onClick={() => this.handleHomeClick()}><strong>Home</strong></Button>
       );
     }
+  }
+
+  handleHomeClick() {
+    this.setState({displayNum: 0});
+    this.getCurrentLocation();
   }
 
   getCurrentLocation() {
@@ -317,8 +295,9 @@ export default class Atlas extends Component {
       macro = "";
     }
 
-    this.setState({distance: this.state.distance + dist});
-    this.setState({displayNum: this.state.distance, displayUnit: macro});
+    this.distance = this.distance + dist;
+    console.log(this.distance);
+    this.setState({displayNum: this.distance, displayUnit: macro});
   }
 
   getPositions() {

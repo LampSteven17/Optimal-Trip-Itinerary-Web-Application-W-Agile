@@ -27,9 +27,10 @@ public class RequestConfig extends RequestHeader {
   RequestConfig() {
     this.requestType = "config";
     this.requestVersion = RequestHeader.CURRENT_SUPPORTED_VERSION;
-    this.supportedRequests = new String[2];
+    this.supportedRequests = new String[3];
     this.supportedRequests[0] = "config";
     this.supportedRequests[1] = "distance";
+    this.supportedRequests[2] = "trip";
   }
 
 
@@ -43,4 +44,7 @@ public class RequestConfig extends RequestHeader {
   String getServerName() {
     return this.serverName;
   }
+  Integer getVersion() { return this.requestVersion; }
+  String getType() { return this.requestType;}
+  int getSupportedRequestLength() { return this.supportedRequests.length;}
 }

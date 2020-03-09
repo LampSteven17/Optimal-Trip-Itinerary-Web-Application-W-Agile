@@ -226,7 +226,7 @@ export default class Atlas extends Component {
         if (this.state.markerPosition.length > 1) {
           let points = this.getPositions();
           this.sendDistanceRequest()/////////////////////////////////////CONVERT TO WHATEVER NESSECARY////////////////////////////////////////////////
-          .then((distance) => this.promptDistance(distance, 6371000000));
+          .then((distance) => this.promptDistance(distance, 6371.0));
         }
       });
     })
@@ -293,7 +293,17 @@ export default class Atlas extends Component {
       console.log(response);
       totalDistance += response.body.distance;
     };
+    //TODO
+    // clean up comments
+    // text steve on making distance public and static
+    //sendTripRequest() {
+      //so we need to send this a list of maps
+      // not sure how do this in javascript
+   // }
 
+    //console.log(this.props.serverPort);
+    sendServerRequestWithBody('distance', requestBody,this.props.serverPort)
+    .then((data) => this.promptDistance(data.body.distance,earthRad));
 
     return totalDistance;
   }

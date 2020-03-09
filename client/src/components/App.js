@@ -63,6 +63,7 @@ export default class App extends Component {
             <Collapse isOpen={!this.state.showAbout}>
                 <Atlas
                     modify={(state, value) => this.setState({[state]: value})}
+                    serverPort = {this.state.serverSettings.serverPort}
                 />
             </Collapse>
         );

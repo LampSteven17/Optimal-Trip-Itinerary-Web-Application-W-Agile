@@ -186,6 +186,7 @@ export default class Atlas extends Component {
     let newArray = this.state.markerPosition.filter(function(mk) {
       return mk.id !== marker.id;
     });
+
     Promise.resolve()
     .then(() => this.setState({markerPosition: newArray}))
     .then(() => this.updateDistance())
@@ -251,8 +252,9 @@ export default class Atlas extends Component {
         requestArray.push(requestBody);
       }
     });
+    
     for (let i = 0; i < requestArray.length; i++) {
-      this.sendDistanceRequest(requestArray[i]);/////////////////////////////////////CONVERT TO WHATEVER NESSECARY////////////////////////////////////////////////
+      this.sendDistanceRequest(requestArray[i]);
     }
   }
 

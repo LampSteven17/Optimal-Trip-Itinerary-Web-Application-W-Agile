@@ -287,7 +287,7 @@ export default class Atlas extends Component {
 
   sendDistanceRequest(lat1,lon1,lat2,lon2,earthRad){
     let requestBody = {
-      requestVersion: 1,
+      requestVersion: 3,
       requestType: "distance",
       place1: {latitude: lat1, longitude: lon1},
       place2: {latitude: lat2, longitude: lon2},

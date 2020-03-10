@@ -42,6 +42,7 @@ export default class Atlas extends Component {
 
     this.mapRef = createRef();
     this.groupRef = createRef();
+    this.distance = 0;
     this.map;
     this.group;
 
@@ -50,6 +51,7 @@ export default class Atlas extends Component {
     this.updateMarkerFromInput = this.updateMarkerFromInput.bind(this);
     this.errorCallback = this.errorCallback.bind(this);
     this.getCurrentLocation = this.getCurrentLocation.bind(this);
+    this.handleHomeClick = this.handleHomeClick.bind(this);
 
     this.state = {
       markerPosition: [],
@@ -60,6 +62,7 @@ export default class Atlas extends Component {
       inputPosition: null,
       displayNum: "",
       displayUnit: "",
+      totalDistance: 0
     };
 
     this.getCurrentLocation();
@@ -140,20 +143,6 @@ export default class Atlas extends Component {
     }
   }
 
-  promptDistance(dist,rad){
-    let macro;
-
-    if(6371/rad == 1){
-      macro = "KM";
-    }else{
-      macro = "";
-    }
-
-    this.setState({displayNum: dist, displayUnit: macro});
-
-  }
-
-
   /**
    * Adapted from Coordinate-Parser isValidPosition Function
    * @param position takes the string of charcters input in lat lng above
@@ -198,34 +187,10 @@ export default class Atlas extends Component {
     let newArray = this.state.markerPosition.filter(function(mk) {
       return mk.id !== marker.id;
     });
-    this.setState({markerPosition: newArray});
-  }
 
-  showHomeButton() {
-    if (this.state.hideButton === false) {
-      return (
-          <Button className='btn-csu' onClick={() => this.getCurrentLocation()}><strong>Home</strong></Button>
-      );
-    }
-  }
-
-  getCurrentLocation() {
-    Geolocation.getCurrentPosition(this.updateMarkerCallback, this.errorCallback);
-    return null;
-  }
-
-  updateMarkerCallback(pos) {
-    this.setState({currentArrayPos: 0});
-    this.addMarker({latlng: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
-  }
-
-  errorCallback(errData) {
-    this.setState({currentArrayPos: 0});
-    this.addMarker({latlng: {lat: 40.57, lng: -105.09}});
-
-    if (errData.message === "User denied Geolocation") {
-      this.setState({hideButton: true});
-    }
+    Promise.resolve()
+    .then(() => this.setState({markerPosition: newArray}))
+    .then(() => this.updateDistance());
   }
 
   async addMarker(mapClickInfo) {
@@ -237,17 +202,32 @@ export default class Atlas extends Component {
         markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
       }), () => {
         if (this.state.markerPosition.length > 1) {
-          let points = this.getPositions();
-          this.sendDistanceRequest(
-            points[0][0].toString(),
-            points[0][1].toString(),
-            points[1][0].toString(),
-            points[1][1].toString(),
-            6371.0);/////////////////////////////////////CONVERT TO WHATEVER NESSECARY////////////////////////////////////////////////
+          this.updateDistance();
         }
       });
     })
-    .then(() => this.getCenter())
+    .then(() => this.getCenter());
+  }
+
+  async updateDistance() {
+    this.distance = 0;
+    let points = this.getPositions();
+    Promise.resolve()
+    .then(async () => {
+      for (let i = 0; i < points.length; i++) {
+        if (i !== points.length - 1) {
+          let requestBody = {
+            requestVersion: this.props.serverVers.requestVersion,
+            requestType: "distance",
+            place1: {latitude: points[i][0].toString(), longitude: points[i][1].toString()},
+            place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
+            earthRadius: 6371.0
+          };
+          await this.sendDistanceRequest(requestBody);
+        }
+      }
+    })
+    .then(() => this.setState({displayNum: this.distance, displayUnit: "KM"}));
   }
 
   async getCenter() {
@@ -262,9 +242,14 @@ export default class Atlas extends Component {
   showHomeButton() {
     if (this.state.hideButton === false) {
       return (
-          <Button className='btn-csu' onClick={() => this.getCurrentLocation()}><strong>Home</strong></Button>
+          <Button className='btn-csu' onClick={() => this.handleHomeClick()}><strong>Home</strong></Button>
       );
     }
+  }
+
+  handleHomeClick() {
+    this.setState({displayNum: 0});
+    this.getCurrentLocation();
   }
 
   getCurrentLocation() {
@@ -285,14 +270,7 @@ export default class Atlas extends Component {
     }
   }
 
-  sendDistanceRequest(lat1,lon1,lat2,lon2,earthRad){
-    let requestBody = {
-      requestVersion: this.props.serverVers.requestVersion,
-      requestType: "distance",
-      place1: {latitude: lat1, longitude: lon1},
-      place2: {latitude: lat2, longitude: lon2},
-      earthRadius: earthRad
-    };
+  async sendDistanceRequest(request){
     //TODO
     // clean up comments
     // text steve on making distance public and static
@@ -301,10 +279,13 @@ export default class Atlas extends Component {
       // not sure how do this in javascript
    // }
 
-    //console.log(this.props.serverPort);
-    sendServerRequestWithBody('distance', requestBody,this.props.serverPort)
-    .then((data) => this.promptDistance(data.body.distance,earthRad));
+    await sendServerRequestWithBody('distance', request, this.props.serverPort)
+    .then((data) => this.promptDistance(data.body.distance));
+  }
 
+
+  promptDistance(dist) {
+    this.distance = this.distance + dist;
   }
 
   getPositions() {

@@ -209,22 +209,25 @@ export default class Atlas extends Component {
     .then(() => this.getCenter());
   }
 
-  updateDistance() {
+  async updateDistance() {
     this.distance = 0;
     let points = this.getPositions();
-
-    points.forEach((point, i) => {
-      if (i !== points.length - 1) {
-        let requestBody = {
-          requestVersion: 3,
-          requestType: "distance",
-          place1: {latitude: points[i][0].toString(), longitude: points[i][1].toString()},
-          place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
-          earthRadius: 6371.0
-        };
-        this.sendDistanceRequest(requestBody);
+    Promise.resolve()
+    .then(async () => {
+      for (let i = 0; i < points.length; i++) {
+        if (i !== points.length - 1) {
+          let requestBody = {
+            requestVersion: 3,
+            requestType: "distance",
+            place1: {latitude: points[i][0].toString(), longitude: points[i][1].toString()},
+            place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
+            earthRadius: 6371.0
+          };
+          await this.sendDistanceRequest(requestBody);
+        }
       }
-    });
+    })
+    .then(() => this.setState({displayNum: this.distance, displayUnit: "KM"}));
   }
 
   async getCenter() {
@@ -276,22 +279,13 @@ export default class Atlas extends Component {
       // not sure how do this in javascript
    // }
 
-    sendServerRequestWithBody('distance', request, this.props.serverPort)
-    .then((data) => this.promptDistance(data.body.distance, 6371.0));
+    await sendServerRequestWithBody('distance', request, this.props.serverPort)
+    .then((data) => this.promptDistance(data.body.distance));
   }
 
 
-  promptDistance(dist,rad){
-    let macro;
-
-    if(6371/rad == 1){
-      macro = "KM";
-    }else{
-      macro = "";
-    }
-
+  promptDistance(dist) {
     this.distance = this.distance + dist;
-    this.setState({displayNum: this.distance, displayUnit: macro});
   }
 
   getPositions() {

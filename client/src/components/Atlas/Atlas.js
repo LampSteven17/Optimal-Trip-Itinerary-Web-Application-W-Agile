@@ -217,7 +217,7 @@ export default class Atlas extends Component {
       for (let i = 0; i < points.length; i++) {
         if (i !== points.length - 1) {
           let requestBody = {
-            requestVersion: 3,
+            requestVersion: this.props.serverVers.requestVersion,
             requestType: "distance",
             place1: {latitude: points[i][0].toString(), longitude: points[i][1].toString()},
             place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},

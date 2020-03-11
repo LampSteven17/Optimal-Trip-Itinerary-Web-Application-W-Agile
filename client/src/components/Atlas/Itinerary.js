@@ -16,10 +16,10 @@ class Itinerary extends Component{
 
         this.state={
             destinations: [
-                {destination: "Denver", leg: 0, total: 0},
-                {destination: "Boulder", leg: 20, total: 20},
-                {destination: "Fort Collins", leg: 40, total: 60},
-                {destination: "Denver", leg: 50, total: 110}
+                {id: 1, destination: "Denver", leg: 0, total: 0},
+                {id: 2, destination: "Boulder", leg: 20, total: 20},
+                {id: 3, destination: "Fort Collins", leg: 40, total: 60},
+                {id: 4, destination: "Denver", leg: 50, total: 110}
 
             ]
         }
@@ -42,9 +42,9 @@ class Itinerary extends Component{
 
     renderData(){
         return this.state.destinations.map((dest,index) => {
-            const {destination, leg, total } = dest;
+            const {id, destination, leg, total } = dest;
             return(
-                <tr key={dest}>
+                <tr key={id}>
                     <td>{destination}</td>
                     <td>{leg}</td>
                     <td>{total}</td>
@@ -59,7 +59,9 @@ class Itinerary extends Component{
         let head = Object.keys(this.state.destinations[0]);
 
         return head.map((key,index) => {
-            return <th key={index}> {key.toUpperCase()} </th>
+            if(key!="id") {
+                return <th key={index}> {key.toUpperCase()} </th>
+            }
         })
     }
 

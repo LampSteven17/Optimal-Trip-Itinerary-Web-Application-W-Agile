@@ -19,7 +19,7 @@ import 'leaflet/dist/leaflet.css';
 import Geolocation from '@react-native-community/geolocation';
 import {getOriginalServerPort, sendServerRequest, sendServerRequestWithBody} from "../../utils/restfulAPI";
 
-import Table from '../../components/Atlas/Table';
+import Itinerary from '../../components/Atlas/Itinerary';
 
 const FALSECOLOR = "5px solid red";
 const TRUECOLOR =  "5px solid green";
@@ -97,7 +97,7 @@ export default class Atlas extends Component {
                 <Button className={"btn-csu"} onClick={() => this.updateMarkerFromInput()}>+</Button>
               </Col>
             </Row>
-            {this.renderTable()}
+            {this.renderItinerary()}
           </Container>
         </div>
     );
@@ -126,11 +126,11 @@ export default class Atlas extends Component {
     )
   }
 
-  renderTable(){
+  renderItinerary(){
     return(
     <Row>
       <Col sm={12} md={{size: 6, offset: 3}}>
-        <Table />
+        <Itinerary />
       </Col>
     </Row>
     )

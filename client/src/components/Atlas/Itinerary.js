@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import '../tcowebstyle.css';
+import {Table} from 'reactstrap';
 
 /***************
  * For full References Vist: https://dev.to/abdulbasit313/an-easy-way-to-create-a-customize-dynamic-table-in-react-js-3igg
@@ -8,7 +9,7 @@ import '../tcowebstyle.css';
  * Formatting is from included CSS
  */
 
-class Table extends Component{
+class Itinerary extends Component{
 
     constructor(props){
         super(props);
@@ -28,12 +29,12 @@ class Table extends Component{
     render(){
         return(
             <div className="csu-branding">
-                <table className="table">
+                <Table className="table">
                     <tbody>
                         <tr>{this.renderHeader()}</tr>
                         {this.renderData()}
                     </tbody>
-                </table>
+                </Table>
             </div>
         )
     }
@@ -67,5 +68,5 @@ class Table extends Component{
 
 }
 
-export default Table
+export default Itinerary
 

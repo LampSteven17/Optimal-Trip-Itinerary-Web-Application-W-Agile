@@ -24,6 +24,7 @@ import {
   sendServerRequestWithBody
 } from "../../utils/restfulAPI";
 import * as distanceRequestSchema from "../../../schemas/DistanceRequest";
+import * as distanceResponseSchema from "../../../schemas/DistanceResponse";
 
 const FALSECOLOR = "5px solid red";
 const TRUECOLOR =  "5px solid green";
@@ -282,12 +283,22 @@ export default class Atlas extends Component {
       return;
     }
     await sendServerRequestWithBody('distance', request, this.props.serverPort)
-    .then((data) => this.promptDistance(data.body.distance));
+    .then((data) => this.promptDistance(data.body)); // data.body.distance
   }
 
+  testDistanceResponse(body) {
+    if (!isJsonResponseValid(body, distanceResponseSchema)) {
+      console.error("DISTANCE RESPONSE INVALID, NO DISTANCE BEING ADDED");
+      return false;
+    }
+    return true;
+  }
 
   promptDistance(dist) {
-    this.distance = this.distance + dist;
+    if (!this.testDistanceResponse(dist)) {
+      return;
+    }
+    this.distance = this.distance + dist.distance;
   }
 
   getPositions() {

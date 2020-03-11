@@ -17,7 +17,16 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
 import Geolocation from '@react-native-community/geolocation';
-import {getOriginalServerPort, sendServerRequest, sendServerRequestWithBody} from "../../utils/restfulAPI";
+import {
+  getOriginalServerPort,
+  isJsonResponseValid,
+  sendServerRequest,
+  sendServerRequestWithBody
+} from "../../utils/restfulAPI";
+import * as distanceRequestSchema from "../../../schemas/DistanceRequest";
+import * as distanceResponseSchema from "../../../schemas/DistanceResponse";
+
+import Itinerary from '../../components/Atlas/Itinerary';
 
 const FALSECOLOR = "5px solid red";
 const TRUECOLOR =  "5px solid green";
@@ -95,6 +104,7 @@ export default class Atlas extends Component {
                 <Button className={"btn-csu"} onClick={() => this.updateMarkerFromInput()}>+</Button>
               </Col>
             </Row>
+            {this.renderItinerary()}
           </Container>
         </div>
     );
@@ -120,6 +130,16 @@ export default class Atlas extends Component {
              {this.getMarker()}
              <Polyline color="red" positions={this.getPositions()} />
         </Map>
+    )
+  }
+
+  renderItinerary(){
+    return(
+    <Row>
+      <Col sm={12} md={{size: 6, offset: 3}}>
+        <Itinerary />
+      </Col>
+    </Row>
     )
   }
 
@@ -271,21 +291,27 @@ export default class Atlas extends Component {
   }
 
   async sendDistanceRequest(request){
-    //TODO
-    // clean up comments
-    // text steve on making distance public and static
-    //sendTripRequest() {
-      //so we need to send this a list of maps
-      // not sure how do this in javascript
-   // }
-
+    if (!isJsonResponseValid(request, distanceRequestSchema)) {
+      console.error("DISTANCE REQUEST INVALID");
+      return;
+    }
     await sendServerRequestWithBody('distance', request, this.props.serverPort)
-    .then((data) => this.promptDistance(data.body.distance));
+    .then((data) => this.promptDistance(data.body)); // data.body.distance
   }
 
+  testDistanceResponse(body) {
+    if (!isJsonResponseValid(body, distanceResponseSchema)) {
+      console.error("DISTANCE RESPONSE INVALID, NO DISTANCE BEING ADDED");
+      return false;
+    }
+    return true;
+  }
 
   promptDistance(dist) {
-    this.distance = this.distance + dist;
+    if (!this.testDistanceResponse(dist)) {
+      return;
+    }
+    this.distance = this.distance + dist.distance;
   }
 
   getPositions() {
@@ -293,6 +319,11 @@ export default class Atlas extends Component {
     this.state.markerPosition.forEach((marker, i) => {
       latlngArray.push([marker.lat, marker.lng]);
     });
+
+    if (this.state.markerPosition.length >= 2){
+      latlngArray.push(latlngArray[0]);
+    }
+
 
     return latlngArray;
   }

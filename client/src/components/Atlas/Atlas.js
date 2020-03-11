@@ -116,9 +116,9 @@ export default class Atlas extends Component {
              ref={this.mapRef}
              onClick={this.addMarker}
              style={{height: MAP_STYLE_LENGTH, maxWidth: MAP_STYLE_LENGTH}}>
-              <TileLayer url={MAP_LAYER_URL} attribution={MAP_LAYER_ATTRIBUTION}/>
-              {this.getMarker()}
-              <Polyline color="red" positions={this.getPositions()} />
+             <TileLayer url={MAP_LAYER_URL} attribution={MAP_LAYER_ATTRIBUTION}/>
+             {this.getMarker()}
+             <Polyline color="red" positions={this.getPositions()} />
         </Map>
     )
   }

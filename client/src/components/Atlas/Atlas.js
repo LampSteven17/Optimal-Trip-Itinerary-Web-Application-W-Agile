@@ -17,7 +17,14 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
 import Geolocation from '@react-native-community/geolocation';
-import {getOriginalServerPort, sendServerRequest, sendServerRequestWithBody} from "../../utils/restfulAPI";
+import {
+  getOriginalServerPort,
+  isJsonResponseValid,
+  sendServerRequest,
+  sendServerRequestWithBody
+} from "../../utils/restfulAPI";
+import * as distanceRequestSchema from "../../../schemas/DistanceRequest";
+import * as distanceResponseSchema from "../../../schemas/DistanceResponse";
 
 import Itinerary from '../../components/Atlas/Itinerary';
 
@@ -284,21 +291,27 @@ export default class Atlas extends Component {
   }
 
   async sendDistanceRequest(request){
-    //TODO
-    // clean up comments
-    // text steve on making distance public and static
-    //sendTripRequest() {
-      //so we need to send this a list of maps
-      // not sure how do this in javascript
-   // }
-
+    if (!isJsonResponseValid(request, distanceRequestSchema)) {
+      console.error("DISTANCE REQUEST INVALID");
+      return;
+    }
     await sendServerRequestWithBody('distance', request, this.props.serverPort)
-    .then((data) => this.promptDistance(data.body.distance));
+    .then((data) => this.promptDistance(data.body)); // data.body.distance
   }
 
+  testDistanceResponse(body) {
+    if (!isJsonResponseValid(body, distanceResponseSchema)) {
+      console.error("DISTANCE RESPONSE INVALID, NO DISTANCE BEING ADDED");
+      return false;
+    }
+    return true;
+  }
 
   promptDistance(dist) {
-    this.distance = this.distance + dist;
+    if (!this.testDistanceResponse(dist)) {
+      return;
+    }
+    this.distance = this.distance + dist.distance;
   }
 
   getPositions() {

@@ -70,6 +70,8 @@ export default class ServerSettings extends Component {
                 {this.render_table_because_code_climate_said_so("Server Name", this.getCurrentServerName())}
                 {this.render_table_because_code_climate_said_so("Request Version", configurationSettings[0])}
                 {this.render_table_because_code_climate_said_so("Request Type", configurationSettings[1])}
+                {this.render_table_because_code_climate_said_so("Supported Requests", "config, distance, trip")}
+
                 </tbody>
             </table>
         </div>

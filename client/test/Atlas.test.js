@@ -46,20 +46,6 @@ function testStoreInputPosition(){
 
 }
 
-function testRoundTripPolylineExists() {
-  jest.mock('leaflet');
-  const atlas = mount(<Atlas />);
-  let x = atlas.contains(<Row />);
-  let markerPositions = [{lat: 38.83418, lng: -104.82497, id: 0},
-    {lat: 40.586345, lng: -105.075813, id: 1},
-    {lat: 40.14055556, lng: -105.13111111, id: 2}];
-
-  atlas.setState({markerPosition: markerPositions});
-
-  expect(atlas.contains(<Polyline />)).toEqual(true);
-
-}
-
 function testGetPositionsOutput() {
   jest.mock('leaflet');
   let testPosAtlas = mount(<Atlas />);
@@ -80,4 +66,3 @@ function testGetPositionsOutput() {
 test("Testing Atlas's Initial State", testInitialAppState);
 test("Testing Atlas's Handle Input", testInitialHandleInput);
 test("Testing Atlas's Store Input Position",testStoreInputPosition);
-test('Testing to see if a round trip Polyline is rendered with Atlas', testRoundTripPolylineExists);

@@ -29,7 +29,7 @@ class Itinerary extends Component{
     render(){
         return(
             <div className="csu-branding">
-                <Table className="table">
+                <Table striped responsive className="table">
                     <tbody>
                         <tr>{this.renderHeader()}</tr>
                         {this.renderData()}

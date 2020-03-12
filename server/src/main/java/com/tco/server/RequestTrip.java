@@ -23,7 +23,8 @@ public class RequestTrip extends RequestHeader{
 
     RequestTrip() {
         this.requestType = "trip";
-        this.requestVersion = RequestHeader.CURRENT_SUPPORTED_VERSION; // TODO update
+        this.requestVersion = RequestHeader.CURRENT_SUPPORTED_VERSION;
+        System.out.println("\n\n\n\n\ndid it even make it here?\n\n\n\n");
     }
 
     @Override
@@ -31,18 +32,17 @@ public class RequestTrip extends RequestHeader{
             /* Everything else is required in the client request
                Also need to check if the given distances mean anything
              */
-        //distances = calculateDistances(places); // TODO wait till distance requests are going through to implement and write last test case
+        System.out.println("\n\n\n\n\ndid it even make it here?\n\n\n\n");
+        distances = calculateDistances(); // TODO wait till distance requests are going through to implement and write last test case
         log.trace("buildResponse -> {}", this);
     }
 
-    private Long[] calculateDistances(List< Map<String, String> > places) {
+    private Long[] calculateDistances() {
+        if (places.isEmpty())
+            return null;
         Long[] dists = new Long[places.size()];
         for (int i = 0; i < places.size()-1; i++){
-            if (places.get(i).get("name") == null) {
-                return dists;
-            } else {
-                dists[i] = RequestDistance.calculateDistance(places.get(i), places.get(i+1), earthRadius);
-            }
+                dists[i] = RequestDistance.calculateDistance(places.get(i), places.get(i+1), Double.valueOf(options.get("earthRadius")));
         }
         if (dists.length > 1) {
             // finish final entry

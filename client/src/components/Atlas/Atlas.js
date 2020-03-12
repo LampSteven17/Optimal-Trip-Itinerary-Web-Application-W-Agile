@@ -25,6 +25,7 @@ import {
 } from "../../utils/restfulAPI";
 import * as distanceRequestSchema from "../../../schemas/DistanceRequest";
 import * as distanceResponseSchema from "../../../schemas/DistanceResponse";
+import * as tripRequestSchema from "../../../schemas/TripFile";
 
 import Itinerary from '../../components/Atlas/Itinerary';
 
@@ -230,6 +231,7 @@ export default class Atlas extends Component {
   }
 
   async updateDistance() {
+    this.sendTrip(); //CADE
     this.distance = 0;
     let points = this.getPositions();
     Promise.resolve()
@@ -243,11 +245,23 @@ export default class Atlas extends Component {
             place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
             earthRadius: 6371.0
           };
-          await this.sendDistanceRequest(requestBody);
+          await this.sendRequest(requestBody, "distance", distanceRequestSchema);
         }
       }
     })
     .then(() => this.setState({displayNum: this.distance, displayUnit: "KM"}));
+  }
+
+  sendTrip() {
+    let requestBody = {
+      requestVersion: this.props.serverVers.requestVersion,
+      requestType: "trip",
+      options: {title: "triptest", earthRadius: "6371.0"},
+      places: [{name:"Denver", latitude: "39.7", longitude: "-105.0"},
+               {name:"Boulder", latitude: "40.0", longitude: "-105.4"},
+               {name:"Fort Collins", latitude: "40.6", longitude: "-105.1"}]
+    }
+    this.sendRequest(requestBody, "trip", tripRequestSchema);
   }
 
   async getCenter() {
@@ -290,28 +304,44 @@ export default class Atlas extends Component {
     }
   }
 
-  async sendDistanceRequest(request){
-    if (!isJsonResponseValid(request, distanceRequestSchema)) {
-      console.error("DISTANCE REQUEST INVALID");
+  async sendRequest(request, requestType, schema) {
+    if (!isJsonResponseValid(request, schema)) {
+      console.error(requestType +  "REQUEST INVALID");
       return;
     }
-    await sendServerRequestWithBody('distance', request, this.props.serverPort)
-    .then((data) => this.promptDistance(data.body)); // data.body.distance
+    switch (requestType) {
+      case "distance":
+        await sendServerRequestWithBody("distance", request, this.props.serverPort)
+            .then((data) => this.promptDistance(data.body));
+        break;
+      case "trip":
+        await sendServerRequestWithBody("trip", request, this.props.serverPort)
+            .then((data) => this.promptTrip(/* add here too */));
+        break;
+      default: console.log("UNSUPPORTED REQUEST TYPE");
+        return;
+    }
   }
 
-  testDistanceResponse(body) {
-    if (!isJsonResponseValid(body, distanceResponseSchema)) {
-      console.error("DISTANCE RESPONSE INVALID, NO DISTANCE BEING ADDED");
-      return false;
-    }
-    return true;
+  promptTrip(/* some vars here*/) {
+    /*
+    this should set the state variables like distance does
+     */
   }
 
   promptDistance(dist) {
-    if (!this.testDistanceResponse(dist)) {
+    if (!this.testResponse(dist, distanceResponseSchema)) {
       return;
     }
     this.distance = this.distance + dist.distance;
+  }
+
+  testResponse(body, schema) {
+    if (!isJsonResponseValid(body, schema)) {
+      console.error("JSON RESPONSE INVALID, NO STATE VARIABLES BEING MODIFIED");
+      return false;
+    }
+    return true;
   }
 
   getPositions() {

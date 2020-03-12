@@ -11,7 +11,7 @@ public class TestRequestTrip {
     @Before
     public void createConfigurationForTestCases(){
         trip = new RequestTrip();
-        trip.buildResponse();
+        //trip.buildResponse();
     }
 
     @Test

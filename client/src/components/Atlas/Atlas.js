@@ -231,8 +231,6 @@ export default class Atlas extends Component {
   }
 
   async updateDistance() {
-    this.sendTrip(); //CADE
-    /*
     this.distance = 0;
     let points = this.getPositions();
     Promise.resolve()
@@ -251,10 +249,14 @@ export default class Atlas extends Component {
       }
     })
     .then(() => this.setState({displayNum: this.distance, displayUnit: "KM"}));
-
-     */
   }
 
+
+  /* This method sends a successful trip. Obviously it will need to be formatted with the data we choose to
+  use at any given time.
+  I'm leaving it here so we have the shell and a request you can test with when building up the itenerary and
+  such. Delete whenever it's use has ended if needed - <3 Cade
+   */
   async sendTrip() {
     Promise.resolve()
         .then(async () => {
@@ -276,6 +278,7 @@ export default class Atlas extends Component {
           }
           await this.sendRequest(requestBody, "trip", tripRequestSchema);
         })
+    // .then() update vars as needed here
   }
 
   async getCenter() {

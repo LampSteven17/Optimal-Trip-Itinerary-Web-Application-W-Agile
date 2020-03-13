@@ -57,13 +57,10 @@ class MicroServer {
     Spark.get("/api/config", this::processConfigRequest);
     // Configure other restful API requests here
     Spark.post("/api/config", this::processPostConfigRequest);
-
     Spark.post("/api/distance",this::processPostDistanceRequest);
-
     Spark.post("/api/trip",this::processPostTripRequest);
   }
 
-  // TODO this can all be one method
   private String processPostTripRequest(Request request, Response response) {
     logRequest(request);
     return processHttpRequest(RequestTrip.class, request.body(), response);
@@ -78,7 +75,6 @@ class MicroServer {
     logRequest(request);
     return processHttpRequest(RequestConfig.class, CONFIG_REQUEST_BODY, response);
   }
-
 
   private String processPostDistanceRequest(Request request, Response response) {
     logRequest(request);

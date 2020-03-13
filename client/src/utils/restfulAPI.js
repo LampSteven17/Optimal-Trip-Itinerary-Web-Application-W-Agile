@@ -16,8 +16,6 @@ export function sendServerRequestWithBody(requestType, requestBody, serverPort=g
 
 
 async function processRestfulAPI(restfulAPI, requestOptions) {
-  console.log("restfulAPI: " + restfulAPI);
-  console.log("options: "+ requestOptions);
   try {
     let response = await fetch(restfulAPI, requestOptions);
     return {

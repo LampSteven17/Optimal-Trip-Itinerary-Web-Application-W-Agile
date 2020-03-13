@@ -232,6 +232,7 @@ export default class Atlas extends Component {
 
   async updateDistance() {
     this.sendTrip(); //CADE
+    /*
     this.distance = 0;
     let points = this.getPositions();
     Promise.resolve()
@@ -250,18 +251,31 @@ export default class Atlas extends Component {
       }
     })
     .then(() => this.setState({displayNum: this.distance, displayUnit: "KM"}));
+
+     */
   }
 
-  sendTrip() {
-    let requestBody = {
-      requestVersion: this.props.serverVers.requestVersion,
-      requestType: "trip",
-      options: {title: "triptest", earthRadius: "6371.0"},
-      places: [{name:"Denver", latitude: "39.7", longitude: "-105.0"},
-               {name:"Boulder", latitude: "40.0", longitude: "-105.4"},
-               {name:"Fort Collins", latitude: "40.6", longitude: "-105.1"}]
-    }
-    this.sendRequest(requestBody, "trip", tripRequestSchema);
+  async sendTrip() {
+    Promise.resolve()
+        .then(async () => {
+          let requestBody = {
+            "requestType" : "trip",
+            "requestVersion" : 3,
+            "options" : {
+              "title" : "Around the world - 21655",
+              "earthRadius" : "3959.0"
+            },
+            "places" : [
+              {"name": "New York City", "latitude": "40.730610", "longitude": "-73.935242"},
+              {"name": "London", "latitude": "51.509865", "longitude": "-0.118092"},
+              {"name": "Baghdad", "latitude": "33.312805", "longitude": "44.361488"},
+              {"name": "Singapore", "latitude": "1.290270", "longitude": "103.851959"},
+              {"name": "Tokyo", "latitude": "35.652832", "longitude": "139.839478"},
+              {"name": "Los Angelos", "latitude":"34.052235", "longitude": "-118.243683"}
+            ]
+          }
+          await this.sendRequest(requestBody, "trip", tripRequestSchema);
+        })
   }
 
   async getCenter() {
@@ -315,6 +329,7 @@ export default class Atlas extends Component {
             .then((data) => this.promptDistance(data.body));
         break;
       case "trip":
+        console.log("herererererererererererer");
         await sendServerRequestWithBody("trip", request, this.props.serverPort)
             .then((data) => this.promptTrip(/* add here too */));
         break;

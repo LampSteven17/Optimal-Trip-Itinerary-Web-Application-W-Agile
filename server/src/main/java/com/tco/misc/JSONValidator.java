@@ -28,6 +28,7 @@ public class JSONValidator {
 
   public static void validate(Type requestType, String requestBody) throws IOException {
     Schema schema = getSchema(requestType.getTypeName());
+    System.out.println("\nTYPE: " + requestType.getTypeName() + "\n");
     try {
       JSONObject request = new JSONObject(requestBody);
       schema.validate(request);

@@ -60,6 +60,8 @@ public class RequestDistance extends RequestHeader {
 
        Double c = 2.0 * Math.atan2(Math.sqrt(a), Math.sqrt(1.0-a));
 
+       System.out.println("c is " + Math.round(earthRad * c));
+
        return Math.round(earthRad * c);
     }
 

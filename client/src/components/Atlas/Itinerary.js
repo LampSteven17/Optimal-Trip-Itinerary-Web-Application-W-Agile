@@ -14,15 +14,7 @@ class Itinerary extends Component{
     constructor(props){
         super(props);
 
-        this.state={
-            destinations: [
-                {id: 1, destination: "Denver", leg: 0, total: 0},
-                {id: 2, destination: "Boulder", leg: 20, total: 20},
-                {id: 3, destination: "Fort Collins", leg: 40, total: 60},
-                {id: 4, destination: "Denver", leg: 50, total: 110}
-
-            ]
-        }
+        //console.log(props.dests);
     }
 
 
@@ -41,7 +33,7 @@ class Itinerary extends Component{
 
 
     renderData(){
-        return this.state.destinations.map((dest,index) => {
+        return this.props.dests.map((dest,index) => {
             const {id, destination, leg, total } = dest;
             return(
                 <tr key={id}>
@@ -56,7 +48,7 @@ class Itinerary extends Component{
     }
 
     renderHeader(){
-        let head = Object.keys(this.state.destinations[0]);
+        let head = Object.keys(this.props.dests[0]);
 
         return head.map((key,index) => {
             if(key!="id") {

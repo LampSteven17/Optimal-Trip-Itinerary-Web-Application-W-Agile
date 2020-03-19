@@ -28,7 +28,6 @@ import * as distanceResponseSchema from "../../../schemas/DistanceResponse";
 import * as tripRequestSchema from "../../../schemas/TripFile";
 
 import Itinerary from '../../components/Atlas/Itinerary';
-import {indexOf} from "leaflet/src/core/Util";
 
 const FALSECOLOR = "5px solid red";
 const TRUECOLOR =  "5px solid green";

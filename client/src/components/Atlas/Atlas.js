@@ -28,6 +28,7 @@ import * as distanceResponseSchema from "../../../schemas/DistanceResponse";
 import * as tripRequestSchema from "../../../schemas/TripFile";
 
 import Itinerary from '../../components/Atlas/Itinerary';
+import {indexOf} from "leaflet/src/core/Util";
 
 const FALSECOLOR = "5px solid red";
 const TRUECOLOR =  "5px solid green";
@@ -72,10 +73,13 @@ export default class Atlas extends Component {
       inputPosition: null,
       displayNum: "",
       displayUnit: "",
-      totalDistance: 0
+      totalDistance: 0,
+
+      itenData : [{id: 1, destination: "", leg: "", total: ""}]
     };
 
     this.getCurrentLocation();
+    this.sendTrip();
   }
 
   render() {
@@ -138,7 +142,7 @@ export default class Atlas extends Component {
     return(
     <Row>
       <Col sm={12} md={{size: 6, offset: 3}}>
-        <Itinerary />
+        <Itinerary dests={this.state.itenData}/>
       </Col>
     </Row>
     )
@@ -276,7 +280,7 @@ export default class Atlas extends Component {
               {"name": "Los Angelos", "latitude":"34.052235", "longitude": "-118.243683"}
             ]
           }
-          await this.sendRequest(requestBody, "trip", tripRequestSchema);
+          await this.sendRequest(requestBody, "trip", tripRequestSchema)
         })
     // .then() update vars as needed here
   }
@@ -332,19 +336,42 @@ export default class Atlas extends Component {
             .then((data) => this.promptDistance(data.body));
         break;
       case "trip":
-        console.log("herererererererererererer");
         await sendServerRequestWithBody("trip", request, this.props.serverPort)
-            .then((data) => this.promptTrip(/* add here too */));
+            .then((data) => this.promptTrip(data.body));
         break;
       default: console.log("UNSUPPORTED REQUEST TYPE");
         return;
     }
   }
 
-  promptTrip(/* some vars here*/) {
-    /*
-    this should set the state variables like distance does
-     */
+  promptTrip(data) {
+    this.setState({itenData: this.parseData(data.places, data.distances)});
+  }
+
+  parseData(names, legs){
+    let formatted = [];
+
+    for(let vals of names){
+      let index = names.indexOf((vals));
+      let totalVal = 0;
+
+      if(index !== 0){
+        totalVal+= (legs[index]+formatted[index-1].total);
+      }else{
+        totalVal=legs[index];
+      }
+
+      formatted.push(
+          {
+            id: index,
+            destination: vals.name,
+            leg: legs[index],
+            total: totalVal
+          })
+    }
+
+    return formatted;
+
   }
 
   promptDistance(dist) {

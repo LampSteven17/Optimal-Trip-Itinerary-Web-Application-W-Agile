@@ -28,6 +28,7 @@ import * as distanceResponseSchema from "../../../schemas/DistanceResponse";
 import * as tripRequestSchema from "../../../schemas/TripFile";
 
 import Itinerary from '../../components/Atlas/Itinerary';
+import LoadFileButton from "./LoadFileButton";
 
 const FALSECOLOR = "5px solid red";
 const TRUECOLOR =  "5px solid green";
@@ -141,11 +142,13 @@ export default class Atlas extends Component {
     return(
     <Row>
       <Col sm={12} md={{size: 6, offset: 3}}>
+        <LoadFileButton/>
         <Itinerary dests={this.state.itenData}/>
       </Col>
     </Row>
     )
   }
+
 
   handleInput(pos) {
     if (this.isValidPosition(pos)) {

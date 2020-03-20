@@ -295,8 +295,15 @@ export default class Atlas extends Component {
       console.error("DISTANCE REQUEST INVALID");
       return;
     }
-    await sendServerRequestWithBody('distance', request, this.props.serverPort)
-    .then((data) => this.promptDistance(data.body)); // data.body.distance
+
+    return await sendServerRequestWithBody('distance', request, this.props.serverPort)
+    .then((data) => {
+      if (data.body.distance >= (0.5 * 40075)) { // greater than half the circumference of earth
+        data.body.distance = 40075 - distance;
+      }
+      this.promptDistance(data.body);
+      return data;
+    });
   }
 
   testDistanceResponse(body) {

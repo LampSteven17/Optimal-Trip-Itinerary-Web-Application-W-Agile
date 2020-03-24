@@ -27,7 +27,7 @@ public class RequestTrip extends RequestHeader{
 
     @Override
     public void buildResponse() {
-        distances = calculateDistances(); // TODO wait till distance requests are going through to implement and write last test case
+        distances = calculateDistances();
         log.trace("buildResponse -> {}", this);
     }
 

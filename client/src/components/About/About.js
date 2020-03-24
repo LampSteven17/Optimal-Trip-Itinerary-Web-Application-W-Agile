@@ -40,21 +40,23 @@ export default class About extends Component {
                 </Col>
             </Row>
             <Row>
-                <Col>
-                    {this.renderAustinCard()}
-                </Col>
-                <Col>
-                    {this.renderSteveCard()}
-                </Col>
-                <Col>
-                    {this.renderCadeCard()}
-                </Col>
-                <Col>
-                    {this.renderRyanCard()}
-                </Col>
+                {this.renderColumnCard(this.renderAustinCard())}
+                {this.renderColumnCard(this.renderSteveCard())}
+                {this.renderColumnCard(this.renderCadeCard())}
+                {this.renderColumnCard(this.renderRyanCard())}
             </Row>
         </Container>)
     }
+
+    renderColumnCard(card) {
+        return (
+            <Col>
+             {card}
+            </Col>
+        )
+    }
+
+
 
 
     renderRyanCard() {

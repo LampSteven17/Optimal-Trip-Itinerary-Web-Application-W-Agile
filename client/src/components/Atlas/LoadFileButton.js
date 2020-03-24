@@ -28,6 +28,21 @@ class LoadFileButton extends Component {
 
     loadFileOnClick(files){
 
+        let file = files.item(0);
+        let extension  = file.name.substr(file.name.lastIndexOf('.') + 1).toLocaleLowerCase(); //I am truly sorry for this.
+        switch(extension){
+            case "json":
+                this.jsonParser(file);
+                break;
+
+            case "csv":
+                this.csvParser(file);
+                break;
+        }
+    }
+
+
+    jsonParser(file){
         let fileReader = new FileReader();
 
         const handleFileRead = (e) => {
@@ -39,9 +54,12 @@ class LoadFileButton extends Component {
         };
 
         fileReader.onloadend = handleFileRead;
-        fileReader.readAsText(files.item(0));
+        fileReader.readAsText(file);
     }
 
+    csvParser(file){
+        //READ CSV HERE
+    }
 
 
 

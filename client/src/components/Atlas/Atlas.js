@@ -128,7 +128,7 @@ export default class Atlas extends Component {
              style={{height: MAP_STYLE_LENGTH, maxWidth: MAP_STYLE_LENGTH}}>
              <TileLayer url={MAP_LAYER_URL} attribution={MAP_LAYER_ATTRIBUTION}/>
              {this.getMarker()}
-             <Polyline color="red" positions={this.getPositions()} />
+             {this.drawLine()}
         </Map>
     )
   }
@@ -319,6 +319,40 @@ export default class Atlas extends Component {
     this.distance = this.distance + dist.distance;
   }
 
+  drawLine() {
+    // [lat, lng]
+    let points = this.getPositions();
+    let lines = [];
+    let keyCount = 0;
+
+    if (points.length > 1) {
+      for (let i = 1; i < points.length; i++) {
+        let checkLat = points[i-1][0] - points[i][0];
+        let checkLng = points[i-1][1] - points[i][1];
+        let currentLine = [points[i-1], points[i]];
+        if (Math.abs(checkLat) > 180) {
+          // +- latitude by 360
+        }
+        else if (Math.abs(checkLng) > 180) {
+          // +- longitude by 360
+        
+        }
+        else {
+          // draw line
+          lines.push(
+              <Polyline key={keyCount + 1} color="red" positions={currentLine} />
+          );
+        }
+      }
+
+      return (
+        <div>
+          {lines}
+        </div>
+      );
+    }
+  }
+
   getPositions() {
     let latlngArray = [];
     this.state.markerPosition.forEach((marker, i) => {
@@ -328,7 +362,6 @@ export default class Atlas extends Component {
     if (this.state.markerPosition.length >= 2){
       latlngArray.push(latlngArray[0]);
     }
-
 
     return latlngArray;
   }

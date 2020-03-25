@@ -16,7 +16,6 @@ public class RequestTrip extends RequestHeader{
     private Map<String, String> options;
     private List<Map < String, String> > places;
     private Long[] distances;
-    private Double earthRadius;
 
     private final transient Logger log = LoggerFactory.getLogger(RequestDistance.class);
 
@@ -51,6 +50,9 @@ public class RequestTrip extends RequestHeader{
     // TESTS //
     public int getVersion() { return this.requestVersion; }
     public String getType() { return this.requestType; }
+    public void setUp(Map<String, String> op, List<Map < String, String> > pl) {
+        options = op; places = pl;
+    }
 
 
 }

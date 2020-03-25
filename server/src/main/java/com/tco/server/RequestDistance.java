@@ -63,6 +63,11 @@ public class RequestDistance extends RequestHeader {
        return Math.round(earthRad * c);
     }
 
+    public String getType() { return this.requestType; }
+    public Integer getVersion() { return this.requestVersion; }
+    public void testDistance(Map<String, String> p1, Map<String, String> p2, Double er) {
+        place1 = p1; place2 = p2; earthRadius = er;
+    }
 
 
 }

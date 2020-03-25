@@ -415,26 +415,7 @@ export default class Atlas extends Component {
       let currentLine = [points[i-1], points[i]];
 
       if (Math.abs(checkLng) > 180) {
-        if (points[i-1][1] < 0) {
-          let lineOneCalc = [points[i][0], points[i][1] - 360];
-          lines.push(
-              <Polyline key={Date.now() * Math.random()} color="red" positions={[points[i-1], lineOneCalc]} />
-          );
-          let lineTwoCalc = [points[i - 1][0], points[i - 1][1] + 360];
-          lines.push(
-              <Polyline key={Date.now() * Math.random()} color="red" positions={[lineTwoCalc, points[i]]} />
-          );
-        }
-        else {
-          let lineOneCalc = [points[i][0], points[i][1] + 360];
-          lines.push(
-            <Polyline key={Date.now() * Math.random()} color="red" positions={[lineOneCalc, points[i-1]]} />
-          );
-          let lineTwoCalc = [points[i-1][0], points[i-1][1] - 360];
-          lines.push(
-              <Polyline key={Date.now() * Math.random()} color="red" positions={[points[i], lineTwoCalc]} />
-          );
-        }
+        lines = lines.concat(this.lineAcrossMeridian(points[i-1], points[i]));
       }
       else {
         lines.push(
@@ -443,6 +424,32 @@ export default class Atlas extends Component {
       }
     }
 
+    return lines;
+  }
+
+  lineAcrossMeridian(point1, point2) {
+    let lines = [];
+
+    if (point1[1] < 0) {
+      let lineOneCalc = [point2[0], point2[1] - 360];
+      lines.push(
+          <Polyline key={Date.now() * Math.random()} color="red" positions={[point1, lineOneCalc]} />
+      );
+      let lineTwoCalc = [point1[0], point1[1] + 360];
+      lines.push(
+          <Polyline key={Date.now() * Math.random()} color="red" positions={[lineTwoCalc, point2]} />
+      );
+    }
+    else {
+      let lineOneCalc = [point2[0], point2[1] + 360];
+      lines.push(
+        <Polyline key={Date.now() * Math.random()} color="red" positions={[lineOneCalc, point1]} />
+      );
+      let lineTwoCalc = [point1[0], point1[1] - 360];
+      lines.push(
+          <Polyline key={Date.now() * Math.random()} color="red" positions={[point2, lineTwoCalc]} />
+      );
+    }
     return lines;
   }
 }

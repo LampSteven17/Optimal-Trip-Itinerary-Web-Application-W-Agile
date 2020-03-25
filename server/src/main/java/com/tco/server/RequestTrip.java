@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import com.tco.server.RequestDistance;
 
-
 /*
 This class defines the Trip response used with Restful API services
  */
@@ -23,30 +22,27 @@ public class RequestTrip extends RequestHeader{
 
     RequestTrip() {
         this.requestType = "trip";
-        this.requestVersion = RequestHeader.CURRENT_SUPPORTED_VERSION; // TODO update
+        this.requestVersion = RequestHeader.CURRENT_SUPPORTED_VERSION;
     }
 
     @Override
     public void buildResponse() {
-            /* Everything else is required in the client request
-               Also need to check if the given distances mean anything
-             */
-        //distances = calculateDistances(places); // TODO wait till distance requests are going through to implement and write last test case
+        distances = calculateDistances(); // TODO wait till distance requests are going through to implement and write last test case
         log.trace("buildResponse -> {}", this);
     }
 
-    private Long[] calculateDistances(List< Map<String, String> > places) {
+    private Long[] calculateDistances() {
+        if (places.isEmpty()) {
+            log.error("In calculateDistances() in RequestTrip.java the variable places is empty. Returning null. ");
+            return null;
+        }
         Long[] dists = new Long[places.size()];
         for (int i = 0; i < places.size()-1; i++){
-            if (places.get(i).get("name") == null) {
-                return dists;
-            } else {
-                dists[i] = RequestDistance.calculateDistance(places.get(i), places.get(i+1), earthRadius);
-            }
+                dists[i] = RequestDistance.calculateDistance(places.get(i), places.get(i+1), Double.valueOf(options.get("earthRadius")));
         }
         if (dists.length > 1) {
-            // finish final entry
-            dists[dists.length-1] = RequestDistance.calculateDistance(places.get(0), places.get(places.size()-1), earthRadius);
+            // finish final round trip entry
+            dists[dists.length-1] = RequestDistance.calculateDistance(places.get(places.size()-1), places.get(0), Double.valueOf(options.get("earthRadius")));
         }
         return dists;
     }
@@ -55,9 +51,6 @@ public class RequestTrip extends RequestHeader{
     // TESTS //
     public int getVersion() { return this.requestVersion; }
     public String getType() { return this.requestType; }
-
-
-
 
 
 }

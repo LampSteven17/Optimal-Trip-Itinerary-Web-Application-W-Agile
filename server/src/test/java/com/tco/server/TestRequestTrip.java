@@ -11,7 +11,7 @@ public class TestRequestTrip {
     @Before
     public void createConfigurationForTestCases(){
         trip = new RequestTrip();
-        trip.buildResponse();
+        //trip.buildResponse();
     }
 
     @Test
@@ -26,6 +26,8 @@ public class TestRequestTrip {
         int version = trip.getVersion();
         assertEquals("config requestVersion", 3, version); // TODO update
     }
+
+
 
 
 }

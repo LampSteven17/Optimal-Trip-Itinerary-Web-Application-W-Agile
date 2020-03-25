@@ -14,22 +14,14 @@ class Itinerary extends Component{
     constructor(props){
         super(props);
 
-        this.state={
-            destinations: [
-                {destination: "Denver", leg: 0, total: 0},
-                {destination: "Boulder", leg: 20, total: 20},
-                {destination: "Fort Collins", leg: 40, total: 60},
-                {destination: "Denver", leg: 50, total: 110}
-
-            ]
-        }
+        //console.log(props.dests);
     }
 
 
     render(){
         return(
             <div className="csu-branding">
-                <Table className="table">
+                <Table striped responsive className="table">
                     <tbody>
                         <tr>{this.renderHeader()}</tr>
                         {this.renderData()}
@@ -41,10 +33,10 @@ class Itinerary extends Component{
 
 
     renderData(){
-        return this.state.destinations.map((dest,index) => {
-            const {destination, leg, total } = dest;
+        return this.props.dests.map((dest,index) => {
+            const {id, destination, leg, total } = dest;
             return(
-                <tr key={dest}>
+                <tr key={id}>
                     <td>{destination}</td>
                     <td>{leg}</td>
                     <td>{total}</td>
@@ -56,10 +48,12 @@ class Itinerary extends Component{
     }
 
     renderHeader(){
-        let head = Object.keys(this.state.destinations[0]);
+        let head = Object.keys(this.props.dests[0]);
 
         return head.map((key,index) => {
-            return <th key={index}> {key.toUpperCase()} </th>
+            if(key!="id") {
+                return <th key={index}> {key.toUpperCase()} </th>
+            }
         })
     }
 

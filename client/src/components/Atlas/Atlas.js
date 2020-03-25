@@ -25,8 +25,10 @@ import {
 } from "../../utils/restfulAPI";
 import * as distanceRequestSchema from "../../../schemas/DistanceRequest";
 import * as distanceResponseSchema from "../../../schemas/DistanceResponse";
+import * as tripRequestSchema from "../../../schemas/TripFile";
 
 import Itinerary from '../../components/Atlas/Itinerary';
+import LoadFileButton from "./LoadFileButton";
 
 const FALSECOLOR = "5px solid red";
 const TRUECOLOR =  "5px solid green";
@@ -61,6 +63,7 @@ export default class Atlas extends Component {
     this.errorCallback = this.errorCallback.bind(this);
     this.getCurrentLocation = this.getCurrentLocation.bind(this);
     this.handleHomeClick = this.handleHomeClick.bind(this);
+    this.sendTrip = this.sendTrip.bind(this);
 
     this.state = {
       markerPosition: [],
@@ -71,7 +74,10 @@ export default class Atlas extends Component {
       inputPosition: null,
       displayNum: "",
       displayUnit: "",
-      totalDistance: 0
+      totalDistance: 0,
+
+      itenData : [{id: 1, destination: "", leg: "", total: ""}],
+      tripRequestData: {}
     };
 
     this.getCurrentLocation();
@@ -137,11 +143,13 @@ export default class Atlas extends Component {
     return(
     <Row>
       <Col sm={12} md={{size: 6, offset: 3}}>
-        <Itinerary />
+        <LoadFileButton onChange={this.sendTrip}/>
+        <Itinerary dests={this.state.itenData}/>
       </Col>
     </Row>
     )
   }
+
 
   handleInput(pos) {
     if (this.isValidPosition(pos)) {
@@ -243,11 +251,27 @@ export default class Atlas extends Component {
             place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
             earthRadius: 6371.0
           };
-          await this.sendDistanceRequest(requestBody);
+          await this.sendRequest(requestBody, "distance", distanceRequestSchema);
         }
       }
     })
     .then(() => this.setState({displayNum: this.distance, displayUnit: "KM"}));
+  }
+
+
+  /* This method sends a successful trip. Obviously it will need to be formatted with the data we choose to
+  use at any given time.
+  I'm leaving it here so we have the shell and a request you can test with when building up the itenerary and
+  such. Delete whenever it's use has ended if needed - <3 Cade
+   */
+  async sendTrip(requestBody) {
+    Promise.resolve()
+        .then(async () => {
+          //console.log(requestBody);
+
+          await this.sendRequest(requestBody, "trip", tripRequestSchema)
+        })
+    // .then() update vars as needed here
   }
 
   async getCenter() {
@@ -290,33 +314,68 @@ export default class Atlas extends Component {
     }
   }
 
-  async sendDistanceRequest(request){
-    if (!isJsonResponseValid(request, distanceRequestSchema)) {
-      console.error("DISTANCE REQUEST INVALID");
+  async sendRequest(request, requestType, schema) {
+    if (!isJsonResponseValid(request, schema)) {
+      console.error(requestType +  "REQUEST INVALID");
       return;
     }
-
-    console.log(request);
-    return await sendServerRequestWithBody('distance', request, this.props.serverPort)
-    .then((data) => {
-      this.promptDistance(data.body);
-      return data;
-    });
+    switch (requestType) {
+      case "distance":
+        await sendServerRequestWithBody("distance", request, this.props.serverPort)
+            .then((data) => this.promptDistance(data.body));
+        break;
+      case "trip":
+        await sendServerRequestWithBody("trip", request, this.props.serverPort)
+            .then((data) => this.promptTrip(data.body));
+        break;
+      default: console.log("UNSUPPORTED REQUEST TYPE");
+        return;
+    }
   }
 
-  testDistanceResponse(body) {
-    if (!isJsonResponseValid(body, distanceResponseSchema)) {
-      console.error("DISTANCE RESPONSE INVALID, NO DISTANCE BEING ADDED");
-      return false;
+  promptTrip(data) {
+    this.setState({itenData: this.parseData(data.places, data.distances)});
+  }
+
+  parseData(names, legs){
+    let formatted = [];
+
+    for(let vals of names){
+      let index = names.indexOf((vals));
+      let totalVal = 0;
+
+      if(index !== 0){
+        totalVal+= (legs[index]+formatted[index-1].total);
+      }else{
+        totalVal=legs[index];
+      }
+
+      formatted.push(
+          {
+            id: index,
+            destination: vals.name,
+            leg: legs[index],
+            total: totalVal
+          })
     }
-    return true;
+
+    return formatted;
+
   }
 
   promptDistance(dist) {
-    if (!this.testDistanceResponse(dist)) {
+    if (!this.testResponse(dist, distanceResponseSchema)) {
       return;
     }
     this.distance = this.distance + dist.distance;
+  }
+
+  testResponse(body, schema) {
+    if (!isJsonResponseValid(body, schema)) {
+      console.error("JSON RESPONSE INVALID, NO STATE VARIABLES BEING MODIFIED");
+      return false;
+    }
+    return true;
   }
 
   drawLines() {

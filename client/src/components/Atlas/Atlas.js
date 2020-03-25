@@ -441,8 +441,4 @@ export default class Atlas extends Component {
 
     return lines;
   }
-
-  addLine(checkLng, point1, point2) {
-
-  }
 }

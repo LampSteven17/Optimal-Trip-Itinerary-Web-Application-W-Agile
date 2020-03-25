@@ -56,15 +56,8 @@ export default class Atlas extends Component {
     this.distance = 0;
     this.map;
     this.group;
-
-    this.addMarker = this.addMarker.bind(this);
-    this.updateMarkerCallback = this.updateMarkerCallback.bind(this);
-    this.updateMarkerFromInput = this.updateMarkerFromInput.bind(this);
-    this.errorCallback = this.errorCallback.bind(this);
-    this.getCurrentLocation = this.getCurrentLocation.bind(this);
-    this.handleHomeClick = this.handleHomeClick.bind(this);
-    this.sendTrip = this.sendTrip.bind(this);
-
+    this.binder();
+    
     this.state = {
       markerPosition: [],
       id: 0,
@@ -75,12 +68,21 @@ export default class Atlas extends Component {
       displayNum: "",
       displayUnit: "",
       totalDistance: 0,
-
       itenData : [{id: 1, destination: "", leg: "", total: ""}],
       tripRequestData: {}
     };
 
     this.getCurrentLocation();
+  }
+
+  binder() {
+    this.addMarker = this.addMarker.bind(this);
+    this.updateMarkerCallback = this.updateMarkerCallback.bind(this);
+    this.updateMarkerFromInput = this.updateMarkerFromInput.bind(this);
+    this.errorCallback = this.errorCallback.bind(this);
+    this.getCurrentLocation = this.getCurrentLocation.bind(this);
+    this.handleHomeClick = this.handleHomeClick.bind(this);
+    this.sendTrip = this.sendTrip.bind(this);
   }
 
   render() {
@@ -97,23 +99,29 @@ export default class Atlas extends Component {
                 {this.renderLeafletMap()}
               </Col>
             </Row>
-            <Row>
-              <Col sm={{size:'auto'}} style={{ width: "4.4rem" }} md={{size: 0, offset: 3}}>
-                {this.showHomeButton()}
-              </Col>
-              <Col sm={{size:'auto'}} style={{ width: "11.7rem" }} md={{size: 0, offset: 0}}>
-                <Form inline={true}>{
-                    <Input style={{ width: "15rem", border: this.state.validLatLng }} placeholder="Latitude, Longitude" onInput={e => this.handleInput(e.target.value)}/>
-                }</Form>
-              </Col>
-              <Col>
-                <Button className={"btn-csu"} onClick={() => this.updateMarkerFromInput()}>+</Button>
-              </Col>
-            </Row>
+            {this.renderBaseButtons()}
             {this.renderItinerary()}
           </Container>
         </div>
     );
+  }
+
+  renderBaseButtons() {
+    return(
+        <Row>
+          <Col sm={{size:'auto'}} style={{ width: "4.4rem" }} md={{size: 0, offset: 3}}>
+            {this.showHomeButton()}
+          </Col>
+          <Col sm={{size:'auto'}} style={{ width: "11.7rem" }} md={{size: 0, offset: 0}}>
+            <Form inline={true}>{
+              <Input style={{ width: "15rem", border: this.state.validLatLng }} placeholder="Latitude, Longitude" onInput={e => this.handleInput(e.target.value)}/>
+            }</Form>
+          </Col>
+          <Col>
+            <Button className={"btn-csu"} onClick={() => this.updateMarkerFromInput()}>+</Button>
+          </Col>
+        </Row>
+    )
   }
 
   componentDidMount() {

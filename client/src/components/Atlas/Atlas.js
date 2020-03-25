@@ -28,6 +28,7 @@ import * as distanceResponseSchema from "../../../schemas/DistanceResponse";
 import * as tripRequestSchema from "../../../schemas/TripFile";
 
 import Itinerary from '../../components/Atlas/Itinerary';
+import LoadFileButton from "./LoadFileButton";
 
 const FALSECOLOR = "5px solid red";
 const TRUECOLOR =  "5px solid green";
@@ -56,7 +57,7 @@ export default class Atlas extends Component {
     this.map;
     this.group;
     this.binder();
-
+    
     this.state = {
       markerPosition: [],
       id: 0,
@@ -67,11 +68,11 @@ export default class Atlas extends Component {
       displayNum: "",
       displayUnit: "",
       totalDistance: 0,
-      itenData : [{id: 1, destination: "", leg: "", total: ""}]
+      itenData : [{id: 1, destination: "", leg: "", total: ""}],
+      tripRequestData: {}
     };
 
     this.getCurrentLocation();
-    this.sendTrip();
   }
 
   binder() {
@@ -81,6 +82,7 @@ export default class Atlas extends Component {
     this.errorCallback = this.errorCallback.bind(this);
     this.getCurrentLocation = this.getCurrentLocation.bind(this);
     this.handleHomeClick = this.handleHomeClick.bind(this);
+    this.sendTrip = this.sendTrip.bind(this);
   }
 
   render() {
@@ -149,11 +151,13 @@ export default class Atlas extends Component {
     return(
     <Row>
       <Col sm={12} md={{size: 6, offset: 3}}>
+        <LoadFileButton onChange={this.sendTrip}/>
         <Itinerary dests={this.state.itenData}/>
       </Col>
     </Row>
     )
   }
+
 
   handleInput(pos) {
     if (this.isValidPosition(pos)) {
@@ -268,25 +272,11 @@ export default class Atlas extends Component {
   I'm leaving it here so we have the shell and a request you can test with when building up the itenerary and
   such. Delete whenever it's use has ended if needed - <3 Cade
    */
-  async sendTrip() {
+  async sendTrip(requestBody) {
     Promise.resolve()
         .then(async () => {
-          let requestBody = {
-            "requestType" : "trip",
-            "requestVersion" : 3,
-            "options" : {
-              "title" : "Around the world - 21655",
-              "earthRadius" : "3959.0"
-            },
-            "places" : [
-              {"name": "New York City", "latitude": "40.730610", "longitude": "-73.935242"},
-              {"name": "London", "latitude": "51.509865", "longitude": "-0.118092"},
-              {"name": "Baghdad", "latitude": "33.312805", "longitude": "44.361488"},
-              {"name": "Singapore", "latitude": "1.290270", "longitude": "103.851959"},
-              {"name": "Tokyo", "latitude": "35.652832", "longitude": "139.839478"},
-              {"name": "Los Angelos", "latitude":"34.052235", "longitude": "-118.243683"}
-            ]
-          }
+          //console.log(requestBody);
+
           await this.sendRequest(requestBody, "trip", tripRequestSchema)
         })
     // .then() update vars as needed here

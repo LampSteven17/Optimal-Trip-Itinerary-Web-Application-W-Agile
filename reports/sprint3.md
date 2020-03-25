@@ -76,6 +76,7 @@ destinations.
 | 3/9/2020 | 5 | 4 |  | 
 | 3/11/2020 | 4 | 4 |  |
 | 3/13/2020 | 3 | 4 |  | 
+| 3/23/2020 | 6 | 4 |  | 
 ###Scrum 3/6 
 ####CLOSED TASKS (before today): 
 * Austin: #165
@@ -127,6 +128,19 @@ destinations.
 * Ryan: #215
 * Cade: #235
 * Steven: #214
+
+###Scrum 3/23
+####CLOSED TASKS (before today): 
+* Austin: 
+* Ryan: 
+* Cade: #196 #235
+* Steven: #216 #214 #256 #217
+
+####IN PROGRESS: 
+* Austin: #208
+* Ryan: #215
+* Cade: #266
+* Steven: #264
 
 ## Review
 

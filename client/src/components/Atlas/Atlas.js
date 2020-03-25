@@ -320,7 +320,6 @@ export default class Atlas extends Component {
   }
 
   drawLine() {
-    // [lat, lng]
     let points = this.getPositions();
     let lines = [];
     let keyCount = 0;
@@ -330,15 +329,44 @@ export default class Atlas extends Component {
         let checkLat = points[i-1][0] - points[i][0];
         let checkLng = points[i-1][1] - points[i][1];
         let currentLine = [points[i-1], points[i]];
-        if (Math.abs(checkLat) > 180) {
-          // +- latitude by 360
+        console.log(checkLat);
+        if (Math.abs(checkLat) > 90) {
+          if (points[i-1][0] < 0) {
+            lines.push(
+                <Polyline key={keyCount + 1} color="red" positions={[points[i-1], [points[i][0] - 360, points[i][1]]]} />
+            );
+            lines.push(
+                <Polyline key={keyCount + 1} color="red" positions={[[points[i - 1][0] + 360, points[i - 1][1]], points[i]]} />
+            );
+          }
+          else {
+            lines.push(
+              <Polyline key={keyCount + 1} color="red" positions={[[points[i][0] + 360, points[i][1]], points[i-1]]} />
+            );
+            lines.push(
+                <Polyline key={keyCount + 1} color="red" positions={[points[i], [points[i-1][0] - 360, points[i-1][1]]]} />
+            );
+          }
         }
         else if (Math.abs(checkLng) > 180) {
-          // +- longitude by 360
-        
+          if (points[i-1][1] < 0) {
+            lines.push(
+                <Polyline key={keyCount + 1} color="red" positions={[points[i-1], [points[i][0], points[i][1] - 360]]} />
+            );
+            lines.push(
+                <Polyline key={keyCount + 1} color="red" positions={[[points[i - 1][0], points[i - 1][1] + 360], points[i]]} />
+            );
+          }
+          else {
+            lines.push(
+              <Polyline key={keyCount + 1} color="red" positions={[[points[i][0], points[i][1] + 360], points[i-1]]} />
+            );
+            lines.push(
+                <Polyline key={keyCount + 1} color="red" positions={[points[i], [points[i-1][0], points[i-1][1] - 360]]} />
+            );
+          }
         }
         else {
-          // draw line
           lines.push(
               <Polyline key={keyCount + 1} color="red" positions={currentLine} />
           );

@@ -63,8 +63,24 @@ function testGetPositionsOutput() {
   expect(actualOutput).toEqual(expectedOutput);
 }
 
+function testValidatePos() {
+  jest.mock('leaflet');
+  let testValidateAtlas = mount(<Atlas />);
+
+  let position = "23, 232";
+
+  let output = testValidateAtlas.instance().isValidPosition(position);
+  expect(true).toEqual(output);
+
+  position = "not a valid pos";
+
+  output = testValidateAtlas.instance().isValidPosition(position);
+  expect(false).toEqual(output);
+}
+
 
 test("Testing Atlas's Initial State", testInitialAppState);
 test("Testing Atlas's Handle Input", testInitialHandleInput);
 test("Testing Atlas's Store Input Position",testStoreInputPosition);
 test("Testing Atlas's getPositions method",testGetPositionsOutput);
+test("Testing Atlas's position validation", testValidatePos);

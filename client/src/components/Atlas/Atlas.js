@@ -188,9 +188,9 @@ export default class Atlas extends Component {
 
     try{
       new Coordinates(position);
-      return(true);
+      return true;
     }catch(caughtError){
-      return(false);
+      return false;
     }
   }
 

@@ -6,6 +6,9 @@ import {Row} from 'reactstrap';
 
 import Atlas from '../src/components/Atlas/Atlas';
 
+const FALSECOLOR = "5px solid red";
+const TRUECOLOR =  "5px solid green";
+
 function testInitialAppState() {
   jest.mock('leaflet');
   const app = shallow(<Atlas />);
@@ -78,9 +81,30 @@ function testValidatePos() {
   expect(false).toEqual(output);
 }
 
+function testDeleteMarker() {
+  jest.mock('leaflet');
+  let testDeleteAtlas = mount(<Atlas />);
+
+  let markerPositions = [{lat: 38.83418, lng: -104.82497, id: 0},
+    {lat: 40.586345, lng: -105.075813, id: 1},
+    {lat: 40.14055556, lng: -105.13111111, id: 2}];
+
+  let expectedOutput = [{lat: 38.83418, lng: -104.82497, id: 0},
+    {lat: 40.14055556, lng: -105.13111111, id: 2}];
+
+  let marker = {lat: 40.586345, lng: -105.075813, id: 1};
+
+  testDeleteAtlas.setState({markerPosition: markerPositions});
+
+  testDeleteAtlas.instance().deleteMarker(marker);
+
+  Promise.resolve().then(r => expect(testDeleteAtlas.state.markerPosition).toEqual(expectedOutput));
+
+}
 
 test("Testing Atlas's Initial State", testInitialAppState);
 test("Testing Atlas's Handle Input", testInitialHandleInput);
 test("Testing Atlas's Store Input Position",testStoreInputPosition);
 test("Testing Atlas's getPositions method",testGetPositionsOutput);
 test("Testing Atlas's position validation", testValidatePos);
+test("Testing Atlas's deleteMarker method", testDeleteMarker);

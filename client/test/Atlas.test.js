@@ -107,6 +107,7 @@ function testDeleteMarker() {
   testDeleteAtlas.instance().deleteMarker(marker);
 
   Promise.resolve().then(r => expect(testDeleteAtlas.state.markerPosition).toEqual(expectedOutput));
+}
 
 function testPolyline() {
   jest.mock('leaflet');
@@ -133,11 +134,12 @@ function testPolyline() {
   expect(test3[1].props.positions).toEqual(expectedResult3b);
 }
 
+
 test("Testing Atlas's Initial State", testInitialAppState);
 test("Testing Atlas's Handle Input", testInitialHandleInput);
 test("Testing Atlas's Store Input Position",testStoreInputPosition);
 test("Testing Atlas's getPositions method",testGetPositionsOutput);
 test("Testing Atlas's position validation", testValidatePos);
 test("Testing Atlas's deleteMarker method", testDeleteMarker);
+test("Testing Atlas's polyline methods", testPolyline);
 test("Testing Atlas's storeInputPosition", testStoreInputPosition);
-test("Testing Atlas's polyline methods",testPolyline);

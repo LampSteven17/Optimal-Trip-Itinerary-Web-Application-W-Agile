@@ -57,7 +57,7 @@ export default class Atlas extends Component {
     this.map;
     this.group;
     this.binder();
-    
+
     this.state = {
       markerPosition: [],
       id: 0,

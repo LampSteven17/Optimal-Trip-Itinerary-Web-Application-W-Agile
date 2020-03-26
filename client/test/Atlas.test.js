@@ -108,6 +108,29 @@ function testDeleteMarker() {
 
   Promise.resolve().then(r => expect(testDeleteAtlas.state.markerPosition).toEqual(expectedOutput));
 
+function testPolyline() {
+  jest.mock('leaflet');
+  let testPolyAtlas = shallow(<Atlas />);
+
+  let pointTest1 = [[0,0],[0,100]];
+  let expectedResult1 = [[0, 0], [0, 100]];
+
+  let pointTest2 = [[0,140],[0,-70]];
+  let expectedResult2a = [[0, 290], [0, 140]];
+  let expectedResult2b = [[0, -70], [0, -220]];
+
+  let pointTest3 = [[0, -160], [0, 70]];
+  let expectedResult3a = [[0, -160], [0, -290]];
+  let expectedResult3b = [[0, 200], [0, 70]];
+
+  let test1 = JSON.parse(JSON.stringify(testPolyAtlas.instance().generateLineArray(pointTest1)));
+  expect(test1[0].props.positions).toEqual(expectedResult1);
+  let test2 = JSON.parse(JSON.stringify(testPolyAtlas.instance().generateLineArray(pointTest2)));
+  expect(test2[0].props.positions).toEqual(expectedResult2a);
+  expect(test2[1].props.positions).toEqual(expectedResult2b);
+  let test3 = JSON.parse(JSON.stringify(testPolyAtlas.instance().generateLineArray(pointTest3)));
+  expect(test3[0].props.positions).toEqual(expectedResult3a);
+  expect(test3[1].props.positions).toEqual(expectedResult3b);
 }
 
 test("Testing Atlas's Initial State", testInitialAppState);
@@ -117,3 +140,4 @@ test("Testing Atlas's getPositions method",testGetPositionsOutput);
 test("Testing Atlas's position validation", testValidatePos);
 test("Testing Atlas's deleteMarker method", testDeleteMarker);
 test("Testing Atlas's storeInputPosition", testStoreInputPosition);
+test("Testing Atlas's polyline methods",testPolyline);

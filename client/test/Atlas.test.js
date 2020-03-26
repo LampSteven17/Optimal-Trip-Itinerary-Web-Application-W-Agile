@@ -6,6 +6,9 @@ import {Row} from 'reactstrap';
 
 import Atlas from '../src/components/Atlas/Atlas';
 
+const FALSECOLOR = "5px solid red";
+const TRUECOLOR =  "5px solid green";
+
 function testInitialAppState() {
   jest.mock('leaflet');
   const app = shallow(<Atlas />);
@@ -42,8 +45,16 @@ function testInitialHandleInput() {
 }
 
 function testStoreInputPosition(){
-//TODO
+  jest.mock('leaflet');
+  let testInputPosAtlas = mount(<Atlas />);
 
+  let position = "23, 23";
+
+  let expectedOutput = {lat: 23, lng: 23};
+
+  testInputPosAtlas.instance().storeInputPosition(position);
+
+  Promise.resolve().then(r => expect(testInputPosAtlas.state.inputPosition).toEqual(expectedOutput));
 }
 
 function testGetPositionsOutput() {
@@ -61,6 +72,41 @@ function testGetPositionsOutput() {
   testPosAtlas.setState({markerPosition: markerPositions});
   let actualOutput = testPosAtlas.instance().getPositions();
   expect(actualOutput).toEqual(expectedOutput);
+}
+
+function testValidatePos() {
+  jest.mock('leaflet');
+  let testValidateAtlas = mount(<Atlas />);
+
+  let position = "23, 232";
+
+  let output = testValidateAtlas.instance().isValidPosition(position);
+  expect(true).toEqual(output);
+
+  position = "not a valid pos";
+
+  output = testValidateAtlas.instance().isValidPosition(position);
+  expect(false).toEqual(output);
+}
+
+function testDeleteMarker() {
+  jest.mock('leaflet');
+  let testDeleteAtlas = mount(<Atlas />);
+
+  let markerPositions = [{lat: 38.83418, lng: -104.82497, id: 0},
+    {lat: 40.586345, lng: -105.075813, id: 1},
+    {lat: 40.14055556, lng: -105.13111111, id: 2}];
+
+  let expectedOutput = [{lat: 38.83418, lng: -104.82497, id: 0},
+    {lat: 40.14055556, lng: -105.13111111, id: 2}];
+
+  let marker = {lat: 40.586345, lng: -105.075813, id: 1};
+
+  testDeleteAtlas.setState({markerPosition: markerPositions});
+
+  testDeleteAtlas.instance().deleteMarker(marker);
+
+  Promise.resolve().then(r => expect(testDeleteAtlas.state.markerPosition).toEqual(expectedOutput));
 }
 
 function testPolyline() {
@@ -88,8 +134,12 @@ function testPolyline() {
   expect(test3[1].props.positions).toEqual(expectedResult3b);
 }
 
+
 test("Testing Atlas's Initial State", testInitialAppState);
 test("Testing Atlas's Handle Input", testInitialHandleInput);
 test("Testing Atlas's Store Input Position",testStoreInputPosition);
 test("Testing Atlas's getPositions method",testGetPositionsOutput);
-test("Testing Atlas's polyline methods",testPolyline);
+test("Testing Atlas's position validation", testValidatePos);
+test("Testing Atlas's deleteMarker method", testDeleteMarker);
+test("Testing Atlas's polyline methods", testPolyline);
+test("Testing Atlas's storeInputPosition", testStoreInputPosition);

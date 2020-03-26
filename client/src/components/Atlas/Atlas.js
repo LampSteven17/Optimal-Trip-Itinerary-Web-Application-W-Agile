@@ -161,7 +161,7 @@ export default class Atlas extends Component {
 
   handleInput(pos) {
     if (this.isValidPosition(pos)) {
-        this.setState({validLatLng: TRUECOLOR});
+      this.setState({validLatLng: TRUECOLOR});
       this.storeInputPosition(pos);
     }else{
       this.setState({validLatLng: FALSECOLOR});
@@ -170,7 +170,7 @@ export default class Atlas extends Component {
 
   storeInputPosition(input) {
     let position = new Coordinates(input);
-    this.setState({inputPosition: {lat: position.getLatitude(), lng: position.getLongitude()}})
+    this.setState({inputPosition: {lat: position.getLatitude(), lng: position.getLongitude()}});
   }
 
   updateMarkerFromInput() {

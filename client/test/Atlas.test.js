@@ -45,8 +45,16 @@ function testInitialHandleInput() {
 }
 
 function testStoreInputPosition(){
-//TODO
+  jest.mock('leaflet');
+  let testInputPosAtlas = mount(<Atlas />);
 
+  let position = "23, 23";
+
+  let expectedOutput = {lat: 23, lng: 23};
+
+  testInputPosAtlas.instance().storeInputPosition(position);
+
+  Promise.resolve().then(r => expect(testInputPosAtlas.state.inputPosition).toEqual(expectedOutput));
 }
 
 function testGetPositionsOutput() {
@@ -108,3 +116,4 @@ test("Testing Atlas's Store Input Position",testStoreInputPosition);
 test("Testing Atlas's getPositions method",testGetPositionsOutput);
 test("Testing Atlas's position validation", testValidatePos);
 test("Testing Atlas's deleteMarker method", testDeleteMarker);
+test("Testing Atlas's storeInputPosition", testStoreInputPosition);

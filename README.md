@@ -1,6 +1,6 @@
 # t10 - Two Hands Up
 ![Here to create, here to master.](https://github.com/csucs314s20/t10/blob/master/team/images/hands-image.png)
-#### We are team 10, Steven, Ryan, Cade, Austin.
+#### We are team 10, Steven, Ryan, Cade, Austin, Richard.
 
 | name | eID | GitHub Username | Email |
 |------|-----|-----------------|-------|
@@ -8,3 +8,4 @@
 | Ryan Kughn | ryanhk | RyanKughn | ryank@colostate.edu |
 | Steven Lamp | lamps17 | LampSteven17 | lamps17@rams.colostate.edu |
 | Cade McCumber | cademccu | cademccu | cademccu@rams.colostate.edu |
+| Richard Vilaret-Tuma | rvilaret | rvilarettuma | rvilaret@colostate.edu |

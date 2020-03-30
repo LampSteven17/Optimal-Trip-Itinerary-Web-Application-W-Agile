@@ -190,9 +190,39 @@ App.js -> Atlas.js (Passing Props: Server Port, Distance)
 States: Server Port is set in App.js, but is used within atlas to set and call other states. 
 
 Distance is set in Atlas.js, and called by using the server request with body to successfully calculate and return the state value.
-
-
-
-
 # Sprint 4 
+![sprint3 diagram](images/sprint4-2.jpg)
+
+**Client Component Hierarchy and design with save button pictured above**
+
+**FEATURES:**
+Our new and updated design will implement a variety of new features as instructed by SPRINT 3, and continued in SPRINT 4.
+These will be implemented over the various epics detailed below. In addition to updating our itinerary behavior for 
+optimal mobile user friendliness, we will also be adding a basic save button below the itinerary. 
+
+
+![sprint3 diagram](images/sprint4-1.jpg)
+
+**Server Class Diagram pictured above**
+
+**LOAD:**
+**User Story -**
+One of our newest features for added travel accessibility is allowing our clients to tour on their own time! Want to 
+go checkout the local bar? Add it! Want to go to a neighboring country? No problem, as you can easily update your trip
+in the itinerary, with updating live displays as you enter more destinations. (Destination wrapping is included in classic
+Mario style edge warping). This will include being able to upload files of types CSV and JSON into our itinerary. 
+
+**SAVE:**
+Saving will also be implemented, allowing our clients to export their trips in KML or SVG Map formats, and CSV or JSON 
+for the itinerary. The client will be able to select their trips individually and save them for later use. That exported
+file should be able to then be reloaded into the website. 
+
+Both of these types will make use of our newly included trip request type, and by click the button on the top of the 
+itinerary for load, and below for save, the client can easily and efficiently import and export data. 
+
+**OPTIMIZATION:**
+Some of the biggest changes will be done behind the scenes, increasing user load time and ease of use. We will be optimizing
+our calculations to give the most efficient path possible on their trip. We also make sure that information relayed will
+be exceptionally quick in response, to avoid client frustration. 
+
 # Sprint 5

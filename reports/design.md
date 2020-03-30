@@ -191,7 +191,7 @@ States: Server Port is set in App.js, but is used within atlas to set and call o
 
 Distance is set in Atlas.js, and called by using the server request with body to successfully calculate and return the state value.
 # Sprint 4 
-![sprint3 diagram](images/sprint4-2.jpg)
+![sprint4 diagram](images/sprint4-2.jpg)
 
 **Client Component Hierarchy and design with save button pictured above**
 
@@ -201,7 +201,7 @@ These will be implemented over the various epics detailed below. In addition to 
 optimal mobile user friendliness, we will also be adding a basic save button below the itinerary. 
 
 
-![sprint3 diagram](images/sprint4-1.jpg)
+![sprint4 diagram](images/sprint4-1.jpg)
 
 **Server Class Diagram pictured above**
 

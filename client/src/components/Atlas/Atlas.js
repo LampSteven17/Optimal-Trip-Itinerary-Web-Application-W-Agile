@@ -27,7 +27,8 @@ import * as distanceRequestSchema from "../../../schemas/DistanceRequest";
 import * as distanceResponseSchema from "../../../schemas/DistanceResponse";
 import * as tripRequestSchema from "../../../schemas/TripFile";
 
-import Itinerary from '../../components/Atlas/Itinerary';
+import Itinerary from './Itinerary';
+import Save from './Save';
 import LoadFileButton from "./LoadFileButton";
 
 const FALSECOLOR = "5px solid red";
@@ -108,6 +109,7 @@ export default class Atlas extends Component {
 
   renderBaseButtons() {
     return(
+      <div>
         <Row>
           <Col sm={{size:'auto'}} style={{ width: "4.4rem" }} md={{size: 0, offset: 3}}>
             {this.showHomeButton()}
@@ -121,6 +123,7 @@ export default class Atlas extends Component {
             <Button className={"btn-csu"} onClick={() => this.updateMarkerFromInput()}>+</Button>
           </Col>
         </Row>
+      </div>
     )
   }
 
@@ -149,12 +152,21 @@ export default class Atlas extends Component {
 
   renderItinerary(){
     return(
-    <Row>
-      <Col sm={12} md={{size: 6, offset: 3}}>
-        <LoadFileButton onChange={this.sendTrip}/>
-        <Itinerary dests={this.state.itenData}/>
-      </Col>
-    </Row>
+      <div>
+        <Row style={{padding: "10px"}}>
+          <Col sm={12} md={{size: 3, offset: 3}}>
+            <LoadFileButton onChange={this.sendTrip}/>
+          </Col>
+          <Col sm={12} md={{size: 2, offset: 0}}>
+            <Save dests={this.state.itenData}/>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={12} md={{size: 6, offset: 3}}>
+            <Itinerary dests={this.state.itenData}/>
+          </Col>
+        </Row>
+      </div>
     )
   }
 

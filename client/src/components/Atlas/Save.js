@@ -17,6 +17,7 @@ import {
 } from 'reactstrap';
 
 import {save} from 'save-file';
+const validFilename = require('valid-filename');
 
 class Save extends Component {
   constructor(props) {
@@ -25,7 +26,8 @@ class Save extends Component {
       showModal: false,
       filename: null,
       showDropdown: false,
-      dropdownHeader: "Type"
+      dropdownHeader: ".json",
+      isNameInvalid: false
     }
     this.toggleModal = this.toggleModal.bind(this);
     this.toggleDropdown = this.toggleDropdown.bind(this);
@@ -43,7 +45,7 @@ class Save extends Component {
           <Form>
             <FormGroup>
               <Label>Name</Label>
-              <Input id="saveName" placeholder="filename" onInput={e => this.updateFilename(e.target.value)}></Input>
+              <Input invalid={this.state.isNameInvalid} id="saveName" placeholder="filename" onInput={e => this.updateFilename(e.target.value)}></Input>
             </FormGroup>
             <FormGroup>
               <Label>File Type</Label>
@@ -96,7 +98,13 @@ class Save extends Component {
   saveFile() {
     console.log(this.state.filename);
     console.log(this.state.dropdownHeader);
-    this.toggleModal();
+
+    if (!validFilename(this.state.filename)) {
+      this.setState({isNameInvalid: true});
+    }
+    else {
+      this.toggleModal();
+    }
   }
 }
 

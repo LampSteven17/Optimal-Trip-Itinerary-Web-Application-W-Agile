@@ -23,7 +23,9 @@ class Save extends Component {
     super(props);
     this.state = {
       showModal: false,
-      showDropdown: false
+      filename: null,
+      showDropdown: false,
+      dropdownHeader: "Type"
     }
     this.toggleModal = this.toggleModal.bind(this);
     this.toggleDropdown = this.toggleDropdown.bind(this);
@@ -41,26 +43,26 @@ class Save extends Component {
           <Form>
             <FormGroup>
               <Label>Name</Label>
-              <Input id="saveName" placeholder="filename"></Input>
+              <Input id="saveName" placeholder="filename" onInput={e => this.updateFilename(e.target.value)}></Input>
             </FormGroup>
             <FormGroup>
               <Label>File Type</Label>
               <Dropdown isOpen={this.state.showDropdown} toggle={() => this.toggleDropdown()}>
                 <DropdownToggle caret>
-                  Type
+                  {this.state.dropdownHeader}
                 </DropdownToggle>
                 <DropdownMenu>
-                  <DropdownItem>.json</DropdownItem>
-                  <DropdownItem>.csv</DropdownItem>
-                  <DropdownItem>.kml</DropdownItem>
-                  <DropdownItem>.svg</DropdownItem>
+                  <DropdownItem onClick={() => this.updateDropdownHeader(".json")}>.json</DropdownItem>
+                  <DropdownItem onClick={() => this.updateDropdownHeader(".csv")}>.csv</DropdownItem>
+                  <DropdownItem onClick={() => this.updateDropdownHeader(".kml")}>.kml</DropdownItem>
+                  <DropdownItem onClick={() => this.updateDropdownHeader(".svg")}>.svg</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={() => this.toggleModal()}>Save</Button>{' '}
+          <Button color="primary" onClick={() => this.saveFile()}>Save</Button>{' '}
           <Button color="secondary" onClick={() => this.toggleModal()}>Cancel</Button>
         </ModalFooter>
       </Modal>
@@ -73,10 +75,28 @@ class Save extends Component {
     });
   }
 
+  updateFilename(newFilename) {
+    this.setState({
+      filename: newFilename
+    });
+  }
+
   toggleDropdown() {
     this.setState({
       showDropdown: !this.state.showDropdown
     });
+  }
+
+  updateDropdownHeader(newHeader) {
+    this.setState({
+      dropdownHeader: newHeader
+    });
+  }
+
+  saveFile() {
+    console.log(this.state.filename);
+    console.log(this.state.dropdownHeader);
+    this.toggleModal();
   }
 }
 

@@ -51,17 +51,7 @@ class Save extends Component {
             </FormGroup>
             <FormGroup>
               <Label>File Type</Label>
-              <Dropdown isOpen={this.state.showDropdown} toggle={() => this.toggleDropdown()}>
-                <DropdownToggle caret>
-                  {this.state.dropdownHeader}
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem onClick={() => this.updateDropdownHeader(".json")}>.json</DropdownItem>
-                  <DropdownItem onClick={() => this.updateDropdownHeader(".csv")}>.csv</DropdownItem>
-                  <DropdownItem onClick={() => this.updateDropdownHeader(".kml")}>.kml</DropdownItem>
-                  <DropdownItem onClick={() => this.updateDropdownHeader(".svg")}>.svg</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
+              {this.renderDropdown()}
             </FormGroup>
           </Form>
         </ModalBody>
@@ -71,6 +61,22 @@ class Save extends Component {
         </ModalFooter>
       </Modal>
     </div>);
+  }
+
+  renderDropdown() {
+    return (
+      <Dropdown isOpen={this.state.showDropdown} toggle={() => this.toggleDropdown()}>
+        <DropdownToggle caret>
+          {this.state.dropdownHeader}
+        </DropdownToggle>
+        <DropdownMenu>
+          <DropdownItem onClick={() => this.updateDropdownHeader(".json")}>.json</DropdownItem>
+          <DropdownItem onClick={() => this.updateDropdownHeader(".csv")}>.csv</DropdownItem>
+          <DropdownItem onClick={() => this.updateDropdownHeader(".kml")}>.kml</DropdownItem>
+          <DropdownItem onClick={() => this.updateDropdownHeader(".svg")}>.svg</DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+    );
   }
 
   toggleModal() {

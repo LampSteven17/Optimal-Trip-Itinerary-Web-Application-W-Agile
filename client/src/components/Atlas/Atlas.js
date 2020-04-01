@@ -70,6 +70,7 @@ export default class Atlas extends Component {
       displayUnit: "",
       totalDistance: 0,
       itenData : [{id: 1, destination: "", leg: "", total: ""}],
+      saveData: {},
       tripRequestData: {}
     };
 
@@ -158,7 +159,7 @@ export default class Atlas extends Component {
             <LoadFileButton onChange={this.sendTrip}/>
           </Col>
           <Col sm={12} md={{size: 2, offset: 0}}>
-            <Save dests={this.state.itenData}/>
+            <Save dests={this.state.saveData}/>
           </Col>
         </Row>
         <Row>
@@ -354,7 +355,9 @@ export default class Atlas extends Component {
   }
 
   promptTrip(data) {
+    console.log(data);
     this.setState({itenData: this.parseData(data.places, data.distances)});
+    this.setState({saveData: data});
   }
 
   parseData(names, legs){

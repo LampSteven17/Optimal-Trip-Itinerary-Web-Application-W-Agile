@@ -32,14 +32,16 @@ class Save extends Component {
     this.toggleModal = this.toggleModal.bind(this);
     this.toggleDropdown = this.toggleDropdown.bind(this);
 
+    console.log(props.dests);
+
   }
 
   render() {
     return (<div>
-      <Button size="md" className={"btn-csu"} onClick={() => this.toggleModal()}>Save Itinerary</Button>
+      <Button size="md" className={"btn-csu"} onClick={() => this.toggleModal()}>Save</Button>
       <Modal isOpen={this.state.showModal} toggle={() => this.toggleModal()}>
         <ModalHeader>
-          Save Map
+          Create Save File
         </ModalHeader>
         <ModalBody>
           <Form>
@@ -68,7 +70,7 @@ class Save extends Component {
           <Button color="secondary" onClick={() => this.toggleModal()}>Cancel</Button>
         </ModalFooter>
       </Modal>
-    </div>)
+    </div>);
   }
 
   toggleModal() {
@@ -95,15 +97,30 @@ class Save extends Component {
     });
   }
 
-  saveFile() {
-    console.log(this.state.filename);
-    console.log(this.state.dropdownHeader);
-
+  async saveFile() {
     if (!validFilename(this.state.filename)) {
       this.setState({isNameInvalid: true});
     }
     else {
       this.toggleModal();
+      if (this.state.dropdownHeader === ".json") {
+        if (Object.keys(this.props.dests).length === 0) {
+          console.log("in here");
+          await save({}, this.state.filename + this.state.dropdownHeader);
+        }
+        else {
+          await save(JSON.stringify(this.props.dests), this.state.filename + this.state.dropdownHeader);
+        }
+      }
+      else if (this.state.dropdownHeader === ".csv") {
+
+      }
+      else if (this.state.dropdownHeader === ".kml") {
+
+      }
+      else {
+
+      }
     }
   }
 }

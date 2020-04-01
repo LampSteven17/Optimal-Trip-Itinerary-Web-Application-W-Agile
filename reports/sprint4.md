@@ -24,17 +24,21 @@
 ### Clean Code
 * Code Climate maintainability of A (technical debt ratio <= 5).
 * Minimize code smells and duplication.
+* Fix easy errors before merging a PR
 
 ### Test Driven Development
 * Write method headers, unit tests, and code in that order.
 * Unit tests are fully automated.
 * Maintain coverage at 60%.
+* Submit PR's with tests
 
 ### Processes
 * Master is never broken. 
 * All pull request builds and tests are successful on Travis-CI.
 * All dependencies managed using Maven, npm, and WebPack.
 * GitHub etiquette is followed always.
+* Have daily scrum meetings on class days over Discord/Slack
+* Integrate new group members and have everyone contribute.
 
 
 ## Planned Epics
@@ -73,19 +77,31 @@
 | Story Points |  39  | 1 | 
 
 
-## Scrums
+## Scrums DAY SUMMARY
 
 | Date | Tasks closed  | Tasks in progress | Impediments |
 | :--- | :--- | :--- | :--- |
-| *date* | *#task, ...* | *#task, ...* |  | 
+| 4/1 | 3 | 5 | - | 
+
+### SCRUM 4/1 DAILY
+| Name | Tasks closed  | Tasks in progress |
+| :--- | :--- | :--- |
+| Ryan | 0 | #265 |
+| Steve | #292 | #264 |
+| Austin | #285 | #287 |
+| Richard | 0 | #298 |
+| Cade | #297 | #295 |
 
 
---- 
 
-| Date | Tasks closed  | Tasks in progress | Impediments |
-| :--- | :--- | :--- | :--- |
-| *date* | *#task, ...* | *#task, ...* |  | 
----
+### SCRUM (TEMPLATE) DAILY
+| Name | Tasks closed  | Tasks in progress |
+| :--- | :--- | :--- |
+| Ryan | 0 | 0 |
+| Steve | 0 | 0 |
+| Austin | 0| 0 |
+| Richard | 0 | 0 |
+| Cade | 0 | 0 |
 
 ## Review
 

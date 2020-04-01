@@ -367,6 +367,8 @@ export default class Atlas extends Component {
           })
     }
 
+    this.state.displayNum = formatted[formatted.length-1].total;
+
     return formatted;
 
   }

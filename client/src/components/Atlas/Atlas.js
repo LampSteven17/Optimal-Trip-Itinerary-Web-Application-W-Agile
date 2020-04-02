@@ -25,7 +25,7 @@ import {
 } from "../../utils/restfulAPI";
 import * as distanceRequestSchema from "../../../schemas/DistanceRequest";
 import * as distanceResponseSchema from "../../../schemas/DistanceResponse";
-import * as tripRequestSchema from "../../../schemas/TripFile";
+import * as tripRequestSchema from "../../../schemas/TripRequest";
 
 import Itinerary from '../../components/Atlas/Itinerary';
 import LoadFileButton from "./LoadFileButton";
@@ -266,20 +266,11 @@ export default class Atlas extends Component {
     .then(() => this.setState({displayNum: this.distance, displayUnit: "KM"}));
   }
 
-
-  /* This method sends a successful trip. Obviously it will need to be formatted with the data we choose to
-  use at any given time.
-  I'm leaving it here so we have the shell and a request you can test with when building up the itenerary and
-  such. Delete whenever it's use has ended if needed - <3 Cade
-   */
   async sendTrip(requestBody) {
     Promise.resolve()
         .then(async () => {
-          //console.log(requestBody);
-
           await this.sendRequest(requestBody, "trip", tripRequestSchema)
         })
-    // .then() update vars as needed here
   }
 
   async getCenter() {
@@ -412,7 +403,6 @@ export default class Atlas extends Component {
     if (this.state.markerPosition.length >= 2){
       latlngArray.push(latlngArray[0]);
     }
-
     return latlngArray;
   }
 

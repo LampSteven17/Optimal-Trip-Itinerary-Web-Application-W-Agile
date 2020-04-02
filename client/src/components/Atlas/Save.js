@@ -16,7 +16,6 @@ import {
   ModalFooter
 } from 'reactstrap';
 
-import {save} from 'save-file';
 const validFilename = require('valid-filename');
 
 class Save extends Component {
@@ -110,13 +109,14 @@ class Save extends Component {
     else {
       this.toggleModal();
       if (this.state.dropdownHeader === ".json") {
-        if (Object.keys(this.props.dests).length === 0) {
-          console.log("in here");
-          await save({}, this.state.filename + this.state.dropdownHeader);
-        }
-        else {
-          await save(JSON.stringify(this.props.dests), this.state.filename + this.state.dropdownHeader);
-        }
+        // if (Object.keys(this.props.dests).length === 0) {
+        //   console.log("in here");
+        //   await save({}, this.state.filename + this.state.dropdownHeader);
+        // }
+        // else {
+        //   await save(JSON.stringify(this.props.dests), this.state.filename + this.state.dropdownHeader);
+        // }
+        this.downloadFile('txt/json', this.state.filename + this.state.dropdownHeader, JSON.stringify(this.props.dests));
       }
       else if (this.state.dropdownHeader === ".csv") {
 
@@ -128,6 +128,20 @@ class Save extends Component {
 
       }
     }
+  }
+
+  downloadFile(fileType, fileName, fileText) {
+    let file = new Blob([fileText], {type: fileType});
+    let a = document.createElement('a'),
+    url = URL.createObjectURL(file);
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function() {
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+    }, 0);
   }
 }
 

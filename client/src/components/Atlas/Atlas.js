@@ -355,7 +355,6 @@ export default class Atlas extends Component {
   }
 
   promptTrip(data) {
-    console.log(data);
     this.setState({itenData: this.parseData(data.places, data.distances)});
     this.setState({saveData: data});
   }

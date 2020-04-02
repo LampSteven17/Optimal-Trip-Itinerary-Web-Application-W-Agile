@@ -9,6 +9,8 @@
 import React, {Component} from 'react';
 import '../tcowebstyle.css';
 import {Button, Input} from "reactstrap";
+import * as tripFileSchema from "../../../schemas/TripFile";
+import {isJsonResponseValid} from "../../utils/restfulAPI";
 
 class LoadFileButton extends Component {
 
@@ -38,6 +40,10 @@ class LoadFileButton extends Component {
             case "csv":
                 this.csvParser(file);
                 break;
+
+            default:
+                console.log("UNSUPPORTED FILE TYPE: " + extension);
+                break; // Do we want to do more of an error message? - <3 Cade
         }
     }
 
@@ -50,6 +56,10 @@ class LoadFileButton extends Component {
 
             let data = JSON.parse(content);
 
+            if (!this.testJsonFile(data, tripFileSchema)){ //!this.testJsonFile(data, tripFileSchema)
+                window.alert("JSON file does not match schema\nPlease upload another file");
+                return;
+            }
             this.props.onChange(data);
         };
 
@@ -61,8 +71,13 @@ class LoadFileButton extends Component {
         //READ CSV HERE
     }
 
-
-
+    testJsonFile(body, schema) {
+        if (!isJsonResponseValid(body, schema)) {
+            console.error("FILE DOES NOT FIT SCHEMA");
+            return false;
+        }
+        return true;
+    }
 
 }
 

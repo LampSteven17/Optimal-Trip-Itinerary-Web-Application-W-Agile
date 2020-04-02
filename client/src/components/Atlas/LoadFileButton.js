@@ -16,9 +16,7 @@ class LoadFileButton extends Component {
 
     constructor(props) {
         super(props);
-        this.loadFileOnClick = this.loadFileOnClick.bind(this)
-
-
+        this.loadFileOnClick = this.loadFileOnClick.bind(this);
     }
 
 
@@ -29,21 +27,20 @@ class LoadFileButton extends Component {
     }
 
     loadFileOnClick(files){
-
         let file = files.item(0);
         let extension  = file.name.substr(file.name.lastIndexOf('.') + 1).toLocaleLowerCase(); //I am truly sorry for this.
         switch(extension){
             case "json":
                 this.jsonParser(file);
                 break;
-
             case "csv":
                 this.csvParser(file);
                 break;
-
             default:
-                console.log("UNSUPPORTED FILE TYPE: " + extension);
-                break; // Do we want to do more of an error message? - <3 Cade
+                window.alert("File '" + file.name
+                    + "' has an unsupported file extension: '." + extension
+                    + "'.\nSupported extensions are '.json' and '.csv'");
+                break;
         }
     }
 
@@ -56,7 +53,7 @@ class LoadFileButton extends Component {
 
             let data = JSON.parse(content);
 
-            if (!this.testJsonFile(data, tripFileSchema)){ //!this.testJsonFile(data, tripFileSchema)
+            if (!this.testJsonFile(data, tripFileSchema)){
                 window.alert("JSON file does not match schema\nPlease upload another file");
                 return;
             }

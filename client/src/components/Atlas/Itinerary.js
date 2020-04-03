@@ -9,7 +9,7 @@ import {Table} from 'reactstrap';
  * Formatting is from included CSS
  */
 
-class Itinerary extends Component{
+class Itinerary extends Component {
 
     constructor(props){
         super(props);
@@ -63,4 +63,3 @@ class Itinerary extends Component{
 }
 
 export default Itinerary
-

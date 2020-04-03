@@ -69,7 +69,8 @@ export default class Atlas extends Component {
       displayUnit: "",
       totalDistance: 0,
       itenData : [{id: 1, destination: "", leg: "", total: ""}],
-      tripRequestData: {}
+      tripRequestData: {},
+      tipDataForMarkers: {}
     };
 
     this.getCurrentLocation();
@@ -83,6 +84,7 @@ export default class Atlas extends Component {
     this.getCurrentLocation = this.getCurrentLocation.bind(this);
     this.handleHomeClick = this.handleHomeClick.bind(this);
     this.sendTrip = this.sendTrip.bind(this);
+    this.sendRequest = this.sendRequest.bind(this);
   }
 
   render() {
@@ -157,6 +159,7 @@ export default class Atlas extends Component {
     </Row>
     )
   }
+
 
 
   handleInput(pos) {
@@ -315,7 +318,7 @@ export default class Atlas extends Component {
 
   async sendRequest(request, requestType, schema) {
     if (!isJsonResponseValid(request, schema)) {
-      console.error(requestType +  "REQUEST INVALID");
+      console.error(requestType + "REQUEST INVALID");
       return;
     }
     switch (requestType) {
@@ -324,6 +327,7 @@ export default class Atlas extends Component {
             .then((data) => this.promptDistance(data.body));
         break;
       case "trip":
+        this.addMarkersForTrip(request);
         await sendServerRequestWithBody("trip", request, this.props.serverPort)
             .then((data) => this.promptTrip(data.body));
         break;
@@ -331,6 +335,15 @@ export default class Atlas extends Component {
         return;
     }
   }
+
+
+  addMarkersForTrip(data) {
+    console.log(data.places);
+    data.places.forEach((place, i) => {
+      this.addMarker({latlng: {lat: parseInt(place.latitude, 10), lng: parseInt(place.longitude, 10)}})});
+
+  }
+
 
   promptTrip(data) {
     this.setState({itenData: this.parseData(data.places, data.distances)});

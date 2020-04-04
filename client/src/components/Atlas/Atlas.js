@@ -346,11 +346,11 @@ export default class Atlas extends Component {
   }
 
   promptTrip(data) {
-    this.setState({itenData: this.parseData(data.places, data.distances)});
+    this.setState({itenData: this.parseData(data.places, data.distances,data.options.earthRadius)});
     this.setState({saveData: data});
   }
 
-  parseData(names, legs){
+  parseData(names, legs, radius){
     let formatted = [];
 
     for(let vals of names){
@@ -372,10 +372,23 @@ export default class Atlas extends Component {
           })
     }
 
-    this.state.displayNum = formatted[formatted.length-1].total;
+    this.setState({displayNum: formatted[formatted.length-1].total});
+    this.setState({displayUnit: this.getUnitRadius(radius)});
 
     return formatted;
 
+  }
+
+  getUnitRadius(radius){
+    if(radius/6371.0===1){
+      return "KM";
+
+    }else if(radius/3959===1){
+      return "Miles"
+
+    }
+
+    return " -- ";
   }
 
   promptDistance(dist) {

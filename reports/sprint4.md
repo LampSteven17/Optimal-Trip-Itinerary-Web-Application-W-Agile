@@ -82,6 +82,7 @@
 | Date | Tasks closed  | Tasks in progress | Impediments |
 | :--- | :--- | :--- | :--- |
 | 4/1 | 3 | 5 | - | 
+| 4/3 | 3 | 6 | - | 
 
 ### SCRUM 4/1 DAILY
 | Name | Tasks closed  | Tasks in progress |
@@ -91,6 +92,15 @@
 | Austin | #285 | #287 |
 | Richard | 0 | #298 |
 | Cade | #297 | #295 |
+
+### SCRUM 4/3 DAILY
+| Name | Tasks closed  | Tasks in progress |
+| :--- | :--- | :--- |
+| Ryan | 0 | #265, #312 |
+| Steve | #308, #307 | #264 |
+| Austin | 0| #287 |
+| Richard | 0 | #298 |
+| Cade | #295 | #294 |
 
 
 

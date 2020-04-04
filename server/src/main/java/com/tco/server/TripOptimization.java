@@ -25,7 +25,7 @@ public class TripOptimization {
     protected List<Map< String, String>> optimize(List<Map < String, String> > places) {
         // driver for optimization
         // will call based on what opt is set too (switch statement)
-
+        // if nothing is provided then it needs to be done anyways?
         return places;
     }
 

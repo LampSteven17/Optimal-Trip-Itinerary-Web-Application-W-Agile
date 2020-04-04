@@ -1,6 +1,9 @@
 package com.tco.server;
 
 
+import java.util.List;
+import java.util.Map;
+
 /*
 This class is designed to do all the sorting and optimization algorithms and take them away from the trip class for
 testing and modular code.
@@ -17,6 +20,13 @@ public class TripOptimization {
         setImprovement(improvement);
         setConstruction(construction);
         setResponse(response);
+    }
+
+    protected List<Map< String, String>> optimize(List<Map < String, String> > places) {
+        // driver for optimization
+        // will call based on what opt is set too (switch statement)
+
+        return places;
     }
 
 

@@ -247,7 +247,6 @@ export default class Atlas extends Component {
 
   async updateDistance(type) {
     let points = this.getPositions();
-    console.log("points " + points);
     Promise.resolve()
     .then(async () => {
 
@@ -384,8 +383,6 @@ export default class Atlas extends Component {
     if (!this.testResponse(dist, distanceResponseSchema)) {
       return;
     }
-    console.log("new dist " + dist.distance);
-    console.log("current dist " + this.distance);
     this.distance = this.distance + dist.distance;
   }
 

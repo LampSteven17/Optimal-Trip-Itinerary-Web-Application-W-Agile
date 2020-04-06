@@ -246,8 +246,8 @@ export default class Atlas extends Component {
   }
 
   async updateDistance(type) {
-    console.log(type);
     let points = this.getPositions();
+    console.log("points " + points);
     Promise.resolve()
     .then(async () => {
 
@@ -266,7 +266,7 @@ export default class Atlas extends Component {
         case "delete":
           this.distance = 0;
           for (let i = 0; i < points.length; i++) {
-            if (i !== points.length - 1) {
+            if (i !== points.length - 2) {
               let requestBody = {
                 requestVersion: this.props.serverVers.requestVersion,
                 requestType: "distance",
@@ -274,6 +274,8 @@ export default class Atlas extends Component {
                 place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
                 earthRadius: 6371.0
               };
+              console.log("i " + points[i]);
+              console.log("i+1 " + points[i + 1]);
               await this.sendRequest(requestBody, "distance", distanceRequestSchema);
             }
           }
@@ -386,7 +388,8 @@ export default class Atlas extends Component {
     if (!this.testResponse(dist, distanceResponseSchema)) {
       return;
     }
-
+    console.log("new dist " + dist.distance);
+    console.log("current dist " + this.distance);
     this.distance = this.distance + dist.distance;
   }
 
@@ -433,6 +436,7 @@ export default class Atlas extends Component {
       let checkLng = points[i-1][1] - points[i][1];
       let currentLine = [points[i-1], points[i]];
 
+      console.log("genLine " + points);
       if (Math.abs(checkLng) > 180) {
         lines = lines.concat(this.lineAcrossMeridian(points[i-1], points[i]));
       }

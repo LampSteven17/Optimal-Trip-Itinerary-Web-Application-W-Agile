@@ -9,14 +9,14 @@
 import React, {Component} from 'react';
 import '../tcowebstyle.css';
 import {Button, Input} from "reactstrap";
+import * as tripFileSchema from "../../../schemas/TripFile";
+import {isJsonResponseValid} from "../../utils/restfulAPI";
 
 class LoadFileButton extends Component {
 
     constructor(props) {
         super(props);
-        this.loadFileOnClick = this.loadFileOnClick.bind(this)
-
-
+        this.loadFileOnClick = this.loadFileOnClick.bind(this);
     }
 
 
@@ -27,16 +27,19 @@ class LoadFileButton extends Component {
     }
 
     loadFileOnClick(files){
-
         let file = files.item(0);
         let extension  = file.name.substr(file.name.lastIndexOf('.') + 1).toLocaleLowerCase(); //I am truly sorry for this.
         switch(extension){
             case "json":
                 this.jsonParser(file);
                 break;
-
             case "csv":
                 this.csvParser(file);
+                break;
+            default:
+                window.alert("File '" + file.name
+                    + "' has an unsupported file extension: '." + extension
+                    + "'.\nSupported extensions are '.json' and '.csv'");
                 break;
         }
     }
@@ -50,6 +53,10 @@ class LoadFileButton extends Component {
 
             let data = JSON.parse(content);
 
+            if (!this.testJsonFile(data, tripFileSchema)){
+                window.alert("JSON file does not match schema\nPlease upload another file");
+                return;
+            }
             this.props.onChange(data);
         };
 
@@ -61,8 +68,13 @@ class LoadFileButton extends Component {
         //READ CSV HERE
     }
 
-
-
+    testJsonFile(body, schema) {
+        if (!isJsonResponseValid(body, schema)) {
+            console.error("FILE DOES NOT FIT SCHEMA");
+            return false;
+        }
+        return true;
+    }
 
 }
 

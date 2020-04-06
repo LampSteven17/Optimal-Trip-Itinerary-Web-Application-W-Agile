@@ -10,6 +10,8 @@
 
 | Name | Preparation Time |
 | ---- | ---- |
+<<<<<<< HEAD
+|  Steven Lamp|  37 minutes|
 | Cade McCumber | 40 minutes |
 | Austin Soriano | 45 minutes|
 
@@ -18,6 +20,11 @@
 
 | file:line | problem | hi/med/low | who found | github#  |
 | --- | --- | :---: | :---: | --- |
+|LoadFileButton:96-98 | Flag Variables that are not constant are used as storage variables for actual data points|low |Steven | |
+|  Itinerary:39| If a request is not correctly imported, their will not be any keys imported and the table will incorrectly render|med |Steven | |
+|Itinerary:55 | If a requests key is valid, but the categories are considered empty -> "" The table will render a nothing as a header| low| Steven||
+|LoadFileButton:88 | If a request is completely empty, the LFB will fail a request instead of loading nothing| high | Steven| |
+|LoadFileButton:121| If This function is called somewhere else, it could potentially break and return an empty JSON object| low| Steven| |
 | LoadFileButton:68 && 49 | No file check | med | Cade| |
 | LoadFileButton:30 | Nothing happens with wrong extension | low | Cade | |
 | LoadFileButton:90 | Hardcoded requestVersion | low | Cade | |
@@ -28,5 +35,3 @@
 | Itinerary.js:17 | commented out code clutters the developers code and can taint readability | low | Austin Soriano | |
 | LoadFileButton.js:86 | This function is huge. This makes this code hard to read and hard to maintain. | low | Austin Soriano | |
 | LoadFileButton.js:114 | A empty default might lead to unknown behavior within LoadFileButton.js | low | Austin Soriano| |
-
-

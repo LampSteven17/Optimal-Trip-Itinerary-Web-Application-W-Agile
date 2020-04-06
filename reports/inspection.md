@@ -10,7 +10,7 @@
 
 | Name | Preparation Time |
 | ---- | ---- |
-<<<<<<< HEAD
+| Ryan Kughn | 38 |
 |  Steven Lamp|  37 minutes|
 | Cade McCumber | 40 minutes |
 | Austin Soriano | 45 minutes|
@@ -20,6 +20,11 @@
 
 | file:line | problem | hi/med/low | who found | github#  |
 | --- | --- | :---: | :---: | --- |
+| Itinerary.js: 36 | unused input in function | low | Ryan | |
+| Itinerary.js: 45 | comparison could cause unexpected type coercion | low | Ryan | |
+| LoadFileButton.js: 121 | could break the schema if called somewhere else | med | Ryan | | 
+| LoadFileButton.js: 90 | hard coded request type value | med | Ryan | |
+| LoadFileButton.js: 114 | unused default in switch statement | med | Ryan | |
 |LoadFileButton:96-98 | Flag Variables that are not constant are used as storage variables for actual data points|low |Steven | |
 |  Itinerary:39| If a request is not correctly imported, their will not be any keys imported and the table will incorrectly render|med |Steven | |
 |Itinerary:55 | If a requests key is valid, but the categories are considered empty -> "" The table will render a nothing as a header| low| Steven||

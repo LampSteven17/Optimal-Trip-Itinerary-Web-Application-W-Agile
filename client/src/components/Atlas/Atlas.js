@@ -253,38 +253,34 @@ export default class Atlas extends Component {
 
       switch (type) {
         case "add":
-          let requestBody = {
-            requestVersion: this.props.serverVers.requestVersion,
-            requestType: "distance",
-            place1: {latitude: points[points.length - 2][0].toString(), longitude: points[points.length - 2][1].toString()},
-            place2: {latitude: points[points.length - 1][0].toString(), longitude: points[points.length - 1][1].toString()},
-            earthRadius: 6371.0
-          };
-          await this.sendRequest(requestBody, "distance", distanceRequestSchema);
+          await this.distanceRequestBody(points.length - 3,
+              points.length - 1, points);
           break;
 
         case "delete":
           this.distance = 0;
-          for (let i = 0; i < points.length; i++) {
-            if (i !== points.length - 2) {
-              let requestBody = {
-                requestVersion: this.props.serverVers.requestVersion,
-                requestType: "distance",
-                place1: {latitude: points[i][0].toString(), longitude: points[i][1].toString()},
-                place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
-                earthRadius: 6371.0
-              };
-              console.log("i " + points[i]);
-              console.log("i+1 " + points[i + 1]);
-              await this.sendRequest(requestBody, "distance", distanceRequestSchema);
-            }
-          }
+          await this.distanceRequestBody(0, points.length - 1, points);
           break;
       }
 
     })
     .then(() => this.setState({displayNum: this.distance, displayUnit: "KM"}));
   }
+
+
+  async distanceRequestBody(i, amount, points) {
+    for (i; i < amount; i++) {
+      let requestBody = {
+        requestVersion: this.props.serverVers.requestVersion,
+        requestType: "distance",
+        place1: {latitude: points[i][0].toString(), longitude: points[i][1].toString()},
+        place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
+        earthRadius: 6371.0
+      };
+      await this.sendRequest(requestBody, "distance", distanceRequestSchema);
+    }
+  }
+
 
   async sendTrip(requestBody) {
     Promise.resolve()
@@ -436,7 +432,6 @@ export default class Atlas extends Component {
       let checkLng = points[i-1][1] - points[i][1];
       let currentLine = [points[i-1], points[i]];
 
-      console.log("genLine " + points);
       if (Math.abs(checkLng) > 180) {
         lines = lines.concat(this.lineAcrossMeridian(points[i-1], points[i]));
       }

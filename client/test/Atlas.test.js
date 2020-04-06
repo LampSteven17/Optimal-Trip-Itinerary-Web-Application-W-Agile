@@ -54,7 +54,7 @@ function testStoreInputPosition(){
 
   testInputPosAtlas.instance().storeInputPosition(position);
 
-  Promise.resolve().then(r => expect(testInputPosAtlas.state.inputPosition).toEqual(expectedOutput));
+  Promise.resolve().then(r => expect(testInputPosAtlas.state().inputPosition).toEqual(expectedOutput));
 }
 
 function testGetPositionsOutput() {
@@ -106,7 +106,7 @@ function testDeleteMarker() {
 
   testDeleteAtlas.instance().deleteMarker(marker);
 
-  Promise.resolve().then(r => expect(testDeleteAtlas.state.markerPosition).toEqual(expectedOutput));
+  Promise.resolve().then(r => expect(testDeleteAtlas.state().markerPosition).toEqual(expectedOutput));
 }
 
 function testPolyline() {
@@ -134,6 +134,22 @@ function testPolyline() {
   expect(test3[1].props.positions).toEqual(expectedResult3b);
 }
 
+function testUpdateDistance() {
+  jest.mock('leaflet');
+  let testDistance = mount(<Atlas />);
+
+  //40.441587,-105.0986593,40.427871569236146,-105.11126518249513
+
+  let markerPositions = [{lat: 40.441587, lng: -105.0986593, id: 0},
+    {lat: 40.427871569236146, lng: -105.11126518249513, id: 1}];
+
+  testDistance.setState({markerPositions: markerPositions});
+
+  testDistance.instance().updateDistance('add').then(r =>
+      expect(testDistance.distance).toEqual(4));
+
+}
+
 
 test("Testing Atlas's Initial State", testInitialAppState);
 test("Testing Atlas's Handle Input", testInitialHandleInput);
@@ -143,3 +159,4 @@ test("Testing Atlas's position validation", testValidatePos);
 test("Testing Atlas's deleteMarker method", testDeleteMarker);
 test("Testing Atlas's polyline methods", testPolyline);
 test("Testing Atlas's storeInputPosition", testStoreInputPosition);
+test("Testing Atlas's updateDistance", testUpdateDistance);

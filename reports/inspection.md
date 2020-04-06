@@ -10,13 +10,16 @@
 
 | Name | Preparation Time |
 | ---- | ---- |
-|  |  |
+| Ryan Kughn | 38 |
 |  |  |
 
 ### Problems found
 
 | file:line | problem | hi/med/low | who found | github#  |
 | --- | --- | :---: | :---: | --- |
-|  | | | | |
-|  | | | | |
+| Itinerary.js: 36 | unused input in function | low | Ryan | |
+| Itinerary.js: 45 | comparison could cause unexpected type coercion | low | Ryan | |
+| LoadFileButton.js: 121 | could break the schema if called somewhere else | med | Ryan | | 
+| LoadFileButton.js: 90 | hard coded request type value | med | Ryan | |
+| LoadFileButton.js: 114 | unused default in switch statement | med | Ryan | |
 

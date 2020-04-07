@@ -13,11 +13,14 @@ import * as tripFileSchema from "../../../schemas/TripFile";
 import {isJsonResponseValid} from "../../utils/restfulAPI";
 import {readString} from "react-papaparse";
 
+import {PROTOCOL_VERSION} from "../Constants";
+
 class LoadFileButton extends Component {
 
     constructor(props) {
         super(props);
         this.loadFileOnClick = this.loadFileOnClick.bind(this);
+
     }
 
 
@@ -87,7 +90,7 @@ class LoadFileButton extends Component {
 
         let jsonTemp = {
             "requestType"    : "trip",
-            "requestVersion" : 3, //////////////////////////////////////////////////DID I REALLY WRITE ANOTHER ONE HERE????????????????????????????????????????
+            "requestVersion" : PROTOCOL_VERSION,
             "options"        : { "title":"csvFile", "earthRadius":"3959.0" },
             "places"         : [{"name": "", "latitude":  "0", "longitude": "0"}]
         };

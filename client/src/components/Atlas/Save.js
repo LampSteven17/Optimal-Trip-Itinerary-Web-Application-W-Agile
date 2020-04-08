@@ -126,7 +126,6 @@ class Save extends Component {
 
   saveAsSVG() {
     let svgHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-    let setViewBox = 
   }
 
   downloadFile(fileType, fileName, fileText) {

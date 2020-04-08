@@ -23,14 +23,13 @@ public class TestRequestTrip {
     @Test
     public void testType() {
         String type = trip.getType();
-        assertEquals("config requestType", "trip", type);
-
+        assertEquals("trip requestType", "trip", type);
     }
 
     @Test
     public void testVersion() {
         int version = trip.getVersion();
-        assertEquals("config requestVersion", 3, version);
+        assertEquals("trip requestVersion", 3, version);
     }
 
     private void setupForResponse() {

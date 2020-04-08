@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 import com.tco.server.RequestDistance;
+import com.tco.server.TripOptimization;
 
 /*
 This class defines the Trip response used with Restful API services
@@ -44,6 +45,16 @@ public class RequestTrip extends RequestHeader{
             dists[dists.length-1] = RequestDistance.calculateDistance(places.get(places.size()-1), places.get(0), Double.valueOf(options.get("earthRadius")));
         }
         return dists;
+    }
+
+    private List<Map < String, String> > optimize() {
+        TripOptimization tripOpt = new TripOptimization(
+                options.get("improvement"),
+                options.get("construction"),
+                (byte) Integer.parseInt(options.get("response")) // schema shouldn't let this be outside of value
+        );
+
+        return places;
     }
 
 

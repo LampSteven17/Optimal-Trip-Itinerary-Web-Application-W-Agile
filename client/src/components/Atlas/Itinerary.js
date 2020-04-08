@@ -9,12 +9,10 @@ import {Table} from 'reactstrap';
  * Formatting is from included CSS
  */
 
-class Itinerary extends Component{
+class Itinerary extends Component {
 
     constructor(props){
         super(props);
-
-        //console.log(props.dests);
     }
 
 
@@ -33,7 +31,7 @@ class Itinerary extends Component{
 
 
     renderData(){
-        return this.props.dests.map((dest,index) => {
+        return this.props.dests.map((dest) => {
             const {id, destination, leg, total } = dest;
             return(
                 <tr key={id}>
@@ -63,4 +61,3 @@ class Itinerary extends Component{
 }
 
 export default Itinerary
-

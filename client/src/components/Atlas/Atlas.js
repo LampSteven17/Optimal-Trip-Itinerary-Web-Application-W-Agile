@@ -27,7 +27,8 @@ import * as distanceRequestSchema from "../../../schemas/DistanceRequest";
 import * as distanceResponseSchema from "../../../schemas/DistanceResponse";
 import * as tripRequestSchema from "../../../schemas/TripRequest";
 
-import Itinerary from '../../components/Atlas/Itinerary';
+import Itinerary from './Itinerary';
+import Save from './Save';
 import LoadFileButton from "./LoadFileButton";
 
 const FALSECOLOR = "5px solid red";
@@ -70,7 +71,8 @@ export default class Atlas extends Component {
       totalDistance: 0,
       itenData : [{id: 1, destination: "", leg: "", total: ""}],
       tripRequestData: {},
-      tipDataForMarkers: {}
+      tipDataForMarkers: {},
+      saveData: {},
     };
 
     this.getCurrentLocation();
@@ -110,6 +112,7 @@ export default class Atlas extends Component {
 
   renderBaseButtons() {
     return(
+      <div>
         <Row>
           <Col sm={{size:'auto'}} style={{ width: "4.4rem" }} md={{size: 0, offset: 3}}>
             {this.showHomeButton()}
@@ -123,6 +126,7 @@ export default class Atlas extends Component {
             <Button className={"btn-csu"} onClick={() => this.updateMarkerFromInput()}>+</Button>
           </Col>
         </Row>
+      </div>
     )
   }
 
@@ -151,12 +155,21 @@ export default class Atlas extends Component {
 
   renderItinerary(){
     return(
-    <Row>
-      <Col sm={12} md={{size: 6, offset: 3}}>
-        <LoadFileButton onChange={this.sendTrip}/>
-        <Itinerary dests={this.state.itenData}/>
-      </Col>
-    </Row>
+      <div>
+        <Row style={{padding: "10px"}}>
+          <Col sm={12} md={{size: 3, offset: 3}}>
+            <LoadFileButton onChange={this.sendTrip}/>
+          </Col>
+          <Col sm={12} md={{size: 2, offset: 0}}>
+            <Save dests={this.state.saveData}/>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={12} md={{size: 6, offset: 3}}>
+            <Itinerary dests={this.state.itenData}/>
+          </Col>
+        </Row>
+      </div>
     )
   }
 
@@ -229,7 +242,7 @@ export default class Atlas extends Component {
 
     Promise.resolve()
     .then(() => this.setState({markerPosition: newArray}))
-    .then(() => this.updateDistance());
+    .then(() => this.updateDistance("delete"));
   }
 
   async addMarker(mapClickInfo) {
@@ -241,33 +254,48 @@ export default class Atlas extends Component {
         markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
       }), () => {
         if (this.state.markerPosition.length > 1) {
-          this.updateDistance();
+          this.updateDistance("add");
         }
       });
     })
     .then(() => this.getCenter());
   }
 
-  async updateDistance() {
-    this.distance = 0;
+  async updateDistance(type) {
     let points = this.getPositions();
     Promise.resolve()
     .then(async () => {
-      for (let i = 0; i < points.length; i++) {
-        if (i !== points.length - 1) {
-          let requestBody = {
-            requestVersion: this.props.serverVers.requestVersion,
-            requestType: "distance",
-            place1: {latitude: points[i][0].toString(), longitude: points[i][1].toString()},
-            place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
-            earthRadius: 6371.0
-          };
-          await this.sendRequest(requestBody, "distance", distanceRequestSchema);
-        }
+
+      switch (type) {
+        case "add":
+          await this.distanceRequestBody(points.length - 3,
+              points.length - 1, points);
+          break;
+
+        case "delete":
+          this.distance = 0;
+          await this.distanceRequestBody(0, points.length - 1, points);
+          break;
       }
+
     })
     .then(() => this.setState({displayNum: this.distance, displayUnit: "KM"}));
   }
+
+
+  async distanceRequestBody(i, amount, points) {
+    for (i; i < amount; i++) {
+      let requestBody = {
+        requestVersion: this.props.serverVers.requestVersion,
+        requestType: "distance",
+        place1: {latitude: points[i][0].toString(), longitude: points[i][1].toString()},
+        place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
+        earthRadius: 6371.0
+      };
+      await this.sendRequest(requestBody, "distance", distanceRequestSchema);
+    }
+  }
+
 
   async sendTrip(requestBody) {
     Promise.resolve()
@@ -346,10 +374,11 @@ export default class Atlas extends Component {
 
 
   promptTrip(data) {
-    this.setState({itenData: this.parseData(data.places, data.distances)});
+    this.setState({itenData: this.parseData(data.places, data.distances,data.options.earthRadius)});
+    this.setState({saveData: data});
   }
 
-  parseData(names, legs){
+  parseData(names, legs, radius){
     let formatted = [];
 
     for(let vals of names){
@@ -371,10 +400,23 @@ export default class Atlas extends Component {
           })
     }
 
-    this.state.displayNum = formatted[formatted.length-1].total;
+    this.setState({displayNum: formatted[formatted.length-1].total});
+    this.setState({displayUnit: this.getUnitRadius(radius)});
 
     return formatted;
 
+  }
+
+  getUnitRadius(radius){
+    if(radius/6371.0===1){
+      return "KM";
+
+    }else if(radius/3959===1){
+      return "Miles"
+
+    }
+
+    return " -- ";
   }
 
   promptDistance(dist) {

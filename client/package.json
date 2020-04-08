@@ -5,6 +5,7 @@
     "dev": "cross-env webpack-dev-server --config ./webpack.dev.config.js"
   },
   "dependencies": {
+    "@react-native-community/geolocation": "latest",
     "babel-cli": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-polyfill": "^6.26.0",
@@ -25,9 +26,10 @@
     "reactstrap": "^7.1.0",
     "style-loader": "^0.23.1",
     "ulog": "^1.1.0",
+    "valid-filename": "^3.1.0",
     "webpack": "^4.28.4",
     "webpack-cli": "^3.2.1",
-    "@react-native-community/geolocation": "latest"
+    "react-papaparse": "latest"
   },
   "devDependencies": {
     "ajv": "^6.10.2",

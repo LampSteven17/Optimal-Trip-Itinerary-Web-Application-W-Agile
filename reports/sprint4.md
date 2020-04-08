@@ -82,6 +82,8 @@
 | Date | Tasks closed  | Tasks in progress | Impediments |
 | :--- | :--- | :--- | :--- |
 | 4/1 | 3 | 5 | - | 
+| 4/3 | 3 | 6 | - | 
+| 4/6 | 3 | 5 | Richard left the group |
 
 ### SCRUM 4/1 DAILY
 | Name | Tasks closed  | Tasks in progress |
@@ -92,15 +94,29 @@
 | Richard | 0 | #298 |
 | Cade | #297 | #295 |
 
+### SCRUM 4/3 DAILY
+| Name | Tasks closed  | Tasks in progress |
+| :--- | :--- | :--- |
+| Ryan | 0 | #265, #312 |
+| Steve | #308, #307 | #264 |
+| Austin | 0| #287 |
+| Richard | 0 | #298 |
+| Cade | #295 | #294 |
 
+### SCRUM 4/6 DAILY
+| Name | Tasks closed  | Tasks in progress |
+| :--- | :--- | :--- |
+| Ryan | #312 | #265 |
+| Steve | #264 | #318, #299 |
+| Austin | 0 | #287 |
+| Cade | #314 | #294 |
 
 ### SCRUM (TEMPLATE) DAILY
 | Name | Tasks closed  | Tasks in progress |
 | :--- | :--- | :--- |
 | Ryan | 0 | 0 |
 | Steve | 0 | 0 |
-| Austin | 0| 0 |
-| Richard | 0 | 0 |
+| Austin | 0 | 0 |
 | Cade | 0 | 0 |
 
 ## Review

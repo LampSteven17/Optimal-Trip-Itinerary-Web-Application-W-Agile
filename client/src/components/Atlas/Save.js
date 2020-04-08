@@ -32,8 +32,6 @@ class Save extends Component {
     this.toggleModal = this.toggleModal.bind(this);
     this.toggleDropdown = this.toggleDropdown.bind(this);
 
-    console.log(props.dests);
-
   }
 
   render() {

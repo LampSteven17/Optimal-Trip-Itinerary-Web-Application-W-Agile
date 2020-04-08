@@ -239,7 +239,7 @@ export default class Atlas extends Component {
 
     Promise.resolve()
     .then(() => this.setState({markerPosition: newArray}))
-    .then(() => this.updateDistance());
+    .then(() => this.updateDistance("delete"));
   }
 
   async addMarker(mapClickInfo) {
@@ -251,33 +251,48 @@ export default class Atlas extends Component {
         markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
       }), () => {
         if (this.state.markerPosition.length > 1) {
-          this.updateDistance();
+          this.updateDistance("add");
         }
       });
     })
     .then(() => this.getCenter());
   }
 
-  async updateDistance() {
-    this.distance = 0;
+  async updateDistance(type) {
     let points = this.getPositions();
     Promise.resolve()
     .then(async () => {
-      for (let i = 0; i < points.length; i++) {
-        if (i !== points.length - 1) {
-          let requestBody = {
-            requestVersion: this.props.serverVers.requestVersion,
-            requestType: "distance",
-            place1: {latitude: points[i][0].toString(), longitude: points[i][1].toString()},
-            place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
-            earthRadius: 6371.0
-          };
-          await this.sendRequest(requestBody, "distance", distanceRequestSchema);
-        }
+
+      switch (type) {
+        case "add":
+          await this.distanceRequestBody(points.length - 3,
+              points.length - 1, points);
+          break;
+
+        case "delete":
+          this.distance = 0;
+          await this.distanceRequestBody(0, points.length - 1, points);
+          break;
       }
+
     })
     .then(() => this.setState({displayNum: this.distance, displayUnit: "KM"}));
   }
+
+
+  async distanceRequestBody(i, amount, points) {
+    for (i; i < amount; i++) {
+      let requestBody = {
+        requestVersion: this.props.serverVers.requestVersion,
+        requestType: "distance",
+        place1: {latitude: points[i][0].toString(), longitude: points[i][1].toString()},
+        place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
+        earthRadius: 6371.0
+      };
+      await this.sendRequest(requestBody, "distance", distanceRequestSchema);
+    }
+  }
+
 
   async sendTrip(requestBody) {
     Promise.resolve()

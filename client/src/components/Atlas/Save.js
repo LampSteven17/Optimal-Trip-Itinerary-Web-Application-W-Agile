@@ -17,6 +17,7 @@ import {
 } from 'reactstrap';
 
 const validFilename = require('valid-filename');
+import { jsonToCSV } from 'react-papaparse';
 
 class Save extends Component {
   constructor(props) {
@@ -109,17 +110,11 @@ class Save extends Component {
     else {
       this.toggleModal();
       if (this.state.dropdownHeader === ".json") {
-        // if (Object.keys(this.props.dests).length === 0) {
-        //   console.log("in here");
-        //   await save({}, this.state.filename + this.state.dropdownHeader);
-        // }
-        // else {
-        //   await save(JSON.stringify(this.props.dests), this.state.filename + this.state.dropdownHeader);
-        // }
         this.downloadFile('txt/json', this.state.filename + this.state.dropdownHeader, JSON.stringify(this.props.dests));
       }
       else if (this.state.dropdownHeader === ".csv") {
-
+        let placesArray = JSON.stringify(this.props.dests.places);
+        this.downloadFile('txt/csv', this.state.filename + this.state.dropdownHeader, jsonToCSV(placesArray));
       }
       else if (this.state.dropdownHeader === ".kml") {
 

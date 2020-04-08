@@ -17,6 +17,7 @@ public class RequestTrip extends RequestHeader{
     private Map<String, String> options;
     private List<Map < String, String> > places;
     private Long[] distances;
+    private Map<String, String> optimization;
 
     private final transient Logger log = LoggerFactory.getLogger(RequestDistance.class);
 
@@ -49,9 +50,9 @@ public class RequestTrip extends RequestHeader{
 
     private List<Map < String, String> > optimize() {
         TripOptimization tripOpt = new TripOptimization(
-                options.get("improvement"),
-                options.get("construction"),
-                (byte) Integer.parseInt(options.get("response")) // schema shouldn't let this be outside of value
+                optimization.containsKey("construction") ? optimization.get("construction") : "",
+                optimization.containsKey("improvement") ? optimization.get("improvement") : "choice",
+                optimization.containsKey("response") ? (byte) Integer.parseInt(optimization.get("response")) : (byte) 1
         );
 
         return places;
@@ -61,8 +62,8 @@ public class RequestTrip extends RequestHeader{
     // TESTS //
     public int getVersion() { return this.requestVersion; }
     public String getType() { return this.requestType; }
-    public void setUp(Map<String, String> op, List<Map < String, String> > pl) {
-        options = op; places = pl;
+    public void setUp(Map<String, String> op, List<Map < String, String> > pl, Map<String, String> optimize) {
+        options = op; places = pl; optimization = optimize;
     }
 
 

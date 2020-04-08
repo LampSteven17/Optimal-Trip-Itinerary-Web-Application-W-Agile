@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.json.JSONObject;
+import org.json.JSONArray;
 
 import static org.junit.Assert.assertEquals;
 
@@ -43,9 +45,11 @@ public class TestRequestTrip {
         places.add(p1); places.add(p2); places.add(p3);
 
         Map<String, String> options = new HashMap<String, String>();
+        Map<String, String> optimization = new HashMap<String, String>();
+        optimization.put("response", "2"); optimization.put("construction", "none"); optimization.put("improvement", "none"); // for now
         options.put("title", "test init"); options.put("earthRadius", "3959.0");
 
-        trip.setUp(options, places);
+        trip.setUp(options, places, optimization);
     }
 
 

@@ -118,9 +118,14 @@ class Save extends Component {
         case ".kml":
           break;
         case ".svg":
+          this.saveAsSVG();
           break;
       }
     }
+  }
+
+  saveAsSVG() {
+    let svgHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
   }
 
   downloadFile(fileType, fileName, fileText) {

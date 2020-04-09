@@ -91,7 +91,13 @@ class LoadFileButton extends Component {
         let jsonTemp = {
             "requestType"    : "trip",
             "requestVersion" : PROTOCOL_VERSION,
-            "options"        : { "title":"csvFile", "earthRadius":"3959.0" },
+            "options"        : { "title":"csvFile",
+                "earthRadius":"3959.0",
+                "optimization" : {
+                    "construction" : "none",
+                    "improvement" : "none",
+                    "response" : "1"
+                }},
             "places"         : [{"name": "", "latitude":  "0", "longitude": "0"}]
         };
 

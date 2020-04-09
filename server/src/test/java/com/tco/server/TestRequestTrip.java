@@ -19,7 +19,7 @@ public class TestRequestTrip {
     public void createConfigurationForTestCases(){
         trip = new RequestTrip();
         setupForResponse();
-        trip.buildResponse();
+        //trip.buildResponse();
     }
 
     @Test
@@ -44,10 +44,10 @@ public class TestRequestTrip {
         p3.put("latitude", "-10"); p3.put("longitude", "-10"); p3.put("name", "place3");
         places.add(p1); places.add(p2); places.add(p3);
 
-        Map<String, String> options = new HashMap<String, String>();
+        Options options = new Options("3959.0", "test init");
+
         Map<String, String> optimization = new HashMap<String, String>();
         optimization.put("response", "2"); optimization.put("construction", "none"); optimization.put("improvement", "none"); // for now
-        options.put("title", "test init"); options.put("earthRadius", "3959.0");
 
         trip.setUp(options, places, optimization);
     }

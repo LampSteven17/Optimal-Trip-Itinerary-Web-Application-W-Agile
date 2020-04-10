@@ -359,19 +359,23 @@ export default class Atlas extends Component {
         await sendServerRequestWithBody("trip", request, this.props.serverPort)
             .then((data) => this.promptTrip(data.body));
         break;
-      default: console.log("UNSUPPORTED REQUEST TYPE");
+      default: console.error("UNSUPPORTED REQUEST TYPE");
         return;
     }
   }
 
 
   addMarkersForTrip(data) {
-    console.log(data.places);
     data.places.forEach((place, i) => {
-      this.addMarker({latlng: {lat: parseInt(place.latitude, 10), lng: parseInt(place.longitude, 10)}})});
-
+      this.addMarker({latlng: {lat: parseInt(place.latitude, 10), lng: parseInt(place.longitude, 10)}});
+    });
   }
 
+  appendToItinerary() {
+    this.setState(prevState => ({
+      markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
+    }));
+  }
 
   promptTrip(data) {
     this.setState({itenData: this.parseData(data.places, data.distances,data.options.earthRadius)});
@@ -380,7 +384,6 @@ export default class Atlas extends Component {
 
   parseData(names, legs, radius){
     let formatted = [];
-
     for(let vals of names){
       let index = names.indexOf((vals));
       let totalVal = 0;
@@ -404,8 +407,8 @@ export default class Atlas extends Component {
     this.setState({displayUnit: this.getUnitRadius(radius)});
 
     return formatted;
-
   }
+
 
   getUnitRadius(radius){
     if(radius/6371.0===1){

@@ -397,6 +397,7 @@ export default class Atlas extends Component {
         totalVal+= (legs[index]+formatted[index-1].total);
       }else{
         totalVal=legs[index];
+        legs[index] = 0;
       }
 
       formatted.push(

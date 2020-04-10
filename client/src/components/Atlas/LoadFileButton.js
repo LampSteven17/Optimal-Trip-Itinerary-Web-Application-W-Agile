@@ -33,6 +33,7 @@ class LoadFileButton extends Component {
     loadFileOnClick(files){
         let file = files.item(0);
         let extension  = file.name.substr(file.name.lastIndexOf('.') + 1).toLocaleLowerCase(); //I am truly sorry for this.
+        this.props.action();
         switch(extension){
             case "json":
                 this.jsonParser(file);

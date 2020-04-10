@@ -247,21 +247,24 @@ export default class Atlas extends Component {
     .then(() => this.updateDistance("delete"));
   }
 
-  async addMarker(mapClickInfo) {
+  async addMarker(mapClickInfo, getDistance=true) {
     Promise.resolve()
     .then(() => {
       mapClickInfo.latlng.id = this.state.id;
       this.setState({id: this.state.id + 1});
       this.setState(prevState => ({
         markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
-      }), () => {
-        if (this.state.markerPosition.length > 1) {
-          this.updateDistance("add");
+      }), async () => {
+        if (this.state.markerPosition.length > 1 && getDistance) {
+          await this.updateDistance("add")
+        }
+        else {
+          console.log("REEE");
+          // this.appendToItinerary();
         }
       });
     })
-    .then(() => this.getCenter())
-    .then(() => this.appendToItinerary());
+    .then(() => this.getCenter());
   }
 
   async updateDistance(type) {
@@ -370,7 +373,7 @@ export default class Atlas extends Component {
 
   addMarkersForTrip(data) {
     data.places.forEach((place, i) => {
-      this.addMarker({latlng: {lat: parseInt(place.latitude, 10), lng: parseInt(place.longitude, 10)}});
+      this.addMarker({latlng: {lat: parseInt(place.latitude, 10), lng: parseInt(place.longitude, 10)}}, false);
     });
   }
 
@@ -416,6 +419,7 @@ export default class Atlas extends Component {
 
     this.setState({displayNum: formatted[formatted.length-1].total});
     this.setState({displayUnit: this.getUnitRadius(radius)});
+    this.distance = totalVal;
 
     return formatted;
   }
@@ -439,6 +443,7 @@ export default class Atlas extends Component {
     }
     this.tempDist = dist.distance;
     this.distance = this.distance + dist.distance;
+    this.appendToItinerary();
   }
 
   testResponse(body, schema) {

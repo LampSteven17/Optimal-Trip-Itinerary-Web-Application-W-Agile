@@ -7,49 +7,32 @@ wow, here again. thanks gson, this class DOES feel necessary
  */
 public class Optimization {
     //private String construction;
-    private Improvement improvement;
-    private Construction construction;
-    private String response;
+    private Improvement improvement = Improvement.NONE;
+    private Construction construction = Construction.none;
+    private String response = "1"; // default
 
     private enum Construction {
+        none,
+        one,
+        some;
+    }
+
+    private enum Improvement {
         @SerializedName("none") NONE,
-        @SerializedName("one") ONE ,
-        @SerializedName("some") SOME;
-    }
-    //private String construction;
-
-    public enum Improvement {
-        @SerializedName("none") NONE("none"),
-        @SerializedName("2opt") TWOOPT("2opt"),
-        @SerializedName("3opt") THREEOPT("3opt");
-
-        String improvement;
-
-        Improvement(String improvement) {
-            this.improvement = improvement;
-        }
-
-        public String getImprovement() {
-            return this.improvement;
-        }
+        @SerializedName("2opt") TWOOPT,
+        @SerializedName("3opt") THREEOPT;
     }
 
-
-    /*
     protected String getConstruction() {
-        return construction != null ? this.construction. : "";
+        return construction.name();
     }
-    */
-
-
 
     protected String getImprovement() {
-        return improvement.getImprovement();
+        return improvement.name();
     }
-
 
     protected byte getResponse() {
-        //return response != null ? Byte.parseByte(response) : 1;
-        return 1;
+        return response != null ? Byte.parseByte(response) : 1;
     }
+
 }

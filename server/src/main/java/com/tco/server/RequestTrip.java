@@ -18,7 +18,6 @@ public class RequestTrip extends RequestHeader{
     private List<Map < String, String> > places;
     private Long[] distances;
     private Options options;
-    private Optimization optimization;
 
 
     private final transient Logger log = LoggerFactory.getLogger(RequestDistance.class);
@@ -30,17 +29,11 @@ public class RequestTrip extends RequestHeader{
 
     @Override
     public void buildResponse() {
-        distances = calculateDistances();
+        this.distances = calculateDistances();
         log.trace("buildResponse -> {}", this);
     }
 
     private Long[] calculateDistances() {
-
-        // TEST
-
-
-            System.out.println(options.getImprovement());
-
 
         if (places.isEmpty()) {
             log.error("In calculateDistances() in RequestTrip.java the variable places is empty. Returning null. ");
@@ -71,7 +64,7 @@ public class RequestTrip extends RequestHeader{
     // TESTS //
     public int getVersion() { return this.requestVersion; }
     public String getType() { return this.requestType; }
-    public void setUp(Options op, List<Map < String, String> > pl, Map<String, String> optimize) {
+    public void setUp(Options op, List<Map < String, String> > pl) {
         options = op; places = pl;
     }
 

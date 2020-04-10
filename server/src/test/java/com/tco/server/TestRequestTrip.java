@@ -19,7 +19,7 @@ public class TestRequestTrip {
     public void createConfigurationForTestCases(){
         trip = new RequestTrip();
         setupForResponse();
-        //trip.buildResponse();
+        trip.buildResponse();
     }
 
     @Test
@@ -45,11 +45,9 @@ public class TestRequestTrip {
         places.add(p1); places.add(p2); places.add(p3);
 
         Options options = new Options("3959.0", "test init");
+        Optimization optimization = new Optimization();
 
-        Map<String, String> optimization = new HashMap<String, String>();
-        optimization.put("response", "2"); optimization.put("construction", "none"); optimization.put("improvement", "none"); // for now
-
-        trip.setUp(options, places, optimization);
+        trip.setUp(options, places);
     }
 
 

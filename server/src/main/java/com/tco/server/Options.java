@@ -12,13 +12,14 @@ public class Options {
     private String earthRadius;
     private String title;
 
-    public Options() {}
+    public Options() {
+        optimization = new Optimization();
+    }
 
     protected Options(String earthRadius, String title) {
         this.earthRadius = earthRadius;
         this.title = title;
     }
-
 
     protected String getEarthRadius() {
         return this.earthRadius;
@@ -29,17 +30,14 @@ public class Options {
     }
 
     protected byte getResponse() {
-        //return optimization.getResponse();
-        return 1;
+        return this.optimization.getResponse();
     }
 
     public String getConstruction() {
-        //return optimization.getConstruction();
-        return "yeah";
+        return this.optimization.getConstruction();
     }
 
     protected String getImprovement() {
-        //return optimization.getImprovement();
-        return optimization.getImprovement();
+        return this.optimization.getImprovement();
     }
 }

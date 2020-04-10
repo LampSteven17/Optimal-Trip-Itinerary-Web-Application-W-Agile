@@ -418,7 +418,7 @@ export default class Atlas extends Component {
 
     this.setState({displayNum: formatted[formatted.length-1].total});
     this.setState({displayUnit: this.getUnitRadius(radius)});
-    // this.distance = totalVal;
+    this.distance = formatted[formatted.length-1].total;
 
     return formatted;
   }

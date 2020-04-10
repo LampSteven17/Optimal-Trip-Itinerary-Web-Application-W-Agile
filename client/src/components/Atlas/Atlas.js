@@ -55,6 +55,7 @@ export default class Atlas extends Component {
     this.mapRef = createRef();
     this.groupRef = createRef();
     this.distance = 0;
+    this.lastDistanceCalculation = 0;
     this.map;
     this.group;
     this.binder();
@@ -87,6 +88,7 @@ export default class Atlas extends Component {
     this.handleHomeClick = this.handleHomeClick.bind(this);
     this.sendTrip = this.sendTrip.bind(this);
     this.sendRequest = this.sendRequest.bind(this);
+    this.changeStateInLoadFileButton = this.changeStateInLoadFileButton.bind(this);
   }
 
   render() {
@@ -158,7 +160,8 @@ export default class Atlas extends Component {
       <div>
         <Row style={{padding: "10px"}}>
           <Col sm={12} md={{size: 3, offset: 3}}>
-            <LoadFileButton onChange={this.sendTrip}/>
+            <LoadFileButton action={this.changeStateInLoadFileButton}
+                            onChange={this.sendTrip}/>
           </Col>
           <Col sm={12} md={{size: 2, offset: 0}}>
             <Save dests={this.state.saveData}/>
@@ -173,7 +176,10 @@ export default class Atlas extends Component {
     )
   }
 
-
+  changeStateInLoadFileButton() {
+    this.setState({markerPosition: [], displayNum: 0});
+    this.distance = 0;
+  }
 
   handleInput(pos) {
     if (this.isValidPosition(pos)) {
@@ -268,6 +274,7 @@ export default class Atlas extends Component {
 
       switch (type) {
         case "add":
+          this.distance = this.distance - this.lastDistanceCalculation;
           await this.distanceRequestBody(points.length - 3,
               points.length - 1, points);
           break;
@@ -322,6 +329,7 @@ export default class Atlas extends Component {
   }
 
   handleHomeClick() {
+    this.distance = 0;
     this.setState({displayNum: 0});
     this.getCurrentLocation();
   }
@@ -366,7 +374,6 @@ export default class Atlas extends Component {
 
 
   addMarkersForTrip(data) {
-    console.log(data.places);
     data.places.forEach((place, i) => {
       this.addMarker({latlng: {lat: parseInt(place.latitude, 10), lng: parseInt(place.longitude, 10)}})});
 
@@ -374,6 +381,7 @@ export default class Atlas extends Component {
 
 
   promptTrip(data) {
+    console.log(data);
     this.setState({itenData: this.parseData(data.places, data.distances,data.options.earthRadius)});
     this.setState({saveData: data});
   }
@@ -423,6 +431,7 @@ export default class Atlas extends Component {
     if (!this.testResponse(dist, distanceResponseSchema)) {
       return;
     }
+    this.lastDistanceCalculation = dist.distance;
     this.distance = this.distance + dist.distance;
   }
 

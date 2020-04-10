@@ -55,6 +55,7 @@ export default class Atlas extends Component {
     this.mapRef = createRef();
     this.groupRef = createRef();
     this.distance = 0;
+    this.tempDist = 0;
     this.map;
     this.group;
     this.binder();
@@ -69,7 +70,7 @@ export default class Atlas extends Component {
       displayNum: "",
       displayUnit: "",
       totalDistance: 0,
-      itenData : [{id: 1, destination: "", leg: "", total: ""}],
+      itenData : [{id: -1, destination: "", leg: "", total: ""}],
       tripRequestData: {},
       tipDataForMarkers: {},
       saveData: {},
@@ -87,6 +88,7 @@ export default class Atlas extends Component {
     this.handleHomeClick = this.handleHomeClick.bind(this);
     this.sendTrip = this.sendTrip.bind(this);
     this.sendRequest = this.sendRequest.bind(this);
+    this.appendToItinerary = this.appendToItinerary.bind(this);
   }
 
   render() {
@@ -258,7 +260,8 @@ export default class Atlas extends Component {
         }
       });
     })
-    .then(() => this.getCenter());
+    .then(() => this.getCenter())
+    .then(() => this.appendToItinerary());
   }
 
   async updateDistance(type) {
@@ -372,12 +375,20 @@ export default class Atlas extends Component {
   }
 
   appendToItinerary() {
-    this.setState(prevState => ({
-      markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
-    }));
+    // {id: 1, destination: "", leg: "", total: ""}
+    let name = "Marker " + this.state.id;
+    if (this.state.itenData[0].id === -1) {
+      this.setState({itenData: [{id: this.state.id, destination: name, leg: "0", total: "0"}]});
+    }
+    else {
+      this.setState(prevState => ({
+        itenData: [...prevState.itenData, {id: this.state.id, destination: name, leg: "0", total: "0"}]
+      }));
+    }
   }
 
   promptTrip(data) {
+    console.log(data);
     this.setState({itenData: this.parseData(data.places, data.distances,data.options.earthRadius)});
     this.setState({saveData: data});
   }
@@ -426,6 +437,7 @@ export default class Atlas extends Component {
     if (!this.testResponse(dist, distanceResponseSchema)) {
       return;
     }
+    this.tempDist = dist.distance;
     this.distance = this.distance + dist.distance;
   }
 

@@ -258,9 +258,8 @@ export default class Atlas extends Component {
         if (this.state.markerPosition.length > 1 && getDistance) {
           await this.updateDistance("add")
         }
-        else {
-          console.log("REEE");
-          // this.appendToItinerary();
+        else if(getDistance) {
+          this.appendToItinerary();
         }
       });
     })
@@ -419,7 +418,7 @@ export default class Atlas extends Component {
 
     this.setState({displayNum: formatted[formatted.length-1].total});
     this.setState({displayUnit: this.getUnitRadius(radius)});
-    this.distance = totalVal;
+    // this.distance = totalVal;
 
     return formatted;
   }

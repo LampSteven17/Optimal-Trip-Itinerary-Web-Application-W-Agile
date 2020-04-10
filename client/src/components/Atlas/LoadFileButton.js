@@ -33,6 +33,7 @@ class LoadFileButton extends Component {
     loadFileOnClick(files){
         let file = files.item(0);
         let extension  = file.name.substr(file.name.lastIndexOf('.') + 1).toLocaleLowerCase(); //I am truly sorry for this.
+        this.props.action();
         switch(extension){
             case "json":
                 this.jsonParser(file);
@@ -91,7 +92,13 @@ class LoadFileButton extends Component {
         let jsonTemp = {
             "requestType"    : "trip",
             "requestVersion" : PROTOCOL_VERSION,
-            "options"        : { "title":"csvFile", "earthRadius":"3959.0" },
+            "options"        : { "title":"csvFile",
+                "earthRadius":"3959.0",
+                "optimization" : {
+                    "construction" : "none",
+                    "improvement" : "none",
+                    "response" : "1"
+                }},
             "places"         : [{"name": "", "latitude":  "0", "longitude": "0"}]
         };
 

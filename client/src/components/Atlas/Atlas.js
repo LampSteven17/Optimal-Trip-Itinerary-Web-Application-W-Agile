@@ -56,6 +56,7 @@ export default class Atlas extends Component {
     this.groupRef = createRef();
     this.distance = 0;
     this.lastDistanceCalculation = 0;
+    this.idForInput = 0;
     this.map;
     this.group;
     this.binder();
@@ -89,6 +90,7 @@ export default class Atlas extends Component {
     this.sendTrip = this.sendTrip.bind(this);
     this.sendRequest = this.sendRequest.bind(this);
     this.changeStateInLoadFileButton = this.changeStateInLoadFileButton.bind(this);
+    this.addMarkersForTrip = this.addMarkersForTrip.bind(this);
   }
 
   render() {
@@ -259,9 +261,10 @@ export default class Atlas extends Component {
       this.setState(prevState => ({
         markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
       }), () => {
-        if (this.state.markerPosition.length > 1) {
-          this.updateDistance("add");
-        }
+          console.log("UPDATE DISTANCE");
+          if (this.state.markerPosition.length > 1) {
+            this.updateDistance("add");
+          }
       });
     })
     .then(() => this.getCenter());
@@ -363,7 +366,6 @@ export default class Atlas extends Component {
             .then((data) => this.promptDistance(data.body));
         break;
       case "trip":
-        this.addMarkersForTrip(request);
         await sendServerRequestWithBody("trip", request, this.props.serverPort)
             .then((data) => this.promptTrip(data.body));
         break;
@@ -373,17 +375,23 @@ export default class Atlas extends Component {
   }
 
 
-  addMarkersForTrip(data) {
-    data.places.forEach((place, i) => {
-      this.addMarker({latlng: {lat: parseInt(place.latitude, 10), lng: parseInt(place.longitude, 10)}})});
-
-  }
-
 
   promptTrip(data) {
-    console.log(data);
+    this.addMarkersForTrip(data);
     this.setState({itenData: this.parseData(data.places, data.distances,data.options.earthRadius)});
     this.setState({saveData: data});
+  }
+
+  async addMarkersForTrip(data) {
+    let newMarkers = [];
+    data.places.forEach((place, i) => {
+      newMarkers.push({lat: parseInt(place.latitude, 10), lng: parseInt(place.longitude, 10), id: this.idForInput});
+      this.idForInput = this.idForInput + 1;
+    });
+    Promise.resolve(
+        this.setState({markerPosition: newMarkers, id: this.idForInput})
+    ).then( () => this.getCenter())
+
   }
 
   parseData(names, legs, radius){

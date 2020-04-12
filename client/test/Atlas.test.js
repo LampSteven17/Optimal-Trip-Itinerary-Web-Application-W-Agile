@@ -138,8 +138,6 @@ function testUpdateDistance() {
   jest.mock('leaflet');
   let testDistance = mount(<Atlas />);
 
-  //40.441587,-105.0986593,40.427871569236146,-105.11126518249513
-
   let markerPositions = [{lat: 40.441587, lng: -105.0986593, id: 0},
     {lat: 40.427871569236146, lng: -105.11126518249513, id: 1}];
 
@@ -147,7 +145,18 @@ function testUpdateDistance() {
 
   testDistance.instance().updateDistance('add').then(r =>
       expect(testDistance.distance).toEqual(4));
+}
 
+function testHomeButton() {
+  jest.mock('leaflet');
+
+  let testHome = mount(<Atlas />);
+
+  testHome.setState({displayNum: 24});
+
+  testHome.instance().handleHomeClick();
+
+  expect(testHome.state().displayNum).toEqual(0);
 }
 
 
@@ -160,3 +169,4 @@ test("Testing Atlas's deleteMarker method", testDeleteMarker);
 test("Testing Atlas's polyline methods", testPolyline);
 test("Testing Atlas's storeInputPosition", testStoreInputPosition);
 test("Testing Atlas's updateDistance", testUpdateDistance);
+test("Testing Atlas's home button method", testHomeButton);

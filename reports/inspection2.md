@@ -34,3 +34,11 @@
 |RequestTrip.java: 54 | Unused variable, might be needed in future though| low|Ryan | |
 |MicroServer.java: 98| Fewer arguments provided than placeholders specified| low|Ryan | |
 |MicroServer.java: 19 | Server config value is hard coded| med| Ryan| |
+| MicroServer.java: 64, 69, 74, 79| Could be one or two functions| low | Cade | |
+| MicroServer.java: 118 | Error logs fill up whole terminal, Not even error| low | Cade | |
+| RequestTrip.java: 18...| Have default values set that tell us when we need to decide to optimize| low | Cade | |
+| RequestTrip.java: | | | Cade | |
+| RequestTrip.java: 36| No check for massive data sets. Could check for >1000 | low | Cade | |
+| RequestTrip.java: 40 | Error handling, could return -1 or something tangible | low | Cade | |
+| RequestTrip: 53 | Need to return the optimized trip list to run | med | Cade | |
+

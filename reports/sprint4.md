@@ -121,13 +121,25 @@
 | Austin | #287 | #337 |
 | Cade | 0 | #294 |
 
-### SCRUM (TEMPLATE) DAILY
+### SCRUM 4/10 DAILY
+| Name | Tasks closed  | Tasks in progress |
+| :--- | :--- | :--- |
+| Ryan | #336 | #343 |
+| Steve | #352 | #299 |
+| Austin | #341 | #337 |
+| Cade | #294 | #296 |
+
+
+
+### SCRUM  DAILY
 | Name | Tasks closed  | Tasks in progress |
 | :--- | :--- | :--- |
 | Ryan | 0 | 0 |
 | Steve | 0 | 0 |
 | Austin | 0 | 0 |
 | Cade | 0 | 0 |
+
+
 
 
 ## Review

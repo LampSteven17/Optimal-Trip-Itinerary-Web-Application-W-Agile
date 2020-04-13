@@ -56,7 +56,6 @@ export default class Atlas extends Component {
     this.groupRef = createRef();
     this.distance = 0;
     this.lastDistanceCalculation = 0;
-    this.idForInput = 0;
     this.map;
     this.group;
     this.binder();
@@ -384,9 +383,10 @@ export default class Atlas extends Component {
 
   async addMarkersForTrip(data) {
     let newMarkers = [];
+    let idForInput = 0;
     data.places.forEach((place, i) => {
-      newMarkers.push({lat: parseInt(place.latitude, 10), lng: parseInt(place.longitude, 10), id: this.idForInput});
-      this.idForInput = this.idForInput + 1;
+      newMarkers.push({lat: parseInt(place.latitude, 10), lng: parseInt(place.longitude, 10), id: idForInput});
+      idForInput = idForInput + 1;
     });
     Promise.resolve(
         this.setState({markerPosition: newMarkers, id: this.idForInput})

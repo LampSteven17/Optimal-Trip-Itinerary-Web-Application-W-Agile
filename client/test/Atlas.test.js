@@ -180,6 +180,23 @@ function testAddMarkersForTrip() {
 
 }
 
+function testStateChangeLFB() {
+  jest.mock('leaflet');
+
+  let testLFBStateChange = mount(<Atlas />);
+
+  let oldMarkers = [{lat: 38, lng: -104, id: 0},
+    {lat: 40, lng: -105, id: 1},
+    {lat: 40, lng: -105, id: 2}];
+
+  testLFBStateChange.setState({markerPosition: oldMarkers, displayNum: 3432});
+
+  testLFBStateChange.instance().changeStateInLoadFileButton();
+
+  expect(testLFBStateChange.state().markerPosition).toEqual([]);
+  expect(testLFBStateChange.state().displayNum).toEqual(0);
+}
+
 
 test("Testing Atlas's Initial State", testInitialAppState);
 test("Testing Atlas's Handle Input", testInitialHandleInput);
@@ -192,3 +209,4 @@ test("Testing Atlas's storeInputPosition", testStoreInputPosition);
 test("Testing Atlas's updateDistance", testUpdateDistance);
 test("Testing Atlas's home button method", testHomeButton);
 test("Testing Atlas's addMarkersForTrip", testAddMarkersForTrip);
+test("Testing Atlas's state change in LFB method", testStateChangeLFB);

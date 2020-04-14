@@ -90,6 +90,7 @@ export default class Atlas extends Component {
     this.sendRequest = this.sendRequest.bind(this);
     this.changeStateInLoadFileButton = this.changeStateInLoadFileButton.bind(this);
     this.addMarkersForTrip = this.addMarkersForTrip.bind(this);
+    this.reverseTrip = this.reverseTrip.bind(this);
   }
 
   render() {
@@ -381,6 +382,7 @@ export default class Atlas extends Component {
 
 
   promptTrip(data) {
+    console.log(data);
     this.addMarkersForTrip(data);
     this.setState({itenData: this.parseData(data.places, data.distances,data.options.earthRadius)});
     this.setState({saveData: data});
@@ -433,7 +435,35 @@ export default class Atlas extends Component {
   }
 
   reverseTrip() {
+    let data = this.state.itenData;
+    if (data.length > 1) {
+      let distances = Array.from(data, x => x.leg);
+      distances.splice(0,1);
+      let distanceReverse = distances.reverse();
+      data.pop();
+      let nameReverse = data.reverse();
+      nameReverse = Array.from(nameReverse, x => {
+        return {name: x.destination};
+      });
+      let reverseObj = {
+        options: {
+          earthRadius: 3959,
+          optimization: {
+            construction: "none",
+            improvement: "none",
+            response: "1"
+          },
+          title: "Trip"
+        },
+        places: nameReverse,
+        distances: distanceReverse,
+        requestType: "trip",
+        requestVersion: 3
+      };
 
+      this.setState({itenData: this.parseData(reverseObj.places, reverseObj.distances,reverseObj.options.earthRadius)});
+      this.setState({saveData: reverseObj});
+    }
   }
 
   getUnitRadius(radius){

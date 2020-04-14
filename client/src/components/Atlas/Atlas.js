@@ -55,6 +55,7 @@ export default class Atlas extends Component {
     this.mapRef = createRef();
     this.groupRef = createRef();
     this.distance = 0;
+    this.lastDistanceCalculation = 0;
     this.map;
     this.group;
     this.binder();
@@ -87,6 +88,8 @@ export default class Atlas extends Component {
     this.handleHomeClick = this.handleHomeClick.bind(this);
     this.sendTrip = this.sendTrip.bind(this);
     this.sendRequest = this.sendRequest.bind(this);
+    this.changeStateInLoadFileButton = this.changeStateInLoadFileButton.bind(this);
+    this.addMarkersForTrip = this.addMarkersForTrip.bind(this);
   }
 
   render() {
@@ -158,7 +161,8 @@ export default class Atlas extends Component {
       <div>
         <Row style={{padding: "10px"}}>
           <Col sm={12} md={{size: 3, offset: 3}}>
-            <LoadFileButton onChange={this.sendTrip}/>
+            <LoadFileButton action={this.changeStateInLoadFileButton}
+                            onChange={this.sendTrip}/>
           </Col>
           <Col sm={12} md={{size: 2, offset: 0}}>
             <Save dests={this.state.saveData}/>
@@ -173,7 +177,10 @@ export default class Atlas extends Component {
     )
   }
 
-
+  changeStateInLoadFileButton() {
+    this.setState({markerPosition: [], displayNum: 0});
+    this.distance = 0;
+  }
 
   handleInput(pos) {
     if (this.isValidPosition(pos)) {
@@ -253,9 +260,10 @@ export default class Atlas extends Component {
       this.setState(prevState => ({
         markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
       }), () => {
-        if (this.state.markerPosition.length > 1) {
-          this.updateDistance("add");
-        }
+          console.log("UPDATE DISTANCE");
+          if (this.state.markerPosition.length > 1) {
+            this.updateDistance("add");
+          }
       });
     })
     .then(() => this.getCenter());
@@ -268,6 +276,7 @@ export default class Atlas extends Component {
 
       switch (type) {
         case "add":
+          this.distance = this.distance - this.lastDistanceCalculation;
           await this.distanceRequestBody(points.length - 3,
               points.length - 1, points);
           break;
@@ -322,6 +331,7 @@ export default class Atlas extends Component {
   }
 
   handleHomeClick() {
+    this.distance = 0;
     this.setState({displayNum: 0});
     this.getCurrentLocation();
   }
@@ -355,7 +365,6 @@ export default class Atlas extends Component {
             .then((data) => this.promptDistance(data.body));
         break;
       case "trip":
-        this.addMarkersForTrip(request);
         await sendServerRequestWithBody("trip", request, this.props.serverPort)
             .then((data) => this.promptTrip(data.body));
         break;
@@ -365,17 +374,24 @@ export default class Atlas extends Component {
   }
 
 
-  addMarkersForTrip(data) {
-    console.log(data.places);
-    data.places.forEach((place, i) => {
-      this.addMarker({latlng: {lat: parseInt(place.latitude, 10), lng: parseInt(place.longitude, 10)}})});
-
-  }
-
 
   promptTrip(data) {
+    this.addMarkersForTrip(data);
     this.setState({itenData: this.parseData(data.places, data.distances,data.options.earthRadius)});
     this.setState({saveData: data});
+  }
+
+  async addMarkersForTrip(data) {
+    let newMarkers = [];
+    let idForInput = 0;
+    data.places.forEach((place, i) => {
+      newMarkers.push({lat: parseInt(place.latitude, 10), lng: parseInt(place.longitude, 10), id: idForInput});
+      idForInput = idForInput + 1;
+    });
+    Promise.resolve(
+        this.setState({markerPosition: newMarkers, id: this.idForInput})
+    ).then( () => this.getCenter())
+
   }
 
   parseData(names, legs, radius){
@@ -389,6 +405,7 @@ export default class Atlas extends Component {
         totalVal+= (legs[index]+formatted[index-1].total);
       }else{
         totalVal=legs[index];
+        legs[index] = 0;
       }
 
       formatted.push(
@@ -423,6 +440,7 @@ export default class Atlas extends Component {
     if (!this.testResponse(dist, distanceResponseSchema)) {
       return;
     }
+    this.lastDistanceCalculation = dist.distance;
     this.distance = this.distance + dist.distance;
   }
 

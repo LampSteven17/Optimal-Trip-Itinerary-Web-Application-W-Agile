@@ -138,8 +138,6 @@ function testUpdateDistance() {
   jest.mock('leaflet');
   let testDistance = mount(<Atlas />);
 
-  //40.441587,-105.0986593,40.427871569236146,-105.11126518249513
-
   let markerPositions = [{lat: 40.441587, lng: -105.0986593, id: 0},
     {lat: 40.427871569236146, lng: -105.11126518249513, id: 1}];
 
@@ -147,7 +145,56 @@ function testUpdateDistance() {
 
   testDistance.instance().updateDistance('add').then(r =>
       expect(testDistance.distance).toEqual(4));
+}
 
+function testHomeButton() {
+  jest.mock('leaflet');
+
+  let testHome = mount(<Atlas />);
+
+  testHome.setState({displayNum: 24});
+
+  testHome.instance().handleHomeClick();
+
+  expect(testHome.state().displayNum).toEqual(0);
+}
+
+function testAddMarkersForTrip() {
+  jest.mock('leaflet');
+
+  let testTripMarkers = mount(<Atlas />);
+
+  let data = {places: [
+    {id: "kaseda", name: "Phantom Canyon Brewing Co", municipality: "Colorado Springs", latitude: "38.83418", longitude: "-104.82497", altitude: "6035"},
+    {id: "lnarmour", name: "Equinox Brewing", municipality: "Fort Collins", latitude: "40.586345", longitude: "-105.075813", altitude: "5003"},
+    {id: "bmckee", name: "Oskar Blue Brewery", municipality: "Longmont", latitude: "40.14055556", longitude: "-105.13111111", altitude: "5019"}]
+  };
+
+  let expected = [{lat: 38, lng: -104, id: 0},
+    {lat: 40, lng: -105, id: 1},
+    {lat: 40, lng: -105, id: 2}];
+
+  testTripMarkers.instance().addMarkersForTrip(data);
+
+  expect(testTripMarkers.state().markerPosition).toEqual(expected);
+
+}
+
+function testStateChangeLFB() {
+  jest.mock('leaflet');
+
+  let testLFBStateChange = mount(<Atlas />);
+
+  let oldMarkers = [{lat: 38, lng: -104, id: 0},
+    {lat: 40, lng: -105, id: 1},
+    {lat: 40, lng: -105, id: 2}];
+
+  testLFBStateChange.setState({markerPosition: oldMarkers, displayNum: 3432});
+
+  testLFBStateChange.instance().changeStateInLoadFileButton();
+
+  expect(testLFBStateChange.state().markerPosition).toEqual([]);
+  expect(testLFBStateChange.state().displayNum).toEqual(0);
 }
 
 
@@ -160,3 +207,6 @@ test("Testing Atlas's deleteMarker method", testDeleteMarker);
 test("Testing Atlas's polyline methods", testPolyline);
 test("Testing Atlas's storeInputPosition", testStoreInputPosition);
 test("Testing Atlas's updateDistance", testUpdateDistance);
+test("Testing Atlas's home button method", testHomeButton);
+test("Testing Atlas's addMarkersForTrip", testAddMarkersForTrip);
+test("Testing Atlas's state change in LFB method", testStateChangeLFB);

@@ -63,7 +63,7 @@ export default class Atlas extends Component {
       displayNum: "",
       displayUnit: "",
       totalDistance: 0,
-      itenData : [{id: 1, destination: "", leg: "", total: ""}],
+      itenData : [{id: -1, destination: "", leg: "", total: ""}],
       tripRequestData: {},
       tipDataForMarkers: {},
       saveData: {},
@@ -81,8 +81,10 @@ export default class Atlas extends Component {
     this.handleHomeClick = this.handleHomeClick.bind(this);
     this.sendTrip = this.sendTrip.bind(this);
     this.sendRequest = this.sendRequest.bind(this);
+    this.appendToItinerary = this.appendToItinerary.bind(this);
     this.changeStateInLoadFileButton = this.changeStateInLoadFileButton.bind(this);
     this.addMarkersForTrip = this.addMarkersForTrip.bind(this);
+    this.reverseTrip = this.reverseTrip.bind(this);
   }
 
   render() {
@@ -159,6 +161,11 @@ export default class Atlas extends Component {
           </Col>
           <Col sm={12} md={{size: 2, offset: 0}}>
             <Save dests={this.state.saveData}/>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm={12} md={{size: 2, offset: 3}}>
+            <Button className={"btn-csu"} onClick={() => this.reverseTrip()}>Reverse Trip</Button>
           </Col>
         </Row>
         <Row>
@@ -245,7 +252,7 @@ export default class Atlas extends Component {
     .then(() => this.updateDistance("delete"));
   }
 
-  async addMarker(mapClickInfo) {
+  async addMarker(mapClickInfo, getDistance=true) {
     Promise.resolve()
     .then(() => {
       mapClickInfo.latlng.id = this.state.id;
@@ -253,9 +260,11 @@ export default class Atlas extends Component {
       this.setState(prevState => ({
         markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
       }), () => {
-          console.log("UPDATE DISTANCE");
           if (this.state.markerPosition.length > 1) {
             this.updateDistance("add");
+          }
+          else {
+            this.appendToItinerary();
           }
       });
     })
@@ -294,7 +303,12 @@ export default class Atlas extends Component {
         place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
         earthRadius: 6371.0
       };
-      await this.sendRequest(requestBody, "distance", distanceRequestSchema);
+      if (i === amount - 1) {
+        await this.sendRequest(requestBody, "distance", distanceRequestSchema, true);
+      }
+      else {
+        await this.sendRequest(requestBody, "distance", distanceRequestSchema);
+      }
     }
   }
 
@@ -343,7 +357,7 @@ export default class Atlas extends Component {
     }
   }
 
-  async sendRequest(request, requestType, schema) {
+  async sendRequest(request, requestType, schema, isLastLeg=false) {
     if (!isJsonResponseValid(request, schema)) {
       console.error(requestType + "REQUEST INVALID");
       return;
@@ -351,20 +365,49 @@ export default class Atlas extends Component {
     switch (requestType) {
       case "distance":
         await sendServerRequestWithBody("distance", request, this.props.serverPort)
-            .then((data) => this.promptDistance(data.body));
+            .then((data) => this.promptDistance(data.body, isLastLeg));
         break;
       case "trip":
         await sendServerRequestWithBody("trip", request, this.props.serverPort)
             .then((data) => this.promptTrip(data.body));
         break;
-      default: console.log("UNSUPPORTED REQUEST TYPE");
+      default: console.error("UNSUPPORTED REQUEST TYPE");
         return;
     }
   }
 
 
+  appendToItinerary(isLastLeg=false) {
+    let id = this.state.itenData[this.state.itenData.length - 1].id + 1;
+    let name = Number.isNaN(this.state.id) ? "Marker " + id : "Marker " + this.state.id;
+    let newItineraryData;
+
+    if (this.state.itenData[0].id === -1) {
+      newItineraryData = {itenData: [{id: 0, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]};
+    }
+    else if (isLastLeg) {
+      name = this.state.itenData[0].destination;
+      newItineraryData = prevState => ({
+        itenData: [...prevState.itenData, {id: id, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]
+      });
+    }
+    else if (this.state.itenData.length > 2) {
+      let newArr = this.state.itenData;
+      newArr.pop();
+      newItineraryData = prevState => ({
+        itenData: [...newArr, {id: id, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]
+      });
+    }
+    else {
+      newItineraryData = prevState => ({
+        itenData: [...prevState.itenData, {id: id, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]
+      });
+    }
+    this.setState(newItineraryData);
+  }
 
   promptTrip(data) {
+    console.log(data);
     this.addMarkersForTrip(data);
     this.setState({saveData: data, itenData: this.parseData(data.places, data.distances,data.options.earthRadius)});
   }
@@ -384,9 +427,11 @@ export default class Atlas extends Component {
 
   parseData(names, legs, radius){
     let formatted = [];
+    names.push(names[0]);
+    legs.unshift(0);
 
-    for(let vals of names){
-      let index = names.indexOf((vals));
+    names.forEach((vals, i) => {
+      let index = i;
       let totalVal = 0;
 
       if(index !== 0){
@@ -402,13 +447,46 @@ export default class Atlas extends Component {
             destination: vals.name,
             leg: legs[index],
             total: totalVal
-          })
-    }
+          }
+      );
+    });
 
     this.setState({displayUnit: this.getUnitRadius(radius), displayNum: formatted[formatted.length-1].total});
+    this.distance = formatted[formatted.length-1].total;
 
     return formatted;
+  }
 
+  reverseTrip() {
+    let data = this.state.itenData;
+    if (data.length > 1) {
+      let distances = Array.from(data, x => x.leg);
+      distances.splice(0,1);
+      let distanceReverse = distances.reverse();
+      data.pop();
+      let nameReverse = data.reverse();
+      nameReverse = Array.from(nameReverse, x => {
+        return {name: x.destination};
+      });
+      let reverseObj = {
+        options: {
+          earthRadius: 3959,
+          optimization: {
+            construction: "none",
+            improvement: "none",
+            response: "1"
+          },
+          title: "Trip"
+        },
+        places: nameReverse,
+        distances: distanceReverse,
+        requestType: "trip",
+        requestVersion: 3
+      };
+
+      this.setState({itenData: this.parseData(reverseObj.places, reverseObj.distances,reverseObj.options.earthRadius)});
+      this.setState({saveData: reverseObj});
+    }
   }
 
   getUnitRadius(radius){
@@ -423,12 +501,13 @@ export default class Atlas extends Component {
     return " -- ";
   }
 
-  promptDistance(dist) {
+  promptDistance(dist, isLastLeg) {
     if (!this.testResponse(dist, distanceResponseSchema)) {
       return;
     }
     this.lastDistanceCalculation = dist.distance;
     this.distance = this.distance + dist.distance;
+    this.appendToItinerary(isLastLeg);
   }
 
   testResponse(body, schema) {

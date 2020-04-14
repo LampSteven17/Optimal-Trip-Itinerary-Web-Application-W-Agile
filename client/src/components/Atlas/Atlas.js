@@ -24,6 +24,7 @@ import * as tripRequestSchema from "../../../schemas/TripRequest";
 import Itinerary from './Itinerary';
 import Save from './Save';
 import LoadFileButton from "./LoadFileButton";
+import MarkerPolyline from './MarkerPolyline';
 
 const FALSECOLOR = "5px solid red";
 const TRUECOLOR =  "5px solid green";
@@ -58,12 +59,12 @@ export default class Atlas extends Component {
       markerPosition: [],
       id: 0,
       hideButton: false,
-      mapCenter: [0,0],
+      mapCenter: [0, 0],
       validLatLng: FALSECOLOR,
       displayNum: "",
       displayUnit: "",
       totalDistance: 0,
-      itenData : [{id: -1, destination: "", leg: "", total: ""}],
+      itenData: [{id: -1, destination: "", leg: "", total: ""}],
       tripRequestData: {},
       tipDataForMarkers: {},
       saveData: {},
@@ -109,22 +110,23 @@ export default class Atlas extends Component {
   }
 
   renderBaseButtons() {
-    return(
-      <div>
-        <Row>
-          <Col sm={{size:'auto'}} style={{ width: "4.4rem" }} md={{size: 0, offset: 3}}>
-            {this.showHomeButton()}
-          </Col>
-          <Col sm={{size:'auto'}} style={{ width: "11.7rem" }} md={{size: 0, offset: 0}}>
-            <Form inline={true}>{
-              <Input style={{ width: "15rem", border: this.state.validLatLng }} placeholder="Latitude, Longitude" onInput={e => this.handleInput(e.target.value)}/>
-            }</Form>
-          </Col>
-          <Col>
-            <Button className={"btn-csu"} onClick={() => this.updateMarkerFromInput()}>+</Button>
-          </Col>
-        </Row>
-      </div>
+    return (
+        <div>
+          <Row>
+            <Col sm={{size: 'auto'}} style={{width: "4.4rem"}} md={{size: 0, offset: 3}}>
+              {this.showHomeButton()}
+            </Col>
+            <Col sm={{size: 'auto'}} style={{width: "11.7rem"}} md={{size: 0, offset: 0}}>
+              <Form inline={true}>{
+                <Input style={{width: "15rem", border: this.state.validLatLng}} placeholder="Latitude, Longitude"
+                       onInput={e => this.handleInput(e.target.value)}/>
+              }</Form>
+            </Col>
+            <Col>
+              <Button className={"btn-csu"} onClick={() => this.updateMarkerFromInput()}>+</Button>
+            </Col>
+          </Row>
+        </div>
     )
   }
 
@@ -144,36 +146,36 @@ export default class Atlas extends Component {
              ref={this.mapRef}
              onClick={this.addMarker}
              style={{height: MAP_STYLE_LENGTH, maxWidth: MAP_STYLE_LENGTH}}>
-             <TileLayer url={MAP_LAYER_URL} attribution={MAP_LAYER_ATTRIBUTION}/>
-             {this.getMarker()}
-             {this.drawLines()}
+          <TileLayer url={MAP_LAYER_URL} attribution={MAP_LAYER_ATTRIBUTION}/>
+          {this.getMarker()}
+          <MarkerPolyline markerPosition={this.state.markerPosition} />
         </Map>
     )
   }
 
-  renderItinerary(){
-    return(
-      <div>
-        <Row style={{padding: "10px"}}>
-          <Col sm={12} md={{size: 3, offset: 3}}>
-            <LoadFileButton action={this.changeStateInLoadFileButton}
-                            onChange={this.sendTrip}/>
-          </Col>
-          <Col sm={12} md={{size: 2, offset: 0}}>
-            <Save dests={this.state.saveData}/>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={12} md={{size: 2, offset: 3}}>
-            <Button className={"btn-csu"} onClick={() => this.reverseTrip()}>Reverse Trip</Button>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={12} md={{size: 6, offset: 3}}>
-            <Itinerary dests={this.state.itenData}/>
-          </Col>
-        </Row>
-      </div>
+  renderItinerary() {
+    return (
+        <div>
+          <Row style={{padding: "10px"}}>
+            <Col sm={12} md={{size: 3, offset: 3}}>
+              <LoadFileButton action={this.changeStateInLoadFileButton}
+                              onChange={this.sendTrip}/>
+            </Col>
+            <Col sm={12} md={{size: 2, offset: 0}}>
+              <Save dests={this.state.saveData}/>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={12} md={{size: 2, offset: 3}}>
+              <Button className={"btn-csu"} onClick={() => this.reverseTrip()}>Reverse Trip</Button>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={12} md={{size: 6, offset: 3}}>
+              <Itinerary dests={this.state.itenData}/>
+            </Col>
+          </Row>
+        </div>
     )
   }
 
@@ -186,7 +188,7 @@ export default class Atlas extends Component {
     if (this.isValidPosition(pos)) {
       this.setState({validLatLng: TRUECOLOR});
       this.storeInputPosition(pos);
-    }else{
+    } else {
       this.setState({validLatLng: FALSECOLOR});
     }
   }
@@ -197,7 +199,7 @@ export default class Atlas extends Component {
   }
 
   updateMarkerFromInput() {
-    if(this.state.inputPosition !== null){
+    if (this.state.inputPosition !== null) {
       this.addMarker({latlng: {lat: this.inputPosition.lat, lng: this.inputPosition.lng}});
     }
   }
@@ -209,10 +211,10 @@ export default class Atlas extends Component {
   isValidPosition(position) {
     let caughtError;
 
-    try{
+    try {
       new Coordinates(position);
       return true;
-    }catch(caughtError){
+    } catch (caughtError) {
       return false;
     }
   }
@@ -228,12 +230,13 @@ export default class Atlas extends Component {
       let markerList = [];
       this.state.markerPosition.forEach((marker, i) => {
         markerList.push(
-          <Marker key={i}  position={marker} icon={MARKER_ICON}>
-            <Popup offset={[0, -18]} style={{ width: "50" }} className="font-weight-bold">
-              {this.formatPosition(marker)}
-              <Button className='btn-csu' style={{ width: "100%", backgroundColor: "red" }} onClick={() => this.deleteMarker(marker)}><strong>Delete</strong></Button>
-            </Popup>
-          </Marker>
+            <Marker key={i} position={marker} icon={MARKER_ICON}>
+              <Popup offset={[0, -18]} style={{width: "50"}} className="font-weight-bold">
+                {this.formatPosition(marker)}
+                <Button className='btn-csu' style={{width: "100%", backgroundColor: "red"}}
+                        onClick={() => this.deleteMarker(marker)}><strong>Delete</strong></Button>
+              </Popup>
+            </Marker>
         );
       });
       return (
@@ -243,54 +246,57 @@ export default class Atlas extends Component {
   }
 
   deleteMarker(marker) {
-    let newArray = this.state.markerPosition.filter(function(mk) {
+    let newArray = this.state.markerPosition.filter(function (mk) {
       return mk.id !== marker.id;
     });
 
     Promise.resolve()
-    .then(() => this.setState({markerPosition: newArray}))
-    .then(() => this.updateDistance("delete"));
+        .then(() => this.setState({markerPosition: newArray}))
+        .then(() => this.updateDistance("delete"));
   }
 
-  async addMarker(mapClickInfo, getDistance=true) {
+  async addMarker(mapClickInfo, getDistance = true) {
     Promise.resolve()
-    .then(() => {
-      mapClickInfo.latlng.id = this.state.id;
-      this.setState({id: this.state.id + 1});
-      this.setState(prevState => ({
-        markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
-      }), () => {
-          if (this.state.markerPosition.length > 1) {
-            this.updateDistance("add");
-          }
-          else {
-            this.appendToItinerary();
-          }
-      });
-    })
-    .then(() => this.adjustZoomToFitPoints());
+        .then(() => {
+          mapClickInfo.latlng.id = this.state.id;
+          this.setState({id: this.state.id + 1});
+          this.setState(prevState => ({
+            markerPosition: [...prevState.markerPosition, {
+              lat: mapClickInfo.latlng.lat,
+              lng: mapClickInfo.latlng.lng,
+              id: mapClickInfo.latlng.id
+            }]
+          }), () => {
+            if (this.state.markerPosition.length > 1) {
+              this.updateDistance("add");
+            } else {
+              this.appendToItinerary();
+            }
+          });
+        })
+        .then(() => this.adjustZoomToFitPoints());
   }
 
   async updateDistance(type) {
     let points = this.getPositions();
     Promise.resolve()
-    .then(async () => {
+        .then(async () => {
 
-      switch (type) {
-        case "add":
-          this.distance = this.distance - this.lastDistanceCalculation;
-          await this.distanceRequestBody(points.length - 3,
-              points.length - 1, points);
-          break;
+          switch (type) {
+            case "add":
+              this.distance = this.distance - this.lastDistanceCalculation;
+              await this.distanceRequestBody(points.length - 3,
+                  points.length - 1, points);
+              break;
 
-        case "delete":
-          this.distance = 0;
-          await this.distanceRequestBody(0, points.length - 1, points);
-          break;
-      }
+            case "delete":
+              this.distance = 0;
+              await this.distanceRequestBody(0, points.length - 1, points);
+              break;
+          }
 
-    })
-    .then(() => this.setState({displayNum: this.distance, displayUnit: "KM"}));
+        })
+        .then(() => this.setState({displayNum: this.distance, displayUnit: "KM"}));
   }
 
 
@@ -300,13 +306,12 @@ export default class Atlas extends Component {
         requestVersion: this.props.serverVers.requestVersion,
         requestType: "distance",
         place1: {latitude: points[i][0].toString(), longitude: points[i][1].toString()},
-        place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
+        place2: {latitude: points[i + 1][0].toString(), longitude: points[i + 1][1].toString()},
         earthRadius: 6371.0
       };
       if (i === amount - 1) {
         await this.sendRequest(requestBody, "distance", distanceRequestSchema, true);
-      }
-      else {
+      } else {
         await this.sendRequest(requestBody, "distance", distanceRequestSchema);
       }
     }
@@ -346,7 +351,7 @@ export default class Atlas extends Component {
 
   updateMarkerCallback(pos) {
     this.setState({markerPosition: []});
-    this.addMarker({latlng:{lat: pos.coords.latitude, lng: pos.coords.longitude}});
+    this.addMarker({latlng: {lat: pos.coords.latitude, lng: pos.coords.longitude}});
   }
 
   errorCallback(errData) {
@@ -357,7 +362,7 @@ export default class Atlas extends Component {
     }
   }
 
-  async sendRequest(request, requestType, schema, isLastLeg=false) {
+  async sendRequest(request, requestType, schema, isLastLeg = false) {
     if (!isJsonResponseValid(request, schema)) {
       console.error(requestType + "REQUEST INVALID");
       return;
@@ -371,36 +376,51 @@ export default class Atlas extends Component {
         await sendServerRequestWithBody("trip", request, this.props.serverPort)
             .then((data) => this.promptTrip(data.body));
         break;
-      default: console.error("UNSUPPORTED REQUEST TYPE");
+      default:
+        console.error("UNSUPPORTED REQUEST TYPE");
         return;
     }
   }
 
 
-  appendToItinerary(isLastLeg=false) {
+  appendToItinerary(isLastLeg = false) {
     let id = this.state.itenData[this.state.itenData.length - 1].id + 1;
     let name = Number.isNaN(this.state.id) ? "Marker " + id : "Marker " + this.state.id;
     let newItineraryData;
 
     if (this.state.itenData[0].id === -1) {
-      newItineraryData = {itenData: [{id: 0, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]};
-    }
-    else if (isLastLeg) {
+      newItineraryData = {
+        itenData: [{
+          id: 0,
+          destination: name,
+          leg: this.lastDistanceCalculation,
+          total: this.distance
+        }]
+      };
+    } else if (isLastLeg) {
       name = this.state.itenData[0].destination;
       newItineraryData = prevState => ({
-        itenData: [...prevState.itenData, {id: id, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]
+        itenData: [...prevState.itenData, {
+          id: id,
+          destination: name,
+          leg: this.lastDistanceCalculation,
+          total: this.distance
+        }]
       });
-    }
-    else if (this.state.itenData.length > 2) {
+    } else if (this.state.itenData.length > 2) {
       let newArr = this.state.itenData;
       newArr.pop();
       newItineraryData = prevState => ({
         itenData: [...newArr, {id: id, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]
       });
-    }
-    else {
+    } else {
       newItineraryData = prevState => ({
-        itenData: [...prevState.itenData, {id: id, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]
+        itenData: [...prevState.itenData, {
+          id: id,
+          destination: name,
+          leg: this.lastDistanceCalculation,
+          total: this.distance
+        }]
       });
     }
     this.setState(newItineraryData);
@@ -409,7 +429,7 @@ export default class Atlas extends Component {
   promptTrip(data) {
     console.log(data);
     this.addMarkersForTrip(data);
-    this.setState({saveData: data, itenData: this.parseData(data.places, data.distances,data.options.earthRadius)});
+    this.setState({saveData: data, itenData: this.parseData(data.places, data.distances, data.options.earthRadius)});
   }
 
   async addMarkersForTrip(data) {
@@ -421,11 +441,11 @@ export default class Atlas extends Component {
     });
     Promise.resolve(
         this.setState({markerPosition: newMarkers, id: this.idForInput})
-    ).then( () => this.adjustZoomToFitPoints())
+    ).then(() => this.adjustZoomToFitPoints())
 
   }
 
-  parseData(names, legs, radius){
+  parseData(names, legs, radius) {
     let formatted = [];
     names.push(names[0]);
     legs.unshift(0);
@@ -434,10 +454,10 @@ export default class Atlas extends Component {
       let index = i;
       let totalVal = 0;
 
-      if(index !== 0){
-        totalVal+= (legs[index]+formatted[index-1].total);
-      }else{
-        totalVal=legs[index];
+      if (index !== 0) {
+        totalVal += (legs[index] + formatted[index - 1].total);
+      } else {
+        totalVal = legs[index];
         legs[index] = 0;
       }
 
@@ -451,8 +471,8 @@ export default class Atlas extends Component {
       );
     });
 
-    this.setState({displayUnit: this.getUnitRadius(radius), displayNum: formatted[formatted.length-1].total});
-    this.distance = formatted[formatted.length-1].total;
+    this.setState({displayUnit: this.getUnitRadius(radius), displayNum: formatted[formatted.length - 1].total});
+    this.distance = formatted[formatted.length - 1].total;
 
     return formatted;
   }
@@ -461,7 +481,7 @@ export default class Atlas extends Component {
     let data = this.state.itenData;
     if (data.length > 1) {
       let distances = Array.from(data, x => x.leg);
-      distances.splice(0,1);
+      distances.splice(0, 1);
       let distanceReverse = distances.reverse();
       data.pop();
       let nameReverse = data.reverse();
@@ -484,16 +504,16 @@ export default class Atlas extends Component {
         requestVersion: 3
       };
 
-      this.setState({itenData: this.parseData(reverseObj.places, reverseObj.distances,reverseObj.options.earthRadius)});
+      this.setState({itenData: this.parseData(reverseObj.places, reverseObj.distances, reverseObj.options.earthRadius)});
       this.setState({saveData: reverseObj});
     }
   }
 
-  getUnitRadius(radius){
-    if(radius/6371.0===1){
+  getUnitRadius(radius) {
+    if (radius / 6371.0 === 1) {
       return "KM";
 
-    }else if(radius/3959===1){
+    } else if (radius / 3959 === 1) {
       return "Miles"
 
     }
@@ -516,78 +536,5 @@ export default class Atlas extends Component {
       return false;
     }
     return true;
-  }
-
-  drawLines() {
-    let points = this.getPositions();
-    let lines;
-
-    if (points.length > 1) {
-      lines = this.generateLineArray(points);
-
-      return (
-        <div>
-          {lines}
-        </div>
-      );
-    }
-  }
-
-  getPositions() {
-    let latlngArray = [];
-    this.state.markerPosition.forEach((marker, i) => {
-      latlngArray.push([marker.lat, marker.lng]);
-    });
-
-    if (this.state.markerPosition.length >= 2){
-      latlngArray.push(latlngArray[0]);
-    }
-    return latlngArray;
-  }
-
-  generateLineArray(points) {
-    let lines = [];
-
-    for (let i = 1; i < points.length; i++) {
-      let checkLng = points[i-1][1] - points[i][1];
-      let currentLine = [points[i-1], points[i]];
-
-      if (Math.abs(checkLng) > 180) {
-        lines = lines.concat(this.lineAcrossMeridian(points[i-1], points[i]));
-      }
-      else {
-        lines.push(
-            <Polyline key={Date.now() * Math.random()} color="red" positions={currentLine} />
-        );
-      }
-    }
-
-    return lines;
-  }
-
-  lineAcrossMeridian(point1, point2) {
-    let lines = [];
-
-    if (point1[1] < 0) {
-      let lineOneCalc = [point2[0], point2[1] - 360];
-      lines.push(
-          <Polyline key={Date.now() * Math.random()} color="red" positions={[point1, lineOneCalc]} />
-      );
-      let lineTwoCalc = [point1[0], point1[1] + 360];
-      lines.push(
-          <Polyline key={Date.now() * Math.random()} color="red" positions={[lineTwoCalc, point2]} />
-      );
-    }
-    else {
-      let lineOneCalc = [point2[0], point2[1] + 360];
-      lines.push(
-        <Polyline key={Date.now() * Math.random()} color="red" positions={[lineOneCalc, point1]} />
-      );
-      let lineTwoCalc = [point1[0], point1[1] - 360];
-      lines.push(
-          <Polyline key={Date.now() * Math.random()} color="red" positions={[point2, lineTwoCalc]} />
-      );
-    }
-    return lines;
   }
 }

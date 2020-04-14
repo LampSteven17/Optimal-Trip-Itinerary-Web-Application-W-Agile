@@ -387,32 +387,33 @@ export default class Atlas extends Component {
     let id = this.state.itenData[this.state.itenData.length - 1].id + 1;
     let name = "Marker " + this.state.id;
     if (Number.isNaN(this.state.id)) {
-      console.log("REEEE");
       name = "Marker " + id;
     }
+
+    let newItineraryData;
+
     if (this.state.itenData[0].id === -1) {
-      this.setState({itenData: [{id: 0, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]});
+      newItineraryData = {itenData: [{id: 0, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]};
     }
     else if (isLastLeg) {
       name = this.state.itenData[0].destination;
-      this.setState(prevState => ({
+      newItineraryData = prevState => ({
         itenData: [...prevState.itenData, {id: id, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]
-      }));
+      });
     }
     else if (this.state.itenData.length > 2) {
       let newArr = this.state.itenData;
       newArr.pop();
-
-      this.setState({itenData: newArr});
-      this.setState(prevState => ({
-        itenData: [...prevState.itenData, {id: id, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]
-      }));
+      newItineraryData = prevState => ({
+        itenData: [...newArr, {id: id, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]
+      });
     }
     else {
-      this.setState(prevState => ({
+      newItineraryData = prevState => ({
         itenData: [...prevState.itenData, {id: id, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]
-      }));
+      });
     }
+    this.setState(newItineraryData);
   }
 
   promptTrip(data) {

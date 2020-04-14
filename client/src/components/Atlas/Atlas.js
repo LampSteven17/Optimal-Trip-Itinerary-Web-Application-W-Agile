@@ -432,8 +432,11 @@ export default class Atlas extends Component {
 
   parseData(names, legs, radius){
     let formatted = [];
-    for(let vals of names){
-      let index = names.indexOf((vals));
+    names.push(names[0]);
+    legs.unshift(0);
+
+    names.forEach((vals, i) => {
+      let index = i;
       let totalVal = 0;
 
       if(index !== 0){
@@ -449,8 +452,9 @@ export default class Atlas extends Component {
             destination: vals.name,
             leg: legs[index],
             total: totalVal
-          })
-    }
+          }
+      );
+    });
 
     this.setState({displayNum: formatted[formatted.length-1].total});
     this.setState({displayUnit: this.getUnitRadius(radius)});

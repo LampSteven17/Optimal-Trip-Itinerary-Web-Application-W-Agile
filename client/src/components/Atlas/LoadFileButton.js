@@ -32,15 +32,36 @@ class LoadFileButton extends Component {
 
     loadFileOnClick(files){
         let file = files.item(0);
-        let extension  = file.name.substr(file.name.lastIndexOf('.') + 1).toLocaleLowerCase(); //I am truly sorry for this.
+        let extension  = file.name.substr(file.name.lastIndexOf('.') + 1).toLocaleLowerCase(); //I am truly sorry for this. - edit 04/11 even more so now
         this.props.action();
-        switch(extension){
+
+
+        let fileReader = new FileReader();
+
+        const handleFileRead = (e) => {
+            const content = fileReader.result;
+
+            this.switcher(extension, content);
+
+        };
+        fileReader.onloadend = handleFileRead;
+        fileReader.readAsText(file);
+
+
+    }
+
+    switcher(ext, content){
+        switch(ext){
             case "json":
-                this.jsonParser(file);
+                this.jsonParser(content);
                 break;
+
+
             case "csv":
-                this.csvParser(file);
+                this.csvParser(content);
                 break;
+
+
             default:
                 window.alert("File '" + file.name
                     + "' has an unsupported file extension: '." + extension
@@ -50,45 +71,25 @@ class LoadFileButton extends Component {
     }
 
 
-    jsonParser(file){
-        let fileReader = new FileReader();
+    jsonParser(content){
+        console.log(content);
+        let data = JSON.parse(content);
 
-        const handleFileRead = (e) => {
-            const content = fileReader.result;
-
-            let data = JSON.parse(content);
-
-            if (!this.testJsonFile(data, tripFileSchema)){
-                window.alert("JSON file does not match schema\nPlease upload another file");
-                return;
-            }
-            this.props.onChange(data);
-        };
-
-        fileReader.onloadend = handleFileRead;
-        fileReader.readAsText(file);
+        if (!this.testJsonFile(data, tripFileSchema)){
+            window.alert("JSON file does not match schema\nPlease upload another file");
+            return;
+        }
+        this.props.onChange(data);
     }
 
-    csvParser(file){
-        let fileReader = new FileReader();
+    csvParser(content){
+        let data = readString(content);
+        let json = this.seperateCsvDataIntoJSON(data);
+        this.props.onChange(json);
 
-        const handleFileRead = (e) => {
-            const content = fileReader.result;
-
-            let data = readString(content);
-
-
-            let json = this.seperateCsvDataIntoJSON(data);
-            this.props.onChange(json);
-
-        };
-
-        fileReader.onloadend = handleFileRead;
-        fileReader.readAsText(file);
     }
 
     seperateCsvDataIntoJSON(dataObj){ //BACK TO MY OLD DASTARDLY WAYS IN THIS FUNCTION
-
         let jsonTemp = {
             "requestType"    : "trip",
             "requestVersion" : PROTOCOL_VERSION,
@@ -103,9 +104,14 @@ class LoadFileButton extends Component {
         };
 
 
+        return this.indexData(jsonTemp,dataObj);
+    }
+
+    indexData(jsonTemp,dataObj) {
         let nameIndex = -1;
         let latIndex = -1;
         let lngIndex = -1;
+
 
         for(let i=0; i<dataObj.data[0].length;i++){
             switch(dataObj.data[0][i].toLowerCase()) {
@@ -124,15 +130,17 @@ class LoadFileButton extends Component {
                 default:
                 //do NOTHING GOOD CODE RIGHT? IM BEGINNING TO WONDER IF I AM A REAL PROGRAMMER
             }
-
         }
 
         if(nameIndex === -1 || latIndex===-1 || lngIndex===-1){
             return jsonTemp;
         }
 
+        return this.setPlaces(dataObj,jsonTemp,nameIndex,latIndex,lngIndex);
 
+    }
 
+    setPlaces(dataObj,jsonTemp,nameIndex,latIndex,lngIndex){
         let places = [];
         for(let i=1; i<dataObj.data.length; i++){
 
@@ -144,8 +152,6 @@ class LoadFileButton extends Component {
         }
 
         jsonTemp.places = places;
-
-
 
         return jsonTemp;
     }

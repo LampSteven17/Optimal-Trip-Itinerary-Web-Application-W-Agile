@@ -420,8 +420,6 @@ export default class Atlas extends Component {
       );
     });
 
-    console.log(formatted);
-
     this.setState({displayNum: formatted[formatted.length-1].total});
     this.setState({displayUnit: this.getUnitRadius(radius)});
 

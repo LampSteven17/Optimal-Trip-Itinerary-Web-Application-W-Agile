@@ -261,7 +261,6 @@ export default class Atlas extends Component {
       this.setState(prevState => ({
         markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
       }), () => {
-          console.log("UPDATE DISTANCE");
           if (this.state.markerPosition.length > 1) {
             this.updateDistance("add");
           }
@@ -394,6 +393,15 @@ export default class Atlas extends Component {
         itenData: [...prevState.itenData, prevState.itenData[0]]
       }));
     }
+    else if (this.state.itenData.length > 2) {
+      let newArr = this.state.itenData;
+      newArr.pop();
+
+      this.setState({itenData: newArr});
+      this.setState(prevState => ({
+        itenData: [...prevState.itenData, {id: this.state.id, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]
+      }));
+    }
     else {
       this.setState(prevState => ({
         itenData: [...prevState.itenData, {id: this.state.id, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]
@@ -466,7 +474,6 @@ export default class Atlas extends Component {
     if (!this.testResponse(dist, distanceResponseSchema)) {
       return;
     }
-    console.log(dist);
     this.lastDistanceCalculation = dist.distance;
     this.distance = this.distance + dist.distance;
     this.appendToItinerary(isLastLeg);

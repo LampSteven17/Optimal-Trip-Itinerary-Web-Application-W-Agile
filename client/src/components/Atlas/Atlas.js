@@ -55,7 +55,6 @@ export default class Atlas extends Component {
     this.mapRef = createRef();
     this.groupRef = createRef();
     this.distance = 0;
-    this.tempDist = 0;
     this.lastDistanceCalculation = 0;
     this.map;
     this.group;
@@ -388,11 +387,11 @@ export default class Atlas extends Component {
     // {id: 1, destination: "", leg: "", total: ""}
     let name = "Marker " + this.state.id;
     if (this.state.itenData[0].id === -1) {
-      this.setState({itenData: [{id: this.state.id, destination: name, leg: this.tempDist, total: this.distance}]});
+      this.setState({itenData: [{id: this.state.id, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]});
     }
     else {
       this.setState(prevState => ({
-        itenData: [...prevState.itenData, {id: this.state.id, destination: name, leg: this.tempDist, total: this.distance}]
+        itenData: [...prevState.itenData, {id: this.state.id, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]
       }));
     }
   }
@@ -448,7 +447,6 @@ export default class Atlas extends Component {
     if (!this.testResponse(dist, distanceResponseSchema)) {
       return;
     }
-    this.tempDist = dist.distance;
     this.lastDistanceCalculation = dist.distance;
     this.distance = this.distance + dist.distance;
     this.appendToItinerary();

@@ -169,6 +169,11 @@ export default class Atlas extends Component {
           </Col>
         </Row>
         <Row>
+          <Col sm={12} md={{size: 2, offset: 3}}>
+            <Button className={"btn-csu"} onClick={() => this.reverseTrip()}>Reverse Trip</Button>
+          </Col>
+        </Row>
+        <Row>
           <Col sm={12} md={{size: 6, offset: 3}}>
             <Itinerary dests={this.state.itenData}/>
           </Col>
@@ -424,6 +429,10 @@ export default class Atlas extends Component {
     this.setState({displayUnit: this.getUnitRadius(radius)});
 
     return formatted;
+
+  }
+
+  reverseTrip() {
 
   }
 

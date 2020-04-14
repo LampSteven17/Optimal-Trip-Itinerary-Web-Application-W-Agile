@@ -72,7 +72,6 @@ class LoadFileButton extends Component {
 
 
     jsonParser(content){
-        console.log(content);
         let data = JSON.parse(content);
 
         if (!this.testJsonFile(data, tripFileSchema)){

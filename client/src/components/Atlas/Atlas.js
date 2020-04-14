@@ -70,7 +70,7 @@ export default class Atlas extends Component {
       displayNum: "",
       displayUnit: "",
       totalDistance: 0,
-      itenData : [{id: 1, destination: "", leg: "", total: ""}],
+      itenData : [{id: -1, destination: "", leg: "", total: ""}],
       tripRequestData: {},
       tipDataForMarkers: {},
       saveData: {},
@@ -88,6 +88,7 @@ export default class Atlas extends Component {
     this.handleHomeClick = this.handleHomeClick.bind(this);
     this.sendTrip = this.sendTrip.bind(this);
     this.sendRequest = this.sendRequest.bind(this);
+    this.appendToItinerary = this.appendToItinerary.bind(this);
     this.changeStateInLoadFileButton = this.changeStateInLoadFileButton.bind(this);
     this.addMarkersForTrip = this.addMarkersForTrip.bind(this);
   }
@@ -252,7 +253,7 @@ export default class Atlas extends Component {
     .then(() => this.updateDistance("delete"));
   }
 
-  async addMarker(mapClickInfo) {
+  async addMarker(mapClickInfo, getDistance=true) {
     Promise.resolve()
     .then(() => {
       mapClickInfo.latlng.id = this.state.id;
@@ -260,9 +261,11 @@ export default class Atlas extends Component {
       this.setState(prevState => ({
         markerPosition: [...prevState.markerPosition, {lat: mapClickInfo.latlng.lat, lng: mapClickInfo.latlng.lng, id: mapClickInfo.latlng.id}]
       }), () => {
-          console.log("UPDATE DISTANCE");
           if (this.state.markerPosition.length > 1) {
             this.updateDistance("add");
+          }
+          else {
+            this.appendToItinerary();
           }
       });
     })
@@ -301,7 +304,12 @@ export default class Atlas extends Component {
         place2: {latitude: points[i+1][0].toString(), longitude: points[i+1][1].toString()},
         earthRadius: 6371.0
       };
-      await this.sendRequest(requestBody, "distance", distanceRequestSchema);
+      if (i === amount - 1) {
+        await this.sendRequest(requestBody, "distance", distanceRequestSchema, true);
+      }
+      else {
+        await this.sendRequest(requestBody, "distance", distanceRequestSchema);
+      }
     }
   }
 
@@ -354,7 +362,7 @@ export default class Atlas extends Component {
     }
   }
 
-  async sendRequest(request, requestType, schema) {
+  async sendRequest(request, requestType, schema, isLastLeg=false) {
     if (!isJsonResponseValid(request, schema)) {
       console.error(requestType + "REQUEST INVALID");
       return;
@@ -362,18 +370,46 @@ export default class Atlas extends Component {
     switch (requestType) {
       case "distance":
         await sendServerRequestWithBody("distance", request, this.props.serverPort)
-            .then((data) => this.promptDistance(data.body));
+            .then((data) => this.promptDistance(data.body, isLastLeg));
         break;
       case "trip":
         await sendServerRequestWithBody("trip", request, this.props.serverPort)
             .then((data) => this.promptTrip(data.body));
         break;
-      default: console.log("UNSUPPORTED REQUEST TYPE");
+      default: console.error("UNSUPPORTED REQUEST TYPE");
         return;
     }
   }
 
 
+  appendToItinerary(isLastLeg=false) {
+    let id = this.state.itenData[this.state.itenData.length - 1].id + 1;
+    let name = Number.isNaN(this.state.id) ? "Marker " + id : "Marker " + this.state.id;
+    let newItineraryData;
+
+    if (this.state.itenData[0].id === -1) {
+      newItineraryData = {itenData: [{id: 0, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]};
+    }
+    else if (isLastLeg) {
+      name = this.state.itenData[0].destination;
+      newItineraryData = prevState => ({
+        itenData: [...prevState.itenData, {id: id, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]
+      });
+    }
+    else if (this.state.itenData.length > 2) {
+      let newArr = this.state.itenData;
+      newArr.pop();
+      newItineraryData = prevState => ({
+        itenData: [...newArr, {id: id, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]
+      });
+    }
+    else {
+      newItineraryData = prevState => ({
+        itenData: [...prevState.itenData, {id: id, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]
+      });
+    }
+    this.setState(newItineraryData);
+  }
 
   promptTrip(data) {
     this.addMarkersForTrip(data);
@@ -422,10 +458,11 @@ export default class Atlas extends Component {
 
     this.setState({displayNum: formatted[formatted.length-1].total});
     this.setState({displayUnit: this.getUnitRadius(radius)});
+    this.distance = formatted[formatted.length-1].total;
 
     return formatted;
-
   }
+
 
   getUnitRadius(radius){
     if(radius/6371.0===1){
@@ -439,12 +476,13 @@ export default class Atlas extends Component {
     return " -- ";
   }
 
-  promptDistance(dist) {
+  promptDistance(dist, isLastLeg) {
     if (!this.testResponse(dist, distanceResponseSchema)) {
       return;
     }
     this.lastDistanceCalculation = dist.distance;
     this.distance = this.distance + dist.distance;
+    this.appendToItinerary(isLastLeg);
   }
 
   testResponse(body, schema) {

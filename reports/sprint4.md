@@ -85,6 +85,8 @@
 | 4/3 | 3 | 6 | - | 
 | 4/6 | 3 | 5 | Richard left the group |
 | 4/8 | 4 | 4 | |
+| 4/10 | 4 | 4 | |
+| 4/14 | 5 | 5 | |
 | | | | |
 
 ### SCRUM 4/1 DAILY
@@ -129,7 +131,13 @@
 | Austin | #341 | #337 |
 | Cade | #294 | #296 |
 
-
+### SCRUM 4/14 DAILY
+| Name | Tasks closed  | Tasks in progress |
+| :--- | :--- | :--- |
+| Ryan | #343, #358 | #226 |
+| Steve | #346 | #299 |
+| Austin | #350 | #337 |
+| Cade | #356 | #296, #299 |
 
 ### SCRUM  DAILY
 | Name | Tasks closed  | Tasks in progress |

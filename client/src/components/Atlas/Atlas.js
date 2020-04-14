@@ -1,13 +1,9 @@
 import React, {createRef, Component} from 'react';
 import {
-  Alert,
   Button,
   Col,
   Container,
   Form,
-  FormGroup,
-  FormFeedback,
-  FormText,
   Input,
   Row
 } from 'reactstrap';
@@ -18,9 +14,7 @@ import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
 import Geolocation from '@react-native-community/geolocation';
 import {
-  getOriginalServerPort,
   isJsonResponseValid,
-  sendServerRequest,
   sendServerRequestWithBody
 } from "../../utils/restfulAPI";
 import * as distanceRequestSchema from "../../../schemas/DistanceRequest";
@@ -35,7 +29,6 @@ const FALSECOLOR = "5px solid red";
 const TRUECOLOR =  "5px solid green";
 const Coordinates = require('coordinate-parser');
 const MAP_BOUNDS = [[-90, -180], [90, 180]];
-const MAP_CENTER_DEFAULT = [0, 0];
 const MAP_LAYER_ATTRIBUTION = "&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors";
 const MAP_LAYER_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const MAP_STYLE_LENGTH = 500;
@@ -56,6 +49,7 @@ export default class Atlas extends Component {
     this.groupRef = createRef();
     this.distance = 0;
     this.lastDistanceCalculation = 0;
+    this.inputPosition = null;
     this.map;
     this.group;
     this.binder();
@@ -66,7 +60,6 @@ export default class Atlas extends Component {
       hideButton: false,
       mapCenter: [0,0],
       validLatLng: FALSECOLOR,
-      inputPosition: null,
       displayNum: "",
       displayUnit: "",
       totalDistance: 0,
@@ -193,12 +186,12 @@ export default class Atlas extends Component {
 
   storeInputPosition(input) {
     let position = new Coordinates(input);
-    this.setState({inputPosition: {lat: position.getLatitude(), lng: position.getLongitude()}});
+    this.inputPosition = {lat: position.getLatitude(), lng: position.getLongitude()};
   }
 
   updateMarkerFromInput() {
     if(this.state.inputPosition !== null){
-      this.addMarker({latlng: {lat: this.state.inputPosition.lat, lng: this.state.inputPosition.lng}});
+      this.addMarker({latlng: {lat: this.inputPosition.lat, lng: this.inputPosition.lng}});
     }
   }
 
@@ -266,7 +259,7 @@ export default class Atlas extends Component {
           }
       });
     })
-    .then(() => this.getCenter());
+    .then(() => this.adjustZoomToFitPoints());
   }
 
   async updateDistance(type) {
@@ -311,10 +304,6 @@ export default class Atlas extends Component {
         .then(async () => {
           await this.sendRequest(requestBody, "trip", tripRequestSchema)
         })
-  }
-
-  async getCenter() {
-    this.adjustZoomToFitPoints();
   }
 
   async adjustZoomToFitPoints() {
@@ -377,8 +366,7 @@ export default class Atlas extends Component {
 
   promptTrip(data) {
     this.addMarkersForTrip(data);
-    this.setState({itenData: this.parseData(data.places, data.distances,data.options.earthRadius)});
-    this.setState({saveData: data});
+    this.setState({saveData: data, itenData: this.parseData(data.places, data.distances,data.options.earthRadius)});
   }
 
   async addMarkersForTrip(data) {
@@ -390,7 +378,7 @@ export default class Atlas extends Component {
     });
     Promise.resolve(
         this.setState({markerPosition: newMarkers, id: this.idForInput})
-    ).then( () => this.getCenter())
+    ).then( () => this.adjustZoomToFitPoints())
 
   }
 
@@ -417,8 +405,7 @@ export default class Atlas extends Component {
           })
     }
 
-    this.setState({displayNum: formatted[formatted.length-1].total});
-    this.setState({displayUnit: this.getUnitRadius(radius)});
+    this.setState({displayUnit: this.getUnitRadius(radius), displayNum: formatted[formatted.length-1].total});
 
     return formatted;
 
@@ -481,7 +468,6 @@ export default class Atlas extends Component {
 
   generateLineArray(points) {
     let lines = [];
-    let keyCount = 0;
 
     for (let i = 1; i < points.length; i++) {
       let checkLng = points[i-1][1] - points[i][1];

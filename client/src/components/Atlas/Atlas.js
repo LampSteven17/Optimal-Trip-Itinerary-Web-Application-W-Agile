@@ -389,8 +389,9 @@ export default class Atlas extends Component {
       this.setState({itenData: [{id: this.state.id, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]});
     }
     else if (isLastLeg) {
+      name = this.state.itenData[0].destination;
       this.setState(prevState => ({
-        itenData: [...prevState.itenData, prevState.itenData[0]]
+        itenData: [...prevState.itenData, {id: this.state.id, destination: name, leg: this.lastDistanceCalculation, total: this.distance}]
       }));
     }
     else if (this.state.itenData.length > 2) {

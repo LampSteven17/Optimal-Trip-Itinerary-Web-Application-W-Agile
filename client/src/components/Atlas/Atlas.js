@@ -199,6 +199,7 @@ export default class Atlas extends Component {
   changeStateInLoadFileButton() {
     this.setState({markerPosition: [], displayNum: 0});
     this.distance = 0;
+    this.lastDistanceCalculation = 0;
   }
 
   handleInput(pos) {
@@ -367,6 +368,7 @@ export default class Atlas extends Component {
   }
 
   handleHomeClick() {
+    this.lastDistanceCalculation = 0;
     this.distance = 0;
     this.setState({displayNum: 0});
     this.getCurrentLocation();

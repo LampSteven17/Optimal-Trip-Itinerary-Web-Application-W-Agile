@@ -246,12 +246,20 @@ export default class Atlas extends Component {
   }
 
   deleteMarker(marker) {
-    let newArray = this.state.markerPosition.filter(function (mk) {
+    let newMarkerArray = this.state.markerPosition.filter(function (mk) {
       return mk.id !== marker.id;
     });
 
+    let newItineraryArray = this.state.itenData.filter(function (mk) {
+      return mk.id !== marker.id;
+    });
+
+    console.log(newMarkerArray);
+    console.log(newItineraryArray);
+
     Promise.resolve()
-        .then(() => this.setState({markerPosition: newArray}))
+        .then(() => this.setState({markerPosition: newMarkerArray}))
+        .then(() => this.setState({itenData: newItineraryArray}))
         .then(() => this.updateDistance("delete"));
   }
 
@@ -291,7 +299,7 @@ export default class Atlas extends Component {
 
             case "delete":
               this.distance = 0;
-              await this.distanceRequestBody(0, points.length - 1, points);
+              await this.distanceRequestBody(0, points.length - 1, points, true);
               break;
           }
 
@@ -311,7 +319,7 @@ export default class Atlas extends Component {
   }
 
 
-  async distanceRequestBody(i, amount, points) {
+  async distanceRequestBody(i, amount, points, isDelete=false) {
     for (i; i < amount; i++) {
       let requestBody = {
         requestVersion: this.props.serverVers.requestVersion,
@@ -321,9 +329,9 @@ export default class Atlas extends Component {
         earthRadius: 6371.0
       };
       if (i === amount - 1) {
-        await this.sendRequest(requestBody, "distance", distanceRequestSchema, true);
+        await this.sendRequest(requestBody, "distance", distanceRequestSchema, isDelete, true);
       } else {
-        await this.sendRequest(requestBody, "distance", distanceRequestSchema);
+        await this.sendRequest(requestBody, "distance", distanceRequestSchema, isDelete);
       }
     }
   }
@@ -373,7 +381,7 @@ export default class Atlas extends Component {
     }
   }
 
-  async sendRequest(request, requestType, schema, isLastLeg = false) {
+  async sendRequest(request, requestType, schema, isDelete, isLastLeg = false) {
     if (!isJsonResponseValid(request, schema)) {
       console.error(requestType + "REQUEST INVALID");
       return;
@@ -381,7 +389,7 @@ export default class Atlas extends Component {
     switch (requestType) {
       case "distance":
         await sendServerRequestWithBody("distance", request, this.props.serverPort)
-            .then((data) => this.promptDistance(data.body, isLastLeg));
+            .then((data) => this.promptDistance(data.body, isLastLeg, isDelete));
         break;
       case "trip":
         await sendServerRequestWithBody("trip", request, this.props.serverPort)
@@ -395,8 +403,6 @@ export default class Atlas extends Component {
 
 
   appendToItinerary(isLastLeg=false) {
-    console.log(this.state.markerPosition);
-    console.log(this.state.itenData);
     let index = this.state.itenData.length;
     let id = 0;
 
@@ -406,7 +412,7 @@ export default class Atlas extends Component {
     else if (this.state.markerPosition[index]) {
       id = this.state.markerPosition[index].id;
     }
-    
+
     let nameid = this.state.itenData[this.state.itenData.length - 1].id + 1;
     let name = Number.isNaN(this.state.id) ? "Marker " + nameid : "Marker " + this.state.id;
     let newItineraryData;
@@ -528,13 +534,15 @@ export default class Atlas extends Component {
     return " -- ";
   }
 
-  promptDistance(dist, isLastLeg) {
+  promptDistance(dist, isLastLeg, isDelete) {
     if (!this.testResponse(dist, distanceResponseSchema)) {
       return;
     }
     this.lastDistanceCalculation = dist.distance;
     this.distance = this.distance + dist.distance;
-    this.appendToItinerary(isLastLeg);
+    if (!isDelete) {
+      this.appendToItinerary(isLastLeg);
+    }
   }
 
   testResponse(body, schema) {

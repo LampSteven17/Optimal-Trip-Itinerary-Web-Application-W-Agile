@@ -57,23 +57,6 @@ function testStoreInputPosition(){
   Promise.resolve().then(r => expect(testInputPosAtlas.state().inputPosition).toEqual(expectedOutput));
 }
 
-function testGetPositionsOutput() {
-  jest.mock('leaflet');
-  let testPosAtlas = mount(<Atlas />);
-
-  let markerPositions = [{lat: 38.83418, lng: -104.82497, id: 0},
-    {lat: 40.586345, lng: -105.075813, id: 1},
-    {lat: 40.14055556, lng: -105.13111111, id: 2}];
-
-  let expectedOutput = [[38.83418, -104.82497],
-    [40.586345, -105.075813],
-    [40.14055556, -105.13111111], [38.83418, -104.82497]];
-
-  testPosAtlas.setState({markerPosition: markerPositions});
-  let actualOutput = testPosAtlas.instance().getPositions();
-  expect(actualOutput).toEqual(expectedOutput);
-}
-
 function testValidatePos() {
   jest.mock('leaflet');
   let testValidateAtlas = mount(<Atlas />);
@@ -107,31 +90,6 @@ function testDeleteMarker() {
   testDeleteAtlas.instance().deleteMarker(marker);
 
   Promise.resolve().then(r => expect(testDeleteAtlas.state().markerPosition).toEqual(expectedOutput));
-}
-
-function testPolyline() {
-  jest.mock('leaflet');
-  let testPolyAtlas = shallow(<Atlas />);
-
-  let pointTest1 = [[0,0],[0,100]];
-  let expectedResult1 = [[0, 0], [0, 100]];
-
-  let pointTest2 = [[0,140],[0,-70]];
-  let expectedResult2a = [[0, 290], [0, 140]];
-  let expectedResult2b = [[0, -70], [0, -220]];
-
-  let pointTest3 = [[0, -160], [0, 70]];
-  let expectedResult3a = [[0, -160], [0, -290]];
-  let expectedResult3b = [[0, 200], [0, 70]];
-
-  let test1 = JSON.parse(JSON.stringify(testPolyAtlas.instance().generateLineArray(pointTest1)));
-  expect(test1[0].props.positions).toEqual(expectedResult1);
-  let test2 = JSON.parse(JSON.stringify(testPolyAtlas.instance().generateLineArray(pointTest2)));
-  expect(test2[0].props.positions).toEqual(expectedResult2a);
-  expect(test2[1].props.positions).toEqual(expectedResult2b);
-  let test3 = JSON.parse(JSON.stringify(testPolyAtlas.instance().generateLineArray(pointTest3)));
-  expect(test3[0].props.positions).toEqual(expectedResult3a);
-  expect(test3[1].props.positions).toEqual(expectedResult3b);
 }
 
 function testUpdateDistance() {
@@ -201,10 +159,8 @@ function testStateChangeLFB() {
 test("Testing Atlas's Initial State", testInitialAppState);
 test("Testing Atlas's Handle Input", testInitialHandleInput);
 test("Testing Atlas's Store Input Position",testStoreInputPosition);
-test("Testing Atlas's getPositions method",testGetPositionsOutput);
 test("Testing Atlas's position validation", testValidatePos);
 test("Testing Atlas's deleteMarker method", testDeleteMarker);
-test("Testing Atlas's polyline methods", testPolyline);
 test("Testing Atlas's storeInputPosition", testStoreInputPosition);
 test("Testing Atlas's updateDistance", testUpdateDistance);
 test("Testing Atlas's home button method", testHomeButton);

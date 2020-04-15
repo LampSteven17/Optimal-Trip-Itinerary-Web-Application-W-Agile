@@ -8,7 +8,7 @@ import {
   Row
 } from 'reactstrap';
 
-import {FeatureGroup, Map, Marker, Polyline, Popup, TileLayer} from 'react-leaflet';
+import {FeatureGroup, Map, Marker, Popup, TileLayer} from 'react-leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
@@ -278,7 +278,8 @@ export default class Atlas extends Component {
   }
 
   async updateDistance(type) {
-    let points = this.getPositions();
+    let points = this.distancePositions();
+    console.log(points);
     Promise.resolve()
         .then(async () => {
 
@@ -297,6 +298,17 @@ export default class Atlas extends Component {
 
         })
         .then(() => this.setState({displayNum: this.distance, displayUnit: "KM"}));
+  }
+
+  distancePositions() {
+    let positions = [];
+    this.state.markerPosition.forEach((marker, i) => {
+      positions.push(marker.lat, marker.lng);
+    });
+    if(positions.length >= 2) {
+      positions.push(positions[0]);
+    }
+    return positions;
   }
 
 

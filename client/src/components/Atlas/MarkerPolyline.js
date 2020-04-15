@@ -88,5 +88,4 @@ class MarkerPolyline extends Component {
     }
 
 }
-
 export default MarkerPolyline

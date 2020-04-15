@@ -25,6 +25,7 @@ import Itinerary from './Itinerary';
 import Save from './Save';
 import LoadFileButton from "./LoadFileButton";
 import MarkerPolyline from './MarkerPolyline';
+import {PROTOCOL_VERSION} from "../Constants";
 
 const FALSECOLOR = "5px solid red";
 const TRUECOLOR =  "5px solid green";
@@ -511,7 +512,7 @@ export default class Atlas extends Component {
         places: nameReverse,
         distances: distanceReverse,
         requestType: "trip",
-        requestVersion: 3
+        requestVersion: PROTOCOL_VERSION
       };
 
       this.setState({itenData: this.parseData(reverseObj.places, reverseObj.distances, reverseObj.options.earthRadius)});

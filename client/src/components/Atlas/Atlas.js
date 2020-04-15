@@ -389,8 +389,12 @@ export default class Atlas extends Component {
 
 
   appendToItinerary(isLastLeg=false) {
-    let id = this.state.itenData[this.state.itenData.length - 1].id + 1;
-    let name = Number.isNaN(this.state.id) ? "Marker " + id : "Marker " + this.state.id;
+    console.log("REEEEEE");
+    console.log(this.state.markerPosition);
+    console.log(this.state.itenData);
+    let index = this.state.itenData.length - 1;
+    let nameid = this.state.itenData[this.state.itenData.length - 1].id + 1;
+    let name = Number.isNaN(this.state.id) ? "Marker " + nameid : "Marker " + this.state.id;
     let newItineraryData;
 
     if (this.state.itenData[0].id === -1) {

@@ -114,21 +114,37 @@ export default class Atlas extends Component {
     return (
         <div>
           <Row>
-            <Col sm={{size: 'auto'}} style={{width: "4.4rem"}} md={{size: 0, offset: 3}}>
-              {this.showHomeButton()}
-            </Col>
-            <Col sm={{size: 'auto'}} style={{width: "11.7rem"}} md={{size: 0, offset: 0}}>
-              <Form inline={true}>{
-                <Input style={{width: "15rem", border: this.state.validLatLng}} placeholder="Latitude, Longitude"
-                       onInput={e => this.handleInput(e.target.value)}/>
-              }</Form>
-            </Col>
-            <Col>
-              <Button className={"btn-csu"} onClick={() => this.updateMarkerFromInput()}>+</Button>
-            </Col>
+            {this.renderHomeButton()}
+            {this.renderStuff()}
+            {this.renderPlusButton()}
           </Row>
         </div>
     )
+  }
+
+  renderStuff(){
+    return(
+    <Col sm={{size: 'auto'}} style={{width: "11.7rem"}} md={{size: 0, offset: 0}}>
+      <Form inline={true}>{
+        <Input style={{width: "15rem", border: this.state.validLatLng}} placeholder="Latitude, Longitude"
+               onInput={e => this.handleInput(e.target.value)}/>
+      }</Form>
+    </Col>);
+  }
+
+  renderHomeButton(){
+    return(
+        <Col sm={{size: 'auto'}} style={{width: "4.4rem"}} md={{size: 0, offset: 3}}>
+          {this.showHomeButton()}
+        </Col>
+    );
+  }
+
+  renderPlusButton(){
+    return(
+        <Col>
+      <Button className={"btn-csu"} onClick={() => this.updateMarkerFromInput()}>+</Button>
+    </Col>);
   }
 
   componentDidMount() {

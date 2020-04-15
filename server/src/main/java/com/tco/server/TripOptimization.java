@@ -60,7 +60,6 @@ public class TripOptimization {
         /* ***************************************** */
 
         nearest_neighbor(places, sorted_places);
-
         return;
     }
 
@@ -72,7 +71,6 @@ public class TripOptimization {
         int current_place = 0;
 
         for (int place_index = 0; place_index < this.distance_matrix.length - 1; place_index++) {
-            System.out.println("F in the chat" + place_index);
             if (System.currentTimeMillis() - this.start_time >= this.cutoff_time) {
                 append_unsorted_items_for_trip(sorted_places, places, visited);
                 return;
@@ -86,7 +84,6 @@ public class TripOptimization {
     }
 
     private int nn_get_next(boolean[] visited, int index_of_head) {
-
         long lowest_value = Long.MAX_VALUE;
         int return_index = -1;
 
@@ -145,5 +142,4 @@ public class TripOptimization {
     }
     protected void setEarthRadius(double e){this.earthRadius = e;}
 
-    // Guide/guides/Optimization
 }

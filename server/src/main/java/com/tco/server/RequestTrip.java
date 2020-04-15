@@ -35,20 +35,10 @@ public class RequestTrip extends RequestHeader{
     }
 
     private Long[] calculateDistances() {
-
-        /////////////////////////
-        ///////TRIPOPT TEST/////
-
-
-        //TripOptimization tripy = new TripOptimization("none","none", (byte) 1);
-        //tripy.setEarthRadius(Double.parseDouble(options.getEarthRadius()));
-        //tripy.optimize(places);
-
         List<Map < String, String> > sorted_places = new ArrayList<Map<String, String>>();
 
         optimize(sorted_places);
 
-        ////////////////////////
         if (places.isEmpty()) {
             log.error("In calculateDistances() in RequestTrip.java the variable places is empty. Returning null. ");
             return null;
@@ -71,9 +61,7 @@ public class RequestTrip extends RequestHeader{
                 options.getImprovement(),
                 options.getResponse()
         );
-
         tripOpt.optimize(places, Double.valueOf(options.getEarthRadius()), sorted_places);
-
     }
 
 

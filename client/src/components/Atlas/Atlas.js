@@ -49,6 +49,7 @@ export default class Atlas extends Component {
 
     this.mapRef = createRef();
     this.groupRef = createRef();
+    this.namesArray = [];
     this.distance = 0;
     this.distanceArray = [];
     this.lastDistanceCalculation = 0;
@@ -247,42 +248,52 @@ export default class Atlas extends Component {
     }
   }
 
-  deleteMarker(marker) {
+  async deleteMarker(marker) {
     let newMarkerArray = this.state.markerPosition.filter(function (mk) {
       return mk.id !== marker.id;
     });
 
-    // let newItineraryArray = this.state.itenData.filter(function (mk) {
-    //   return mk.id !== marker.id;
-    // });
-    // let newItineraryArray = this.state.itenData;
-    // this.state.itenData.forEach((item, i) => {
-    //   let idMatch = marker.id === item.id;
-    //   let length = newItineraryArray.length;
-    //
-    //   if (length === 1 && idMatch) {
-    //     newItineraryArray = [{id: -1, destination: "", leg: "", total: ""}];
-    //   }
-    //   else if (i === 0 && idMatch) {
-    //     newItineraryArray.splice(i, 1);
-    //     newItineraryArray.splice(length - 1, 1);
-    //     this.appendToItinerary(true);
-    //   }
-    //   else if (idMatch) {
-    //     newItineraryArray.splice(i, 1);
-    //   }
-    // });
-    //
-    // if (newItineraryArray.length === 2) {
-    //   newItineraryArray.pop();
-    // }
+    let newItineraryArray = this.state.itenData;
+    this.state.itenData.forEach((item, i) => {
+      let idMatch = marker.id === item.id;
+      let length = newItineraryArray.length;
 
-    this.distanceArray = [];
+      if (idMatch) {
+        this.namesArray = this.namesArray.filter((nm) => {
+          return nm.name !== item.destination;
+        });
+      }
+    });
+
+    let jsonTemp = {
+        requestType: "trip",
+        requestVersion: 3,
+        options: {
+          title:"Trip",
+          earthRadius:"3959.0",
+          optimization: {
+            construction: "none",
+            improvement: "none",
+            response: "1"
+          }
+        },
+        places: []
+    };
+
+    newMarkerArray.forEach((item, i) => {
+      jsonTemp.places.push({name: this.namesArray[i].name, latitude: item.lat.toString(), longitude: item.lng.toString()});
+    });
 
     Promise.resolve()
     .then(() => this.setState({markerPosition: newMarkerArray}))
-    .then(() => this.setState(prevState => ({itenData: [{id: -1, destination: "", leg: "", total: ""}]})))
-    .then(() => this.updateDistance("delete"));
+    .then(async () => {
+      if (newMarkerArray.length === 0) {
+        this.setState({itenData: [{id: -1, destination: "", leg: "", total: ""}]});
+      }
+      else {
+        await this.sendRequest(jsonTemp, "trip", tripRequestSchema);
+      }
+    });
   }
 
   async addMarker(mapClickInfo, getDistance = true) {
@@ -365,6 +376,7 @@ export default class Atlas extends Component {
 
 
   async sendTrip(requestBody) {
+    console.log(requestBody);
     Promise.resolve()
         .then(async () => {
           await this.sendRequest(requestBody, "trip", tripRequestSchema)
@@ -444,6 +456,10 @@ export default class Atlas extends Component {
     let name = Number.isNaN(this.state.id) ? "Marker " + nameid : "Marker " + this.state.id;
     let newItineraryData;
 
+    if (!isLastLeg) {
+      this.namesArray.push({name: name});
+    }
+
     if (this.state.itenData[0].id === -1) {
       newItineraryData = {
         itenData: [{id: 0,destination: name,leg: this.lastDistanceCalculation,total: this.distance}]
@@ -468,8 +484,12 @@ export default class Atlas extends Component {
   }
 
   promptTrip(data) {
+    console.log(data);
     this.addMarkersForTrip(data);
     this.distanceArray = data.distances;
+    this.namesArray = Array.from(data.places, x => {
+      return {name: x.destination};
+    });
     this.setState({saveData: data, itenData: this.parseData(data.places, data.distances, data.options.earthRadius)});
   }
 
@@ -477,7 +497,7 @@ export default class Atlas extends Component {
     let newMarkers = [];
     let idForInput = 0;
     data.places.forEach((place, i) => {
-      newMarkers.push({lat: parseInt(place.latitude, 10), lng: parseInt(place.longitude, 10), id: idForInput});
+      newMarkers.push({lat: parseFloat(place.latitude), lng: parseFloat(place.longitude), id: idForInput});
       idForInput = idForInput + 1;
     });
     Promise.resolve(
@@ -569,7 +589,6 @@ export default class Atlas extends Component {
     this.lastDistanceCalculation = dist.distance;
     this.distance = this.distance + dist.distance;
     this.distanceArray.push(dist.distance);
-    console.log(this.distanceArray);
     if (!isDelete) {
       this.appendToItinerary(isLastLeg);
     }

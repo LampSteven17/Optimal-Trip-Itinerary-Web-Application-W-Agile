@@ -3,6 +3,7 @@ package com.tco.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import com.tco.server.RequestDistance;
@@ -39,35 +40,40 @@ public class RequestTrip extends RequestHeader{
         ///////TRIPOPT TEST/////
 
 
-        TripOptimization tripy = new TripOptimization("none","none", (byte) 1);
-        tripy.setEarthRadius(Double.parseDouble(options.getEarthRadius()));
-        tripy.optimize(places);
+        //TripOptimization tripy = new TripOptimization("none","none", (byte) 1);
+        //tripy.setEarthRadius(Double.parseDouble(options.getEarthRadius()));
+        //tripy.optimize(places);
+
+        List<Map < String, String> > sorted_places = new ArrayList<Map<String, String>>();
+
+        optimize(sorted_places);
 
         ////////////////////////
         if (places.isEmpty()) {
             log.error("In calculateDistances() in RequestTrip.java the variable places is empty. Returning null. ");
             return null;
         }
-        Long[] dists = new Long[places.size()];
-        for (int i = 0; i < places.size()-1; i++){
-                dists[i] = RequestDistance.calculateDistance(places.get(i), places.get(i+1), Double.valueOf(options.getEarthRadius()));
+        Long[] dists = new Long[sorted_places.size()];
+        for (int i = 0; i < sorted_places.size()-1; i++){
+                dists[i] = RequestDistance.calculateDistance(sorted_places.get(i), sorted_places.get(i+1), Double.valueOf(options.getEarthRadius()));
         }
         if (dists.length > 1) {
             // finish final round trip entry
-            dists[dists.length-1] = RequestDistance.calculateDistance(places.get(places.size()-1), places.get(0), Double.valueOf(options.getEarthRadius()));
+            dists[dists.length-1] = RequestDistance.calculateDistance(sorted_places.get(sorted_places.size()-1), sorted_places.get(0), Double.valueOf(options.getEarthRadius()));
         }
         return dists;
     }
 
 
-    private List<Map < String, String> > optimize() {
+    private void optimize(List<Map < String, String> > sorted_places) {
         TripOptimization tripOpt = new TripOptimization(
                 options.getConstruction(),
                 options.getImprovement(),
                 options.getResponse()
         );
 
-        return places;
+        tripOpt.optimize(places, Double.valueOf(options.getEarthRadius()), sorted_places);
+
     }
 
 

@@ -124,28 +124,35 @@ export default class Atlas extends Component {
 
   renderStuff(){
     return(
-    <Col sm={{size: 'auto'}} style={{width: "11.7rem"}} md={{size: 0, offset: 0}}>
-      <Form inline={true}>{
-        <Input style={{width: "15rem", border: this.state.validLatLng}} placeholder="Latitude, Longitude"
-               onInput={e => this.handleInput(e.target.value)}/>
-      }</Form>
-    </Col>);
+    this.colRenderer(<Form inline={true}>{
+      <Input style={{width: "15rem", border: this.state.validLatLng}} placeholder="Latitude, Longitude"
+             onInput={e => this.handleInput(e.target.value)}/>
+    }</Form>,"11.7rem",0,0,'auto')
+        );
   }
 
   renderHomeButton(){
+    let tempy = this.showHomeButton();
     return(
-        <Col sm={{size: 'auto'}} style={{width: "4.4rem"}} md={{size: 0, offset: 3}}>
-          {this.showHomeButton()}
-        </Col>
+        this.colRenderer(tempy,"4.4rem",0,3,'auto')
     );
   }
 
   renderPlusButton(){
     return(
-        <Col>
-      <Button className={"btn-csu"} onClick={() => this.updateMarkerFromInput()}>+</Button>
-    </Col>);
+      this.colRenderer(<Button className={"btn-csu"} onClick={() => this.updateMarkerFromInput()}>+</Button>,"0rem",0,0,'auto')
+    );
   }
+
+  colRenderer(otherObj,widthy,sizey,offsety,smy){
+    return(
+    <Col sm={{size: smy}} style={{width: widthy}} md={{size: sizey, offset: offsety}}>
+      {otherObj}
+    </Col>
+    );
+  }
+
+
 
   componentDidMount() {
     if (this.mapRef.current) {
@@ -174,25 +181,41 @@ export default class Atlas extends Component {
     return (
         <div>
           <Row style={{padding: "10px"}}>
-            <Col sm={12} md={{size: 3, offset: 3}}>
-              <LoadFileButton action={this.changeStateInLoadFileButton}
-                              onChange={this.sendTrip}/>
-            </Col>
-            <Col sm={12} md={{size: 2, offset: 0}}>
-              <Save dests={this.state.saveData}/>
-            </Col>
+            {this.loadFileButtonRenderer()}
+            {this.saveRenderer()}
           </Row>
           <Row>
-            <Col sm={12} md={{size: 2, offset: 3}}>
-              <Button className={"btn-csu"} onClick={() => this.reverseTrip()}>Reverse Trip</Button>
-            </Col>
+            {this.reverseRenderer()}
           </Row>
           <Row>
-            <Col sm={12} md={{size: 6, offset: 3}}>
-              <Itinerary dests={this.state.itenData}/>
-            </Col>
+            {this.itenRenderer()}
           </Row>
         </div>
+    )
+  }
+
+  itenRenderer(){
+    return(
+      this.colRenderer(<Itinerary dests={this.state.itenData}/>,null,6,3,12)
+    );
+  }
+
+  reverseRenderer(){
+    return(
+      this.colRenderer(<Button className={"btn-csu"} onClick={() => this.reverseTrip()}>Reverse Trip</Button>,null,2,3,12)
+    );
+  }
+
+  loadFileButtonRenderer(){
+    return(
+      this.colRenderer(<LoadFileButton action={this.changeStateInLoadFileButton}
+                                       onChange={this.sendTrip}/>,null,3,3,12)
+    );
+  }
+
+  saveRenderer(){
+    return(
+        this.colRenderer(<Save dests={this.state.saveData}/>,null,6,3,12)
     )
   }
 

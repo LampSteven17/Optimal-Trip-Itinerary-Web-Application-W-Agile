@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Polyline} from "react-leaflet";
 
-class MarkerPolyline extends Component {
+export class MarkerPolyline extends Component {
     constructor(props) {
         super(props);
     }

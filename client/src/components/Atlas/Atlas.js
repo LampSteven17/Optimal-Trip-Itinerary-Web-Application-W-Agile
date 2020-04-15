@@ -303,7 +303,7 @@ export default class Atlas extends Component {
   distancePositions() {
     let positions = [];
     this.state.markerPosition.forEach((marker, i) => {
-      positions.push(marker.lat, marker.lng);
+      positions.push([marker.lat, marker.lng]);
     });
     if(positions.length >= 2) {
       positions.push(positions[0]);

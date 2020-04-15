@@ -4,6 +4,7 @@ package com.tco.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Arrays;
@@ -21,6 +22,10 @@ public class TripOptimization {
     private String construction;
     private byte response = 1; // default response time in seconds
     private double earthRadius=0;
+    private long[][] distance_matrix;
+
+    private long cutoff_time;
+    private long start_time;
 
 
     private final transient Logger log = LoggerFactory.getLogger(TripOptimization.class);
@@ -31,6 +36,7 @@ public class TripOptimization {
         setImprovement(improvement);
         setConstruction(construction);
         setResponse(response);
+        this.cutoff_time = (this.response * 1000) - 250;
     }
 
     protected List<Map< String, String>> optimize(List<Map < String, String> > places) {
@@ -38,43 +44,76 @@ public class TripOptimization {
         // will call based on what opt is set too (switch statement)
         // if nothing is provided then it needs to be done anyways?
 
-        int length = places.size();
-        long[][] tempy = new long[length][length];
+        // Start time
+        this.start_time = System.currentTimeMillis();
 
-        generateHashMap(places,tempy,length);
+        // initialize 2-d array
+        generateHashMap(places);
+
+        System.out.println(System.currentTimeMillis() - start_time);
 
 
+
+
+        /* Verification of algorithm, delete after completion */
         String stringy="\n\n\n";
-        for (long[] row : tempy)
+        for (long[] row : this.distance_matrix)
             stringy += (Arrays.toString(row) + "\n");
-
         log.info(stringy);
+        /* ***************************************** */
 
 
         return places;
     }
 
+    private List<Map < String, String> > nearest_neighbor(List<Map < String, String> > places) {
+        List<Map < String, String> > sorted_places = new ArrayList<Map<String, String>>();
+        boolean[] visited = new boolean[distance_matrix.length];
+        Arrays.fill(visited, false);
+        visited[0] = true;
+        sorted_places.add(places.get(0));
+        int current_place = 0;
+
+        for (int place_index = 0; place_index < this.distance_matrix.length; place_index++) {
+            if (System.currentTimeMillis() - this.start_time >= this.cutoff_time) {
+                return append_unsorted_items_for_trip(sorted_places, places);
+            }
+            int next_destination = nn_get_next(visited, current_place);
+            sorted_places.add(places.get(next_destination));
+            visited[next_destination] = true;
+            current_place = next_destination;
+        }
+        return sorted_places;
+    }
+
+    private int nn_get_next(boolean[] visited, int index_of_head) {
 
 
+        return -1;
+    }
 
-    protected void generateHashMap(List<Map < String, String> > places,long[][] tempy,int length){
-
-        log.info(Integer.toString(length));
-        log.info(String.valueOf(earthRadius));
-
-        for(int i=0;i<length;i++) {
-            for(int j=0;j<length;j++) {
-
-                if(i<j){
-                    tempy[i][j] = RequestDistance.calculateDistance(places.get(i), places.get(j), earthRadius);
-                }else{
-                    tempy[i][j] = -1;
-                }
+    private List<Map < String, String> > append_unsorted_items_for_trip(List<Map < String, String> > sorted, List<Map < String, String> > still_unsorted) {
+        for (Map<String, String> place : still_unsorted) {
+            sorted.add(place);
+        }
+        return sorted;
+    }
 
 
+    protected void generateHashMap(List<Map < String, String> > places){
+        /* Verification of algorithm, delete after completion */
+        log.info("Size of places: " + places.size());
+        log.info("Earth Radius: " + earthRadius);
+        /* ***************************************** */
+
+        int places_length = places.size();
+        this.distance_matrix = new long[places_length][places_length];
+
+        for(int i=0;i<places_length;i++) {
+            for(int j=0;j<places_length;j++) {
+                distance_matrix[i][j] = (i < j) ? RequestDistance.calculateDistance(places.get(i), places.get(j), earthRadius) : -1;
             }
         }
-
     }
 
 

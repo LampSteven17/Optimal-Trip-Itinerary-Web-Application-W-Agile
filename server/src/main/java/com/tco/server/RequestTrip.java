@@ -37,7 +37,7 @@ public class RequestTrip extends RequestHeader{
     private Long[] calculateDistances() {
         List<Map < String, String> > sorted_places = new ArrayList<Map<String, String>>();
 
-        optimize(sorted_places);
+        optimize(sorted_places); // for now, optimize
 
         if (places.isEmpty()) {
             log.error("In calculateDistances() in RequestTrip.java the variable places is empty. Returning null. ");
@@ -51,6 +51,8 @@ public class RequestTrip extends RequestHeader{
             // finish final round trip entry
             dists[dists.length-1] = RequestDistance.calculateDistance(sorted_places.get(sorted_places.size()-1), sorted_places.get(0), Double.valueOf(options.getEarthRadius()));
         }
+
+        places = sorted_places;
         return dists;
     }
 

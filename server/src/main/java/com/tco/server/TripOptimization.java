@@ -52,13 +52,6 @@ public class TripOptimization {
         // initialize 2-d array
         generateHashMap(places);
 
-        /* Verification of algorithm, delete after completion */
-        String stringy="\n\n\n";
-        for (long[] row : this.distance_matrix)
-            stringy += (Arrays.toString(row) + "\n");
-        log.info(stringy);
-        /* ***************************************** */
-
         nearest_neighbor(places, sorted_places);
         return;
     }
@@ -117,11 +110,6 @@ public class TripOptimization {
 
 
     protected void generateHashMap(List<Map < String, String> > places){
-        /* Verification of algorithm, delete after completion */
-        log.info("Size of places: " + places.size());
-        log.info("Earth Radius: " + earthRadius);
-        /* ***************************************** */
-
         int places_length = places.size();
         this.distance_matrix = new long[places_length][places_length];
 
@@ -141,5 +129,6 @@ public class TripOptimization {
         this.response = (response > 60 || response < 1) ? 1 : response;
     }
     protected void setEarthRadius(double e){this.earthRadius = e;}
+
 
 }

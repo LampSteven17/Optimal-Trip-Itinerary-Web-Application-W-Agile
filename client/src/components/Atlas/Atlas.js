@@ -394,39 +394,31 @@ export default class Atlas extends Component {
   }
 
 
-<<<<<<< HEAD
   appendToItinerary(isLastLeg=false) {
-    console.log("REEEEEE");
     console.log(this.state.markerPosition);
     console.log(this.state.itenData);
-    let index = this.state.itenData.length - 1;
+    let index = this.state.itenData.length;
+    let id = 0;
+
+    if (this.state.itenData.length > 2) {
+      id = this.state.markerPosition[index-1].id;
+    }
+    else if (this.state.markerPosition[index]) {
+      id = this.state.markerPosition[index].id;
+    }
+    
     let nameid = this.state.itenData[this.state.itenData.length - 1].id + 1;
     let name = Number.isNaN(this.state.id) ? "Marker " + nameid : "Marker " + this.state.id;
-=======
-  appendToItinerary(isLastLeg = false) {
-    let id = this.state.itenData[this.state.itenData.length - 1].id + 1;
-    let name = Number.isNaN(this.state.id) ? "Marker " + id : "Marker " + this.state.id;
->>>>>>> 5d34acbac49800a004e4c8fc62903ff673265c55
     let newItineraryData;
 
     if (this.state.itenData[0].id === -1) {
       newItineraryData = {
-        itenData: [{
-          id: 0,
-          destination: name,
-          leg: this.lastDistanceCalculation,
-          total: this.distance
-        }]
+        itenData: [{id: 0,destination: name,leg: this.lastDistanceCalculation,total: this.distance}]
       };
     } else if (isLastLeg) {
       name = this.state.itenData[0].destination;
       newItineraryData = prevState => ({
-        itenData: [...prevState.itenData, {
-          id: id,
-          destination: name,
-          leg: this.lastDistanceCalculation,
-          total: this.distance
-        }]
+        itenData: [...prevState.itenData, {id: Math.random(),destination: name,leg: this.lastDistanceCalculation,total: this.distance}]
       });
     } else if (this.state.itenData.length > 2) {
       let newArr = this.state.itenData;
@@ -436,12 +428,7 @@ export default class Atlas extends Component {
       });
     } else {
       newItineraryData = prevState => ({
-        itenData: [...prevState.itenData, {
-          id: id,
-          destination: name,
-          leg: this.lastDistanceCalculation,
-          total: this.distance
-        }]
+        itenData: [...prevState.itenData, { id: id, destination: name, leg: this.lastDistanceCalculation,total: this.distance}]
       });
     }
     this.setState(newItineraryData);

@@ -50,11 +50,6 @@ public class TripOptimization {
         // initialize 2-d array
         generateHashMap(places);
 
-        System.out.println(System.currentTimeMillis() - start_time);
-
-
-
-
         /* Verification of algorithm, delete after completion */
         String stringy="\n\n\n";
         for (long[] row : this.distance_matrix)
@@ -76,7 +71,7 @@ public class TripOptimization {
 
         for (int place_index = 0; place_index < this.distance_matrix.length; place_index++) {
             if (System.currentTimeMillis() - this.start_time >= this.cutoff_time) {
-                return append_unsorted_items_for_trip(sorted_places, places);
+                return append_unsorted_items_for_trip(sorted_places, places, visited);
             }
             int next_destination = nn_get_next(visited, current_place);
             sorted_places.add(places.get(next_destination));
@@ -88,13 +83,33 @@ public class TripOptimization {
 
     private int nn_get_next(boolean[] visited, int index_of_head) {
 
+        long lowest_value = 0;
+        int return_index = -1;
 
-        return -1;
+        for (int index = 0; index < distance_matrix.length; index++) {
+            if (distance_matrix[index][index_of_head] > 0 && distance_matrix[index][index_of_head] < lowest_value) {
+                if (visited[index])
+                    continue;
+                return_index = index;
+                lowest_value = distance_matrix[index][index_of_head];
+            }
+
+            if (distance_matrix[index_of_head][index] > 0 && distance_matrix[index_of_head][index] < lowest_value) {
+                if (visited[index])
+                    continue;
+                return_index = index;
+                lowest_value = distance_matrix[index][index_of_head];
+            }
+        }
+
+        return return_index;
     }
 
-    private List<Map < String, String> > append_unsorted_items_for_trip(List<Map < String, String> > sorted, List<Map < String, String> > still_unsorted) {
-        for (Map<String, String> place : still_unsorted) {
-            sorted.add(place);
+    private List<Map < String, String> > append_unsorted_items_for_trip(List<Map < String, String> > sorted, List<Map < String, String> > unsorted, boolean[] visited) {
+        for (int i = 0; i < unsorted.size(); i++) {
+            if (!visited[i]) {
+                sorted.add(unsorted.get(i));
+            }
         }
         return sorted;
     }

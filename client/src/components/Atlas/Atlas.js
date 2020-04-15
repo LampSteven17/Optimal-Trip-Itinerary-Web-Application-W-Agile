@@ -250,17 +250,35 @@ export default class Atlas extends Component {
       return mk.id !== marker.id;
     });
 
-    let newItineraryArray = this.state.itenData.filter(function (mk) {
-      return mk.id !== marker.id;
-    });
-
-    console.log(newMarkerArray);
-    console.log(newItineraryArray);
+    // let newItineraryArray = this.state.itenData.filter(function (mk) {
+    //   return mk.id !== marker.id;
+    // });
+    // let newItineraryArray = this.state.itenData;
+    // this.state.itenData.forEach((item, i) => {
+    //   let idMatch = marker.id === item.id;
+    //   let length = newItineraryArray.length;
+    //
+    //   if (length === 1 && idMatch) {
+    //     newItineraryArray = [{id: -1, destination: "", leg: "", total: ""}];
+    //   }
+    //   else if (i === 0 && idMatch) {
+    //     newItineraryArray.splice(i, 1);
+    //     newItineraryArray.splice(length - 1, 1);
+    //     this.appendToItinerary(true);
+    //   }
+    //   else if (idMatch) {
+    //     newItineraryArray.splice(i, 1);
+    //   }
+    // });
+    //
+    // if (newItineraryArray.length === 2) {
+    //   newItineraryArray.pop();
+    // }
 
     Promise.resolve()
-        .then(() => this.setState({markerPosition: newMarkerArray}))
-        .then(() => this.setState({itenData: newItineraryArray}))
-        .then(() => this.updateDistance("delete"));
+    .then(() => this.setState({markerPosition: newMarkerArray}))
+    .then(() => this.setState(prevState => ({itenData: [{id: -1, destination: "", leg: "", total: ""}]})))
+    .then(() => this.updateDistance("delete"));
   }
 
   async addMarker(mapClickInfo, getDistance = true) {

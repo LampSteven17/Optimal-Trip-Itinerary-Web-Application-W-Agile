@@ -267,7 +267,7 @@ export default class Atlas extends Component {
 
     let jsonTemp = {
         requestType: "trip",
-        requestVersion: 3,
+        requestVersion: PROTOCOL_VERSION,
         options: {
           title:"Trip",
           earthRadius:"3959.0",

@@ -81,24 +81,32 @@ class Save extends Component {
     this.setState({
       showModal: !this.state.showModal
     });
+
+    return true;
   }
 
   updateFilename(newFilename) {
     this.setState({
       filename: newFilename
     });
+
+    return true;
   }
 
   toggleDropdown() {
     this.setState({
       showDropdown: !this.state.showDropdown
     });
+
+    return true;
   }
 
   updateDropdownHeader(newHeader) {
     this.setState({
       dropdownHeader: newHeader
     });
+
+    return true;
   }
 
   async saveFile() {
@@ -135,7 +143,11 @@ class Save extends Component {
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
     }, 0);
+
+    return true;
   }
+
+
 }
 
 export default Save

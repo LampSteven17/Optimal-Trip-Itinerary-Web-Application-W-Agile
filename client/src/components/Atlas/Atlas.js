@@ -49,6 +49,7 @@ export default class Atlas extends Component {
     this.mapRef = createRef();
     this.groupRef = createRef();
     this.distance = 0;
+    this.distanceArray = [];
     this.lastDistanceCalculation = 0;
     this.inputPosition = null;
     this.map;
@@ -275,6 +276,8 @@ export default class Atlas extends Component {
     //   newItineraryArray.pop();
     // }
 
+    this.distanceArray = [];
+
     Promise.resolve()
     .then(() => this.setState({markerPosition: newMarkerArray}))
     .then(() => this.setState(prevState => ({itenData: [{id: -1, destination: "", leg: "", total: ""}]})))
@@ -338,6 +341,10 @@ export default class Atlas extends Component {
 
 
   async distanceRequestBody(i, amount, points, isDelete=false) {
+    if (!isDelete) {
+        this.distanceArray.pop();
+    }
+
     for (i; i < amount; i++) {
       let requestBody = {
         requestVersion: this.props.serverVers.requestVersion,
@@ -346,6 +353,7 @@ export default class Atlas extends Component {
         place2: {latitude: points[i + 1][0].toString(), longitude: points[i + 1][1].toString()},
         earthRadius: 6371.0
       };
+
       if (i === amount - 1) {
         await this.sendRequest(requestBody, "distance", distanceRequestSchema, isDelete, true);
       } else {
@@ -460,6 +468,7 @@ export default class Atlas extends Component {
 
   promptTrip(data) {
     this.addMarkersForTrip(data);
+    this.distanceArray = data.distances;
     this.setState({saveData: data, itenData: this.parseData(data.places, data.distances, data.options.earthRadius)});
   }
 
@@ -558,6 +567,8 @@ export default class Atlas extends Component {
     }
     this.lastDistanceCalculation = dist.distance;
     this.distance = this.distance + dist.distance;
+    this.distanceArray.push(dist.distance);
+    console.log(this.distanceArray);
     if (!isDelete) {
       this.appendToItinerary(isLastLeg);
     }

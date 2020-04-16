@@ -52,7 +52,6 @@ export default class Atlas extends Component {
 
     this.state = {
       markerPosition: [],
-      id: 0,
       hideButton: false,
       mapCenter: [0, 0],
       validLatLng: FALSECOLOR,
@@ -69,6 +68,7 @@ export default class Atlas extends Component {
   }
 
   createGlobals() {
+    this.id = 0;
     this.mapRef = createRef();
     this.groupRef = createRef();
     this.namesArray = [];
@@ -294,6 +294,7 @@ export default class Atlas extends Component {
   }
 
   async deleteMarker(marker) {
+    console.log(this.state.markerPosition);
     this.lastDistanceCalculation = 0;
     let newMarkerArray = this.removeMarker(marker);
     let newItineraryArray = this.state.itenData;
@@ -364,8 +365,8 @@ export default class Atlas extends Component {
   async addMarker(mapClickInfo, getDistance = true) {
     Promise.resolve()
         .then(() => {
-          mapClickInfo.latlng.id = this.state.id;
-          this.setState({id: this.state.id + 1});
+          mapClickInfo.latlng.id = this.id;
+          this.id += 1;
           if (Number.isNaN(mapClickInfo.latlng.id)) {
             mapClickInfo.latlng.id = 0;
           }

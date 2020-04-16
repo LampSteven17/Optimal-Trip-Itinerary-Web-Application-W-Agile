@@ -627,7 +627,6 @@ export default class Atlas extends Component {
         return {name: x.destination};
       });
 
-      // let reverseObj = this.getReverseTripObject(nameReverse, distanceReverse);
       let reverseObj = this.tripObjTemplate();
       reverseObj.places = nameReverse;
       reverseObj.distances = distanceReverse;

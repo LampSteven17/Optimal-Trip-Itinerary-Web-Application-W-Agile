@@ -222,7 +222,7 @@ export default class Atlas extends Component {
 
   saveRenderer(){
     return(
-        this.colRenderer(<Save dests={this.state.saveData}/>,null,6,3,12)
+        this.colRenderer(<Save mpArray={this.state.markerPosition} names={this.namesArray} dests={this.state.saveData}/>,null,6,3,12)
     )
   }
 
@@ -464,6 +464,8 @@ export default class Atlas extends Component {
   }
 
   handleHomeClick() {
+    this.distanceArray = [];
+    this.namesArray = [];
     this.setState({itenData: [{id: -1, destination: "", leg: "", total: ""}]});
     this.lastDistanceCalculation = 0;
     this.distance = 0;

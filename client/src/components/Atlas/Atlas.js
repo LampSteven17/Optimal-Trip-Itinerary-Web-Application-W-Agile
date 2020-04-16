@@ -489,11 +489,9 @@ export default class Atlas extends Component {
   promptTrip(data) {
     this.addMarkersForTrip(data);
     this.distanceArray = data.distances;
-    console.log(data);
     this.namesArray = Array.from(data.places, x => {
       return {name: x.name};
     });
-    console.log(this.namesArray);
     this.setState({saveData: data, itenData: this.parseData(data.places, data.distances, data.options.earthRadius)});
   }
 

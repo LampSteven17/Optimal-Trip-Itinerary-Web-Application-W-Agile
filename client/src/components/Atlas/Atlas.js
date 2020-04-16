@@ -320,17 +320,20 @@ export default class Atlas extends Component {
         places: []
     };
 
-    console.log(this.namesArray);
-
     newMarkerArray.forEach((item, i) => {
       jsonTemp.places.push({name: this.namesArray[i].name, latitude: item.lat.toString(), longitude: item.lng.toString()});
     });
 
+    console.log(newMarkerArray.length);
     Promise.resolve()
     .then(() => this.setState({markerPosition: newMarkerArray}))
     .then(async () => {
       if (newMarkerArray.length === 0) {
         this.setState({itenData: [{id: -1, destination: "", leg: "", total: ""}]});
+      }
+      else if (newMarkerArray.length === 1) {
+        console.log("REEEEEE");
+        this.setState(prevState => ({itenData: [prevState.itenData[0]]}));
       }
       else {
         await this.sendRequest(jsonTemp, "trip", tripRequestSchema);
@@ -439,6 +442,7 @@ export default class Atlas extends Component {
   }
 
   handleHomeClick() {
+    this.setState({itenData: [{id: -1, destination: "", leg: "", total: ""}]});
     this.lastDistanceCalculation = 0;
     this.distance = 0;
     this.setState({displayNum: 0});
@@ -499,7 +503,12 @@ export default class Atlas extends Component {
     if (this.state.itenData[0].id === -1) {
       newItineraryData = {
         itenData: [{id: 0,destination: name,leg: this.lastDistanceCalculation,total: this.distance}]
-      };
+      };    // if (this.state.itenData.length > 2) {
+    //   id = this.state.markerPosition[index-1].id;
+    // }
+    // else if (this.state.markerPosition[index]) {
+    //   id = Math.random() * Date.now();
+    // }
     } else if (isLastLeg) {
       name = this.state.itenData[0].destination;
       newItineraryData = prevState => ({

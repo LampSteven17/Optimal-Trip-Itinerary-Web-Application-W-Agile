@@ -321,7 +321,6 @@ export default class Atlas extends Component {
     };
 
     console.log(this.namesArray);
-    console.log(this.markerPosition);
 
     newMarkerArray.forEach((item, i) => {
       jsonTemp.places.push({name: this.namesArray[i].name, latitude: item.lat.toString(), longitude: item.lng.toString()});
@@ -487,14 +486,7 @@ export default class Atlas extends Component {
 
   appendToItinerary(isLastLeg=false) {
     let index = this.state.itenData.length;
-    let id = 0;
-
-    if (this.state.itenData.length > 2) {
-      id = this.state.markerPosition[index-1].id;
-    }
-    else if (this.state.markerPosition[index]) {
-      id = this.state.markerPosition[index].id;
-    }
+    let id = Math.random() * Date.now();
 
     let nameid = this.state.itenData[this.state.itenData.length - 1].id + 1;
     let name = Number.isNaN(this.state.id) ? "Marker " + nameid : "Marker " + this.state.id;

@@ -627,28 +627,12 @@ export default class Atlas extends Component {
         return {name: x.destination};
       });
 
-      let reverseObj = this.getReverseTripObject(nameReverse, distanceReverse);
-
+      // let reverseObj = this.getReverseTripObject(nameReverse, distanceReverse);
+      let reverseObj = this.tripObjTemplate();
+      reverseObj.places = nameReverse;
+      reverseObj.distances = distanceReverse;
       this.setState({itenData: this.parseData(reverseObj.places, reverseObj.distances, reverseObj.options.earthRadius)});
     }
-  }
-
-  getReverseTripObject(name_r, distance_r) {
-    let reverse = {
-      options: {
-        earthRadius: 3959,
-        optimization: {
-          construction: "none",
-          improvement: "none",
-          response: "1"
-        },
-        title: "Trip"
-      },
-      places: name_r,
-      distances: distance_r,
-      requestType: "trip",
-      requestVersion: PROTOCOL_VERSION
-    };
   }
 
   getUnitRadius(radius) {

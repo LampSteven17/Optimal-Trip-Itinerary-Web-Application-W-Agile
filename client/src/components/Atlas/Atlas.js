@@ -290,14 +290,30 @@ export default class Atlas extends Component {
   }
 
   async deleteMarker(marker) {
+    let newMarkerArray = this.removeMarker(marker);
+    let newItineraryArray = this.state.itenData;
+
+    this.removeName(marker);
+
+    let jsonTemp = this.tripObjTemplate();
+
+    newMarkerArray.forEach((item, i) => {
+      jsonTemp.places.push({name: this.namesArray[i].name, latitude: item.lat.toString(), longitude: item.lng.toString()});
+    });
+
+    this.setDeleteStates(newMarkerArray, jsonTemp);
+  }
+
+  removeMarker(marker) {
     let newMarkerArray = this.state.markerPosition.filter(function (mk) {
       return mk.id !== marker.id;
     });
+    return newMarkerArray;
+  }
 
-    let newItineraryArray = this.state.itenData;
+  removeName(marker) {
     this.state.itenData.forEach((item, i) => {
       let idMatch = marker.id === item.id;
-      let length = newItineraryArray.length;
 
       if (idMatch) {
         this.namesArray = this.namesArray.filter((nm) => {
@@ -305,8 +321,10 @@ export default class Atlas extends Component {
         });
       }
     });
+  }
 
-    let jsonTemp = {
+  tripObjTemplate() {
+    return {
         requestType: "trip",
         requestVersion: PROTOCOL_VERSION,
         options: {
@@ -320,11 +338,9 @@ export default class Atlas extends Component {
         },
         places: []
     };
+  }
 
-    newMarkerArray.forEach((item, i) => {
-      jsonTemp.places.push({name: this.namesArray[i].name, latitude: item.lat.toString(), longitude: item.lng.toString()});
-    });
-
+  async setDeleteStates(newMarkerArray, jsonTemp) {
     Promise.resolve()
     .then(() => this.setState({markerPosition: newMarkerArray}))
     .then(async () => {

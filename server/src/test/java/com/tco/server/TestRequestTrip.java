@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.json.JSONObject;
-import org.json.JSONArray;
 
 import static org.junit.Assert.assertEquals;
 
@@ -43,9 +41,10 @@ public class TestRequestTrip {
         p2.put("latitude", "0"); p2.put("longitude", "0"); p3.put("name", "place2");
         p3.put("latitude", "-10"); p3.put("longitude", "-10"); p3.put("name", "place3");
         places.add(p1); places.add(p2); places.add(p3);
-
+        // set up options
         Options options = new Options("3959.0", "test init");
         Optimization optimization = new Optimization();
+        options.setOptimization(optimization);
 
         trip.setUp(options, places);
     }

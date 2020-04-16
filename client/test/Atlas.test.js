@@ -3,7 +3,8 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import {Polyline} from 'react-leaflet';
 import {Row} from 'reactstrap';
-
+import {PROTOCOL_VERSION} from "../src/components/Constants";
+import * as distanceRequestSchema from "../schemas/DistanceRequest";
 import Atlas from '../src/components/Atlas/Atlas';
 
 const FALSECOLOR = "5px solid red";
@@ -54,7 +55,7 @@ function testStoreInputPosition(){
 
   testInputPosAtlas.instance().storeInputPosition(position);
 
-  Promise.resolve().then(r => expect(testInputPosAtlas.state().inputPosition).toEqual(expectedOutput));
+  Promise.resolve().then(r => expect(testInputPosAtlas.instance().inputPosition).toEqual(expectedOutput));
 }
 
 function testValidatePos() {
@@ -90,6 +91,27 @@ function testDeleteMarker() {
   testDeleteAtlas.instance().deleteMarker(marker);
 
   Promise.resolve().then(r => expect(testDeleteAtlas.state().markerPosition).toEqual(expectedOutput));
+}
+
+function testTripObjTemplate() {
+  jest.mock('leaflet');
+  let testTemplate = mount(<Atlas />);
+  let obj = testTemplate.instance().tripObjTemplate();
+  let expected = {
+      requestType: "trip",
+      requestVersion: PROTOCOL_VERSION,
+      options: {
+        title:"Trip",
+        earthRadius:"3959.0",
+        optimization: {
+          construction: "none",
+          improvement: "none",
+          response: "1"
+        }
+      },
+      places: []
+  };
+  expect(obj).toEqual(expected);
 }
 
 function testUpdateDistance() {
@@ -128,9 +150,9 @@ function testAddMarkersForTrip() {
     {id: "bmckee", name: "Oskar Blue Brewery", municipality: "Longmont", latitude: "40.14055556", longitude: "-105.13111111", altitude: "5019"}]
   };
 
-  let expected = [{lat: 38, lng: -104, id: 0},
-    {lat: 40, lng: -105, id: 1},
-    {lat: 40, lng: -105, id: 2}];
+  let expected = [{lat: 38.83418, lng: -104.82497, id: 0},
+    {lat: 40.586345, lng: -105.075813, id: 1},
+    {lat: 40.14055556, lng: -105.13111111, id: 2}];
 
   testTripMarkers.instance().addMarkersForTrip(data);
 
@@ -155,14 +177,25 @@ function testStateChangeLFB() {
   expect(testLFBStateChange.state().displayNum).toEqual(0);
 }
 
+function testTestResponse() {
+  jest.mock('leaflet');
+  let testTestResponse = mount(<Atlas />);
+
+  let testtrue = testTestResponse.instance().testResponse({},{});
+  let testfalse = testTestResponse.instance().testResponse({blueBerry: "cheese"},distanceRequestSchema);
+  expect(testtrue).toEqual(true);
+  expect(testfalse).toEqual(false);
+}
 
 test("Testing Atlas's Initial State", testInitialAppState);
 test("Testing Atlas's Handle Input", testInitialHandleInput);
 test("Testing Atlas's Store Input Position",testStoreInputPosition);
 test("Testing Atlas's position validation", testValidatePos);
 test("Testing Atlas's deleteMarker method", testDeleteMarker);
+test("Testing Atlas's trip object template method", testTripObjTemplate);
 test("Testing Atlas's storeInputPosition", testStoreInputPosition);
 test("Testing Atlas's updateDistance", testUpdateDistance);
 test("Testing Atlas's home button method", testHomeButton);
 test("Testing Atlas's addMarkersForTrip", testAddMarkersForTrip);
 test("Testing Atlas's state change in LFB method", testStateChangeLFB);
+test("Testing Atlas's testResponse function", testTestResponse);

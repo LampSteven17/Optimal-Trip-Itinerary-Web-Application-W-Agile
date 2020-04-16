@@ -67,24 +67,28 @@ export class MarkerPolyline extends Component {
         if (point1[1] < 0) {
             let lineOneCalc = [point2[0], point2[1] - 360];
             lines.push(
-                <Polyline key={Date.now() * Math.random()} color="red" positions={[point1, lineOneCalc]} />
+                this.polylineRenders(point1, lineOneCalc)
             );
             let lineTwoCalc = [point1[0], point1[1] + 360];
             lines.push(
-                <Polyline key={Date.now() * Math.random()} color="red" positions={[lineTwoCalc, point2]} />
+                this.polylineRenders(lineTwoCalc, point2)
             );
         }
         else {
             let lineOneCalc = [point2[0], point2[1] + 360];
             lines.push(
-                <Polyline key={Date.now() * Math.random()} color="red" positions={[lineOneCalc, point1]} />
+                this.polylineRenders(lineOneCalc, point1)
             );
             let lineTwoCalc = [point1[0], point1[1] - 360];
             lines.push(
-                <Polyline key={Date.now() * Math.random()} color="red" positions={[point2, lineTwoCalc]} />
+                this.polylineRenders(point2, lineTwoCalc)
             );
         }
         return lines;
+    }
+
+    polylineRenders(inputOne, inputTwo) {
+        return <Polyline key={Date.now() * Math.random()} color="red" positions={[inputOne, inputTwo]} />
     }
 
 }

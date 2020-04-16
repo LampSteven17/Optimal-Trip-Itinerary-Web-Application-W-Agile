@@ -33,11 +33,15 @@ public class Options {
         return this.optimization.getResponse();
     }
 
-    public String getConstruction() {
+    protected String getConstruction() {
         return this.optimization.getConstruction();
     }
 
     protected String getImprovement() {
         return this.optimization.getImprovement();
+    }
+
+    protected void setOptimization(Optimization optimization) {
+        this.optimization = optimization;
     }
 }

@@ -61,7 +61,6 @@ export default class Atlas extends Component {
       itenData: [{id: -1, destination: "", leg: "", total: ""}],
       tripRequestData: {},
       tipDataForMarkers: {},
-      saveData: {},
     };
 
     this.getCurrentLocation();
@@ -222,7 +221,7 @@ export default class Atlas extends Component {
 
   saveRenderer(){
     return(
-        this.colRenderer(<Save mpArray={this.state.markerPosition} names={this.namesArray} dests={this.state.saveData}/>,null,6,3,12)
+        this.colRenderer(<Save mpArray={this.state.markerPosition} names={this.namesArray}/>,null,6,3,12)
     )
   }
 
@@ -563,7 +562,12 @@ export default class Atlas extends Component {
     this.namesArray = Array.from(data.places, x => {
       return {name: x.name};
     });
-    this.setState({saveData: data, itenData: this.parseData(data.places, data.distances, data.options.earthRadius)});
+    if (this.namesArray.length === 1) {
+      this.setState({itenData: [{id: 0, destination: this.namesArray[0].name, leg: "0", total: "0"}]})
+    }
+    else {
+      this.setState({itenData: this.parseData(data.places, data.distances, data.options.earthRadius)});
+    }
   }
 
   async addMarkersForTrip(data) {
@@ -626,7 +630,6 @@ export default class Atlas extends Component {
       let reverseObj = this.getReverseTripObject(nameReverse, distanceReverse);
 
       this.setState({itenData: this.parseData(reverseObj.places, reverseObj.distances, reverseObj.options.earthRadius)});
-      this.setState({saveData: reverseObj});
     }
   }
 

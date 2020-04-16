@@ -47,17 +47,8 @@ export default class Atlas extends Component {
   constructor(props) {
     super(props);
 
-    this.mapRef = createRef();
-    this.groupRef = createRef();
-    this.namesArray = [];
-    this.distance = 0;
-    this.distanceArray = [];
-    this.lastDistanceCalculation = 0;
-    this.inputPosition = null;
-    this.map;
-    this.group;
+    this.createGlobals();
     this.binder();
-    this.itineraryNameCounter = 1;
 
     this.state = {
       markerPosition: [],
@@ -75,6 +66,19 @@ export default class Atlas extends Component {
     };
 
     this.getCurrentLocation();
+  }
+
+  createGlobals() {
+    this.mapRef = createRef();
+    this.groupRef = createRef();
+    this.namesArray = [];
+    this.distance = 0;
+    this.distanceArray = [];
+    this.lastDistanceCalculation = 0;
+    this.inputPosition = null;
+    this.map;
+    this.group;
+    this.itineraryNameCounter = 1;
   }
 
   binder() {
@@ -290,6 +294,7 @@ export default class Atlas extends Component {
   }
 
   async deleteMarker(marker) {
+    this.lastDistanceCalculation = 0;
     let newMarkerArray = this.removeMarker(marker);
     let newItineraryArray = this.state.itenData;
 

@@ -301,7 +301,7 @@ export default class Atlas extends Component {
       jsonTemp.places.push({name: this.namesArray[i].name, latitude: item.lat.toString(), longitude: item.lng.toString()});
     });
 
-    this.setDeleteStates(newMarkerArray, jsonTemp);
+    await this.setDeleteStates(newMarkerArray, jsonTemp);
   }
 
   removeMarker(marker) {

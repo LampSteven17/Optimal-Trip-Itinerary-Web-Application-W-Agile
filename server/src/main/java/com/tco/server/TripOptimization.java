@@ -81,22 +81,25 @@ public class TripOptimization {
         int return_index = -1;
 
         for (int index = 0; index < distance_matrix.length; index++) {
-            if (distance_matrix[index][index_of_head] > 0 && distance_matrix[index][index_of_head] < lowest_value) {
-                if (visited[index])
-                    continue;
+            if (visited[index])
+                continue;
+
+            if (arrayHelper(index, index_of_head, lowest_value)) {
                 return_index = index;
                 lowest_value = distance_matrix[index][index_of_head];
-            }
-
-            if (distance_matrix[index_of_head][index] > 0 && distance_matrix[index_of_head][index] < lowest_value) {
-                if (visited[index])
-                    continue;
+            } else if (arrayHelper(index_of_head, index, lowest_value)) {
                 return_index = index;
                 lowest_value = distance_matrix[index_of_head][index];
             }
         }
-
         return return_index;
+    }
+
+    private boolean arrayHelper(int a, int b, long lowest_value) {
+        if (distance_matrix[a][b] > 0 && distance_matrix[a][b] < lowest_value) {
+            return true;
+        }
+        return false;
     }
 
     private List<Map < String, String> > append_unsorted_items_for_trip(List<Map < String, String> > sorted, List<Map < String, String> > unsorted, boolean[] visited) {

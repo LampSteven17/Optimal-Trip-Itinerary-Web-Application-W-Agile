@@ -3,6 +3,7 @@ import React from 'react';
 import {shallow, mount} from 'enzyme';
 import {Polyline} from 'react-leaflet';
 import {Row} from 'reactstrap';
+import {PROTOCOL_VERSION} from "../src/components/Constants";
 
 import Atlas from '../src/components/Atlas/Atlas';
 
@@ -92,6 +93,27 @@ function testDeleteMarker() {
   Promise.resolve().then(r => expect(testDeleteAtlas.state().markerPosition).toEqual(expectedOutput));
 }
 
+function testTripObjTemplate() {
+  jest.mock('leaflet');
+  let testTemplate = mount(<Atlas />);
+  let obj = testTemplate.instance().tripObjTemplate();
+  let expected = {
+      requestType: "trip",
+      requestVersion: PROTOCOL_VERSION,
+      options: {
+        title:"Trip",
+        earthRadius:"3959.0",
+        optimization: {
+          construction: "none",
+          improvement: "none",
+          response: "1"
+        }
+      },
+      places: []
+  };
+  expect(obj).toEqual(expected);
+}
+
 function testUpdateDistance() {
   jest.mock('leaflet');
   let testDistance = mount(<Atlas />);
@@ -161,6 +183,7 @@ test("Testing Atlas's Handle Input", testInitialHandleInput);
 test("Testing Atlas's Store Input Position",testStoreInputPosition);
 test("Testing Atlas's position validation", testValidatePos);
 test("Testing Atlas's deleteMarker method", testDeleteMarker);
+test("Testing Atlas's trip object template method", testTripObjTemplate);
 test("Testing Atlas's storeInputPosition", testStoreInputPosition);
 test("Testing Atlas's updateDistance", testUpdateDistance);
 test("Testing Atlas's home button method", testHomeButton);

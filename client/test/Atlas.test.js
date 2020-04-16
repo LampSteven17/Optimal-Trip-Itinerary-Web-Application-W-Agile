@@ -4,7 +4,7 @@ import {shallow, mount} from 'enzyme';
 import {Polyline} from 'react-leaflet';
 import {Row} from 'reactstrap';
 import {PROTOCOL_VERSION} from "../src/components/Constants";
-
+import * as distanceRequestSchema from "../schemas/DistanceRequest";
 import Atlas from '../src/components/Atlas/Atlas';
 
 const FALSECOLOR = "5px solid red";
@@ -177,6 +177,15 @@ function testStateChangeLFB() {
   expect(testLFBStateChange.state().displayNum).toEqual(0);
 }
 
+function testTestResponse() {
+  jest.mock('leaflet');
+  let testTestResponse = mount(<Atlas />);
+
+  let testtrue = testTestResponse.instance().testResponse({},{});
+  let testfalse = testTestResponse.instance().testResponse({blueBerry: "cheese"},distanceRequestSchema);
+  expect(testtrue).toEqual(true);
+  expect(testfalse).toEqual(false);
+}
 
 test("Testing Atlas's Initial State", testInitialAppState);
 test("Testing Atlas's Handle Input", testInitialHandleInput);
@@ -189,3 +198,4 @@ test("Testing Atlas's updateDistance", testUpdateDistance);
 test("Testing Atlas's home button method", testHomeButton);
 test("Testing Atlas's addMarkersForTrip", testAddMarkersForTrip);
 test("Testing Atlas's state change in LFB method", testStateChangeLFB);
+test("Testing Atlas's testResponse function", testTestResponse);

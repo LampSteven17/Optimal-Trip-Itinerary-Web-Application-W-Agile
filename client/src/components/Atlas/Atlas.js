@@ -57,6 +57,7 @@ export default class Atlas extends Component {
     this.map;
     this.group;
     this.binder();
+    this.itineraryNameCounter = 1;
 
     this.state = {
       markerPosition: [],
@@ -324,7 +325,6 @@ export default class Atlas extends Component {
       jsonTemp.places.push({name: this.namesArray[i].name, latitude: item.lat.toString(), longitude: item.lng.toString()});
     });
 
-    console.log(newMarkerArray.length);
     Promise.resolve()
     .then(() => this.setState({markerPosition: newMarkerArray}))
     .then(async () => {
@@ -332,7 +332,6 @@ export default class Atlas extends Component {
         this.setState({itenData: [{id: -1, destination: "", leg: "", total: ""}]});
       }
       else if (newMarkerArray.length === 1) {
-        console.log("REEEEEE");
         this.setState(prevState => ({itenData: [prevState.itenData[0]]}));
       }
       else {
@@ -421,7 +420,6 @@ export default class Atlas extends Component {
 
 
   async sendTrip(requestBody) {
-    console.log(requestBody);
     Promise.resolve()
         .then(async () => {
           await this.sendRequest(requestBody, "trip", tripRequestSchema)
@@ -493,7 +491,10 @@ export default class Atlas extends Component {
     let id = Math.random() * Date.now();
 
     let nameid = this.state.itenData[this.state.itenData.length - 1].id + 1;
-    let name = Number.isNaN(this.state.id) ? "Marker " + nameid : "Marker " + this.state.id;
+    let name = "Marker " + this.itineraryNameCounter;
+    if (!isLastLeg) {
+      this.itineraryNameCounter += 1;
+    }
     let newItineraryData;
 
     if (!isLastLeg) {

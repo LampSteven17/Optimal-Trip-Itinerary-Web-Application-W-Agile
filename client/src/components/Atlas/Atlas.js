@@ -510,6 +510,13 @@ export default class Atlas extends Component {
   }
 
 
+  // if (this.state.itenData.length > 2) {
+  //   id = this.state.markerPosition[index-1].id;
+  // }
+  // else if (this.state.markerPosition[index]) {
+  //   id = Math.random() * Date.now();
+  // } KEEPING FOR WHATEVER
+
   appendToItinerary(isLastLeg=false) {
     let index = this.state.itenData.length;
     let id = Math.random() * Date.now();
@@ -528,12 +535,7 @@ export default class Atlas extends Component {
     if (this.state.itenData[0].id === -1) {
       newItineraryData = {
         itenData: [{id: 0,destination: name,leg: this.lastDistanceCalculation,total: this.distance}]
-      };    // if (this.state.itenData.length > 2) {
-    //   id = this.state.markerPosition[index-1].id;
-    // }
-    // else if (this.state.markerPosition[index]) {
-    //   id = Math.random() * Date.now();
-    // }
+      };
     } else if (isLastLeg) {
       name = this.state.itenData[0].destination;
       newItineraryData = prevState => ({
@@ -618,25 +620,30 @@ export default class Atlas extends Component {
       nameReverse = Array.from(nameReverse, x => {
         return {name: x.destination};
       });
-      let reverseObj = {
-        options: {
-          earthRadius: 3959,
-          optimization: {
-            construction: "none",
-            improvement: "none",
-            response: "1"
-          },
-          title: "Trip"
-        },
-        places: nameReverse,
-        distances: distanceReverse,
-        requestType: "trip",
-        requestVersion: PROTOCOL_VERSION
-      };
+
+      let reverseObj = this.getReverseTripObject(nameReverse, distanceReverse);
 
       this.setState({itenData: this.parseData(reverseObj.places, reverseObj.distances, reverseObj.options.earthRadius)});
       this.setState({saveData: reverseObj});
     }
+  }
+
+  getReverseTripObject(name_r, distance_r) {
+    let reverse = {
+      options: {
+        earthRadius: 3959,
+        optimization: {
+          construction: "none",
+          improvement: "none",
+          response: "1"
+        },
+        title: "Trip"
+      },
+      places: name_r,
+      distances: distance_r,
+      requestType: "trip",
+      requestVersion: PROTOCOL_VERSION
+    };
   }
 
   getUnitRadius(radius) {

@@ -290,6 +290,7 @@ export default class Atlas extends Component {
   }
 
   async deleteMarker(marker) {
+    console.log("REEEEE");
     let newMarkerArray = this.removeMarker(marker);
     let newItineraryArray = this.state.itenData;
 
@@ -344,6 +345,8 @@ export default class Atlas extends Component {
     Promise.resolve()
     .then(() => this.setState({markerPosition: newMarkerArray}))
     .then(async () => {
+      console.log(newMarkerArray.length);
+      console.log(newMarkerArray);
       if (newMarkerArray.length === 0) {
         this.setState({itenData: [{id: -1, destination: "", leg: "", total: ""}]});
       }
@@ -361,6 +364,9 @@ export default class Atlas extends Component {
         .then(() => {
           mapClickInfo.latlng.id = this.state.id;
           this.setState({id: this.state.id + 1});
+          if (Number.isNaN(mapClickInfo.latlng.id)) {
+            mapClickInfo.latlng.id = 0;
+          }
           this.setState(prevState => ({
             markerPosition: [...prevState.markerPosition, {
               lat: mapClickInfo.latlng.lat,

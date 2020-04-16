@@ -294,7 +294,6 @@ export default class Atlas extends Component {
   }
 
   async deleteMarker(marker) {
-    console.log(this.state.markerPosition);
     this.lastDistanceCalculation = 0;
     let newMarkerArray = this.removeMarker(marker);
     let newItineraryArray = this.state.itenData;

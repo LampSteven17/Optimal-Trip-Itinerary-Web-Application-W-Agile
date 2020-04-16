@@ -54,7 +54,7 @@ function testStoreInputPosition(){
 
   testInputPosAtlas.instance().storeInputPosition(position);
 
-  Promise.resolve().then(r => expect(testInputPosAtlas.state().inputPosition).toEqual(expectedOutput));
+  Promise.resolve().then(r => expect(testInputPosAtlas.instance().inputPosition).toEqual(expectedOutput));
 }
 
 function testValidatePos() {
@@ -128,9 +128,9 @@ function testAddMarkersForTrip() {
     {id: "bmckee", name: "Oskar Blue Brewery", municipality: "Longmont", latitude: "40.14055556", longitude: "-105.13111111", altitude: "5019"}]
   };
 
-  let expected = [{lat: 38, lng: -104, id: 0},
-    {lat: 40, lng: -105, id: 1},
-    {lat: 40, lng: -105, id: 2}];
+  let expected = [{lat: 38.83418, lng: -104.82497, id: 0},
+    {lat: 40.586345, lng: -105.075813, id: 1},
+    {lat: 40.14055556, lng: -105.13111111, id: 2}];
 
   testTripMarkers.instance().addMarkersForTrip(data);
 

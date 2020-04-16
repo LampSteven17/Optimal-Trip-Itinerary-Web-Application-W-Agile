@@ -280,6 +280,9 @@ export default class Atlas extends Component {
         places: []
     };
 
+    console.log(this.namesArray);
+    console.log(this.markerPosition);
+
     newMarkerArray.forEach((item, i) => {
       jsonTemp.places.push({name: this.namesArray[i].name, latitude: item.lat.toString(), longitude: item.lng.toString()});
     });
@@ -484,12 +487,13 @@ export default class Atlas extends Component {
   }
 
   promptTrip(data) {
-    console.log(data);
     this.addMarkersForTrip(data);
     this.distanceArray = data.distances;
+    console.log(data);
     this.namesArray = Array.from(data.places, x => {
-      return {name: x.destination};
+      return {name: x.name};
     });
+    console.log(this.namesArray);
     this.setState({saveData: data, itenData: this.parseData(data.places, data.distances, data.options.earthRadius)});
   }
 

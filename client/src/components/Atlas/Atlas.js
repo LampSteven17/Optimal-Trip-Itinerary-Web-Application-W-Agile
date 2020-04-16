@@ -368,7 +368,7 @@ export default class Atlas extends Component {
           mapClickInfo.latlng.id = this.id;
           this.id += 1;
           if (Number.isNaN(mapClickInfo.latlng.id)) {
-            mapClickInfo.latlng.id = 0;
+            mapClickInfo.latlng.id = Math.random();
           }
           this.setState(prevState => ({
             markerPosition: [...prevState.markerPosition, {

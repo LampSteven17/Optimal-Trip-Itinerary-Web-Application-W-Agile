@@ -21,18 +21,46 @@ class Itinerary extends Component {
         this.state = {
             dests: this.props.dests
         };
+
+        this.updateOrder = this.updateOrder.bind(this);
     }
 
 
     render(){
         return(
             <div key={this.props.dests} className="csu-branding">
-                <Table striped responsive className="table">
-                    <tbody>
-                        <tr>{this.renderHeader()}</tr>
-                        {this.renderData()}
-                    </tbody>
-                </Table>
+                <List
+                    values={this.state.dests}
+                    onChange = {({ oldIndex, newIndex }) =>
+                    this.updateOrder(oldIndex, newIndex)
+                    }
+                    renderList={({ children, props, isDragged}) => (
+                        <Table striped responsive className="table">
+                            <thead>
+                                <tr>{this.renderHeader()}</tr>
+                            </thead>
+                            <tbody>
+                                {this.renderData()}
+                            </tbody>
+                        </Table>
+                    )}
+                    renderItem={({ value, props, isDragged, isSelected }) => {
+                    const row = (
+                        <tr
+                        style={{
+                            cursor: isDragged ? 'grabbing' : 'grab',
+                            backgroundColor: isDragged || isSelected ? '#EEE' : '#fafafa'
+                        }}
+                        >
+                        </tr>
+                    );
+                    return isDragged ? (
+                        <Table style={{borderSpacing: 0 }}>
+                            <tbody>{row}</tbody>
+                        </Table>
+                    ) : (row);
+                    }}
+                />
                 {/* <List values={['Item 1', 'Item 2', 'Item 3']} /> */}
             </div>
         )
@@ -46,6 +74,10 @@ class Itinerary extends Component {
         }
 
         return null;
+    }
+
+    updateOrder(oldIndex, newIndex) {
+        this.setState({dests: arrayMove(this.state.dests, oldIndex, newIndex)});
     }
 
     renderData(){

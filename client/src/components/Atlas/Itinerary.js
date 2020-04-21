@@ -1,6 +1,11 @@
 import React, {Component} from 'react';
 import '../tcowebstyle.css';
 import {Table} from 'reactstrap';
+import {
+    List,
+    arrayMove
+} from 'react-movable';
+
 
 /***************
  * For full References Vist: https://dev.to/abdulbasit313/an-easy-way-to-create-a-customize-dynamic-table-in-react-js-3igg
@@ -13,26 +18,33 @@ class Itinerary extends Component {
 
     constructor(props){
         super(props);
+        this.state = {
+            dests: this.props.dests
+        };
+
+        console.log("REEEE");
+        console.log(this.state.dests);
     }
 
 
     render(){
         return(
-            <div className="csu-branding">
+            <div key={this.props.dests} className="csu-branding">
                 <Table striped responsive className="table">
                     <tbody>
                         <tr>{this.renderHeader()}</tr>
                         {this.renderData()}
                     </tbody>
                 </Table>
+                {/* <List values={['Item 1', 'Item 2', 'Item 3']} /> */}
             </div>
         )
     }
 
-
     renderData(){
-        return this.props.dests.map((dest) => {
+        return this.state.dests.map((dest) => {
             const {id, destination, leg, total } = dest;
+               
             return(
                 <tr key={id}>
                     <td>{destination}</td>

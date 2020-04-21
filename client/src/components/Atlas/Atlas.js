@@ -202,7 +202,7 @@ export default class Atlas extends Component {
 
   itenRenderer(){
     return(
-      this.colRenderer(<Itinerary dests={this.state.itenData}/>,null,6,3,12)
+      this.colRenderer(<Itinerary handler={this.itenUpdateHandler} dests={this.state.itenData}/>,null,6,3,12)
     );
   }
 
@@ -223,6 +223,10 @@ export default class Atlas extends Component {
     return(
         this.colRenderer(<Save mpArray={this.state.markerPosition} names={this.namesArray}/>,null,6,3,12)
     )
+  }
+
+  itenUpdateHandler(newItenData) {
+
   }
 
   changeStateInLoadFileButton() {

@@ -39,26 +39,34 @@ class Itinerary extends Component {
                             <thead>
                                 <tr>{this.renderHeader()}</tr>
                             </thead>
-                            <tbody>
-                                {this.renderData()}
+                            <tbody {...props}>
+                                {/* {this.renderData()} */}
+                                {children}
                             </tbody>
                         </Table>
                     )}
                     renderItem={({ value, props, isDragged, isSelected }) => {
-                    const row = (
-                        <tr
-                        style={{
-                            cursor: isDragged ? 'grabbing' : 'grab',
-                            backgroundColor: isDragged || isSelected ? '#EEE' : '#fafafa'
-                        }}
-                        >
-                        </tr>
-                    );
-                    return isDragged ? (
-                        <Table style={{borderSpacing: 0 }}>
-                            <tbody>{row}</tbody>
-                        </Table>
-                    ) : (row);
+                        const {id, destination, leg, total } = value;
+
+                        const row = (
+                            <tr
+                                {...props}
+                                style={{
+                                    cursor: isDragged ? 'grabbing' : 'grab',
+                                    backgroundColor: isDragged || isSelected ? '#EEE' : '#fafafa'
+                                }}
+                                key={id}
+                            >
+                                <td>{destination}</td>
+                                <td>{leg}</td>
+                                <td>{total}</td>
+                            </tr>
+                        );
+                        return isDragged ? (
+                            <Table style={{borderSpacing: 0 }}>
+                                <tbody>{row}</tbody>
+                            </Table>
+                        ) : (row);
                     }}
                 />
                 {/* <List values={['Item 1', 'Item 2', 'Item 3']} /> */}

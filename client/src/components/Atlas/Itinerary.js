@@ -21,9 +21,6 @@ class Itinerary extends Component {
         this.state = {
             dests: this.props.dests
         };
-
-        console.log("REEEE");
-        console.log(this.state.dests);
     }
 
 
@@ -39,6 +36,16 @@ class Itinerary extends Component {
                 {/* <List values={['Item 1', 'Item 2', 'Item 3']} /> */}
             </div>
         )
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        if (props.dests !== state.dests) {
+            return {
+                dests: props.dests
+            };
+        }
+
+        return null;
     }
 
     renderData(){

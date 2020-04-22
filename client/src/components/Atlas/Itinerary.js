@@ -96,7 +96,7 @@ class Itinerary extends Component {
         this.props.handler(arrayMove(this.state.dests, oldIndex, newIndex));
     }
 
-    renderData(){
+    renderData() {
         return this.state.dests.map((dest) => {
             const {id, destination, leg, total } = dest;
                

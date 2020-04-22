@@ -226,7 +226,8 @@ export default class Atlas extends Component {
   }
 
   itenUpdateHandler(newItenData) {
-
+    console.log(newItenData);
+    
   }
 
   changeStateInLoadFileButton() {

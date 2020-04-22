@@ -27,29 +27,6 @@ class Itinerary extends Component {
 
 
     render(){
-        const tableStyles = {
-            background: '#eaebec',
-            borderSpacing: 0
-        };
-        
-        const thStyles = {
-            borderBottom: '2px solid #ddd',
-            padding: '30px',
-            background: '#ededed',
-            color: '#666',
-            textAlign: 'center',
-            fontFamily: 'Arial, "Helvetica Neue", Helvetica, sans-serif'
-        };
-        
-        const tdStyles = {
-            borderBottom: '1px solid #ddd',
-            color: '#666',
-            fontFamily: 'Arial, "Helvetica Neue", Helvetica, sans-serif',
-            padding: '24px',
-            textAlign: 'center',
-            width: '150px'
-        };
-
         return(
             <div key={this.props.dests} className="csu-branding"
                 style={{
@@ -66,7 +43,6 @@ class Itinerary extends Component {
                     renderList={({ children, props, isDragged}) => (
                         <Table striped responsive className="table"
                             style={{
-                                tableStyles,
                                 cursor: isDragged ? 'grabbing' : undefined
                             }}
                         >
@@ -90,9 +66,9 @@ class Itinerary extends Component {
                                 }}
                                 key={id}
                             >
-                                <td style={tdStyles}>{destination}</td>
-                                <td style={tdStyles}>{leg}</td>
-                                <td style={tdStyles}>{total}</td>
+                                <td>{destination}</td>
+                                <td>{leg}</td>
+                                <td>{total}</td>
                             </tr>
                         );
                         return isDragged ? (
@@ -117,7 +93,7 @@ class Itinerary extends Component {
     }
 
     updateOrder(oldIndex, newIndex) {
-        this.setState({dests: arrayMove(this.state.dests, oldIndex, newIndex)});
+        this.props.handler(arrayMove(this.state.dests, oldIndex, newIndex));
     }
 
     renderData(){

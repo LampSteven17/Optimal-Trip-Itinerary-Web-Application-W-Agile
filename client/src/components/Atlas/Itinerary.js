@@ -116,7 +116,8 @@ class Itinerary extends Component {
         let head = Object.keys(this.props.dests[0]);
 
         return head.map((key,index) => {
-            if(key!="id") {
+            
+            if(key!="id" && key!=="lat" && key!=="lng") {
                 return <th key={index}> {key.toUpperCase()} </th>
             }
         })

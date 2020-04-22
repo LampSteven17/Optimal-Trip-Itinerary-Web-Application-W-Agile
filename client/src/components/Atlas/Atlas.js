@@ -93,6 +93,7 @@ export default class Atlas extends Component {
     this.changeStateInLoadFileButton = this.changeStateInLoadFileButton.bind(this);
     this.addMarkersForTrip = this.addMarkersForTrip.bind(this);
     this.reverseTrip = this.reverseTrip.bind(this);
+    this.itenUpdateHandler = this.itenUpdateHandler.bind(this);
   }
 
   render() {
@@ -225,9 +226,25 @@ export default class Atlas extends Component {
     )
   }
 
-  itenUpdateHandler(newItenData) {
-    console.log(newItenData);
+  async itenUpdateHandler(newItenData) {    
+    let jsonTemp = this.tripObjTemplate();
+
+    newItenData.forEach((item, i) => {
+      if (i !== newItenData.length - 1) {
+        jsonTemp.places.push({
+          name: item.destination,
+          latitude: item.lat.toString(),
+          longitude: item.lng.toString()
+        });
+      }
+    });
+
+    console.log(jsonTemp);
     
+    Promise.resolve()
+    .then(async () => {
+      await this.sendRequest(jsonTemp, "trip", tripRequestSchema);
+    });
   }
 
   changeStateInLoadFileButton() {
@@ -300,7 +317,6 @@ export default class Atlas extends Component {
   async deleteMarker(marker) {
     this.lastDistanceCalculation = 0;
     let newMarkerArray = this.removeMarker(marker);
-    let newItineraryArray = this.state.itenData;
 
     this.removeName(marker);
 
@@ -562,13 +578,24 @@ export default class Atlas extends Component {
   }
 
   promptTrip(data) {
+    console.log("WE UP IN THIS MAF");
+    console.log(data);
     this.addMarkersForTrip(data);
     this.distanceArray = data.distances;
     this.namesArray = Array.from(data.places, x => {
       return {name: x.name};
     });
     if (this.namesArray.length === 1) {
-      this.setState({itenData: [{id: 0, destination: this.namesArray[0].name, leg: "0", total: "0"}]})
+      this.setState({
+        itenData: [{
+          id: 0,
+          destination: this.namesArray[0].name,
+          leg: "0",
+          total: "0",
+          lat: this.state.markerPosition[0].lat,
+          lng: this.state.markerPosition[0].lng
+        }]
+      })
     }
     else {
       this.setState({itenData: this.parseData(data.places, data.distances, data.options.earthRadius)});
@@ -603,13 +630,15 @@ export default class Atlas extends Component {
         totalVal = legs[index];
         legs[index] = 0;
       }
-
+      
       formatted.push(
           {
             id: index,
             destination: vals.name,
             leg: legs[index],
-            total: totalVal
+            total: totalVal,
+            lat: vals.latitude,
+            lng: vals.longitude
           }
       );
     });

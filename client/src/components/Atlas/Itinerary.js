@@ -27,20 +27,53 @@ class Itinerary extends Component {
 
 
     render(){
+        const tableStyles = {
+            background: '#eaebec',
+            borderSpacing: 0
+        };
+        
+        const thStyles = {
+            borderBottom: '2px solid #ddd',
+            padding: '30px',
+            background: '#ededed',
+            color: '#666',
+            textAlign: 'center',
+            fontFamily: 'Arial, "Helvetica Neue", Helvetica, sans-serif'
+        };
+        
+        const tdStyles = {
+            borderBottom: '1px solid #ddd',
+            color: '#666',
+            fontFamily: 'Arial, "Helvetica Neue", Helvetica, sans-serif',
+            padding: '24px',
+            textAlign: 'center',
+            width: '150px'
+        };
+
         return(
-            <div key={this.props.dests} className="csu-branding">
+            <div key={this.props.dests} className="csu-branding"
+                style={{
+                    paddingTop: '1em',
+                    display: 'flex',
+                    justifyContent: 'center'
+                }}
+            >
                 <List
                     values={this.state.dests}
                     onChange = {({ oldIndex, newIndex }) =>
                     this.updateOrder(oldIndex, newIndex)
                     }
                     renderList={({ children, props, isDragged}) => (
-                        <Table striped responsive className="table">
+                        <Table striped responsive className="table"
+                            style={{
+                                tableStyles,
+                                cursor: isDragged ? 'grabbing' : undefined
+                            }}
+                        >
                             <thead>
                                 <tr>{this.renderHeader()}</tr>
                             </thead>
                             <tbody {...props}>
-                                {/* {this.renderData()} */}
                                 {children}
                             </tbody>
                         </Table>
@@ -57,19 +90,18 @@ class Itinerary extends Component {
                                 }}
                                 key={id}
                             >
-                                <td>{destination}</td>
-                                <td>{leg}</td>
-                                <td>{total}</td>
+                                <td style={tdStyles}>{destination}</td>
+                                <td style={tdStyles}>{leg}</td>
+                                <td style={tdStyles}>{total}</td>
                             </tr>
                         );
                         return isDragged ? (
-                            <Table style={{borderSpacing: 0 }}>
-                                <tbody>{row}</tbody>
+                            <Table {...props}>
+                                <tbody style={{offset: 3, size: 6}}>{row}</tbody>
                             </Table>
                         ) : (row);
                     }}
                 />
-                {/* <List values={['Item 1', 'Item 2', 'Item 3']} /> */}
             </div>
         )
     }

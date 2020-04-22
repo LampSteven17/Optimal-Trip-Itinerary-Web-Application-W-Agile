@@ -140,7 +140,7 @@ export default class Atlas extends Component {
   renderHomeButton(){
     let tempy = this.showHomeButton();
     return(
-        this.colRenderer(tempy,"4.4rem",0,3,'auto')
+        this.colRenderer(tempy, "4.4rem", 0, 3, 'auto') 
     );
   }
 

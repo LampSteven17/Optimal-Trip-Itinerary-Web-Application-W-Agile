@@ -1,11 +1,7 @@
-import React, {createRef, Component} from 'react';
-import '../tcowebstyle.css';
-import {Table} from 'reactstrap';
-import {
-    List,
-    arrayMove
-} from 'react-movable';
-
+import React, { createRef, Component } from "react";
+import "../tcowebstyle.css";
+import { Table } from "reactstrap";
+import { List, arrayMove } from "react-movable";
 
 /***************
  * For full References Vist: https://dev.to/abdulbasit313/an-easy-way-to-create-a-customize-dynamic-table-in-react-js-3igg
@@ -43,9 +39,9 @@ class Itinerary extends Component {
           onChange={({ oldIndex, newIndex }) =>
             this.updateOrder(oldIndex, newIndex)
           }
-          renderList={({ children, props, isDragged }) =>
-            this.renderTable(children, props, isDragged)
-          }
+          renderList={({ children, props, isDragged }) => {
+            this.renderTable(children, props, isDragged);
+          }}
           renderItem={({ value, props, isDragged, isSelected }) => {
             const row = this.renderRow(value, props, isDragged, isSelected);
             return isDragged ? (
@@ -109,8 +105,17 @@ class Itinerary extends Component {
   }
 
   updateOrder(oldIndex, newIndex) {
-    if (newIndex === this.state.dests.length - 1) {
+    let lastIndex = this.state.dests.length - 1;
+    if (oldIndex === 0 && newIndex === lastIndex) {
+      return;
+    } else if (oldIndex === lastIndex && newIndex === 0) {
+      return;
+    } else if (oldIndex === lastIndex && newIndex === 1) {
+      return;
+    } else if (newIndex === lastIndex) {
       newIndex = 0;
+    } else if (oldIndex === lastIndex) {
+      oldIndex = 0;
     }
     this.props.handler(arrayMove(this.state.dests, oldIndex, newIndex));
   }
@@ -140,4 +145,4 @@ class Itinerary extends Component {
   }
 }
 
-export default Itinerary
+export default Itinerary;

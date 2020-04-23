@@ -93,6 +93,9 @@ class Itinerary extends Component {
     }
 
     updateOrder(oldIndex, newIndex) {
+        if (newIndex === this.state.dests.length - 1) {
+            newIndex = 0;
+        }
         this.props.handler(arrayMove(this.state.dests, oldIndex, newIndex));
     }
 

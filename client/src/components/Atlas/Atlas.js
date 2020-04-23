@@ -238,8 +238,6 @@ export default class Atlas extends Component {
         });
       }
     });
-
-    console.log(jsonTemp);
     
     Promise.resolve()
     .then(async () => {
@@ -578,8 +576,6 @@ export default class Atlas extends Component {
   }
 
   promptTrip(data) {
-    console.log("WE UP IN THIS MAF");
-    console.log(data);
     this.addMarkersForTrip(data);
     this.distanceArray = data.distances;
     this.namesArray = Array.from(data.places, x => {

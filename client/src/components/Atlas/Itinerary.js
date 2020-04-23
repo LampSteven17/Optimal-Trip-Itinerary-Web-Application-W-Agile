@@ -60,7 +60,7 @@ class Itinerary extends Component {
   renderTable(children, props, isDragged) {
     return (
       <Table
-        innerRef={this.ref}
+        // innerRef="Table"
         responsive
         className="table"
         style={{

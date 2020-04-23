@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import '../tcowebstyle.css';
-import {Table} from 'reactstrap';
+import {Input, Table} from 'reactstrap';
 
 /***************
  * For full References Vist: https://dev.to/abdulbasit313/an-easy-way-to-create-a-customize-dynamic-table-in-react-js-3igg
@@ -13,12 +13,17 @@ class Itinerary extends Component {
 
     constructor(props){
         super(props);
+
+        this.state = {
+            searchText: ""
+        };
     }
 
 
     render(){
         return(
             <div className="csu-branding">
+                <Input placeHolder="Search" onInput={t =>console.log(t.target.value)}/>
                 <Table striped responsive className="table">
                     <tbody>
                         <tr>{this.renderHeader()}</tr>

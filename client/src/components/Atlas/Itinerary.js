@@ -1,4 +1,4 @@
-import React, { createRef, Component } from "react";
+import React, { createRef, Component, useRef } from "react";
 import "../tcowebstyle.css";
 import { Table } from "reactstrap";
 import { List, arrayMove } from "react-movable";
@@ -17,7 +17,7 @@ class Itinerary extends Component {
       dests: this.props.dests,
     };
 
-    this.ref = React.createRef();
+    this.ref = createRef();
     this.updateOrder = this.updateOrder.bind(this);
   }
 
@@ -45,9 +45,9 @@ class Itinerary extends Component {
           renderItem={({ value, props, isDragged, isSelected }) => {
             const row = this.renderRow(value, props, isDragged, isSelected);
             return isDragged ? (
-              <Table {...props} ref={this.ref}>
+              <table {...props}>
                 <tbody style={{ offset: 3, size: 6 }}>{row}</tbody>
-              </Table>
+              </table>
             ) : (
               row
             );
@@ -59,9 +59,7 @@ class Itinerary extends Component {
 
   renderTable(children, props, isDragged) {
     return (
-      <Table
-        // innerRef="Table"
-        responsive
+      <table
         className="table"
         style={{
           cursor: isDragged ? "grabbing" : undefined,
@@ -71,7 +69,7 @@ class Itinerary extends Component {
           <tr>{this.renderHeader()}</tr>
         </thead>
         <tbody {...props}>{children}</tbody>
-      </Table>
+      </table>
     );
   }
 
@@ -117,7 +115,12 @@ class Itinerary extends Component {
     } else if (oldIndex === lastIndex) {
       oldIndex = 0;
     }
-    this.props.handler(arrayMove(this.state.dests, oldIndex, newIndex));
+    this.setState(
+      { dests: arrayMove(this.state.dests, oldIndex, newIndex) },
+      () => {
+        this.props.handler(arrayMove(this.state.dests, oldIndex, newIndex));
+      }
+    );
   }
 
   renderData() {

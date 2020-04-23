@@ -40,7 +40,7 @@ class Itinerary extends Component {
             this.updateOrder(oldIndex, newIndex)
           }
           renderList={({ children, props, isDragged }) => {
-            this.renderTable(children, props, isDragged);
+            return this.renderTable(children, props, isDragged);
           }}
           renderItem={({ value, props, isDragged, isSelected }) => {
             const row = this.renderRow(value, props, isDragged, isSelected);
@@ -60,7 +60,7 @@ class Itinerary extends Component {
   renderTable(children, props, isDragged) {
     return (
       <Table
-        ref="Table"
+        innerRef={this.ref}
         responsive
         className="table"
         style={{

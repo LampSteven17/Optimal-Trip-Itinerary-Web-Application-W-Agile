@@ -26,17 +26,6 @@ class Itinerary extends Component {
   }
 
   render() {
-    const ItineraryTable = React.forwardRef((props, ref) => (
-      <Table
-        responsive
-        className="table"
-      >
-        <thead>
-          <tr>{this.renderHeader()}</tr>
-        </thead>
-        <tbody {...props.data}>{props.children}</tbody>
-      </Table>
-    ));
     return (
       <div
         key={this.props.dests}
@@ -49,23 +38,18 @@ class Itinerary extends Component {
         ref={this.ref}
       >
         <List
+          ref={this.ref}
           values={this.state.dests}
           onChange={({ oldIndex, newIndex }) =>
             this.updateOrder(oldIndex, newIndex)
           }
-          renderList={({ children, props, isDragged }) => (
-            <ItineraryTable
-              children={children}
-              data={props}
-              style={{
-                cursor: isDragged ? "grabbing" : undefined,
-              }}
-            ></ItineraryTable>
-          )}
+          renderList={({ children, props, isDragged }) =>
+            this.renderTable(children, props, isDragged)
+          }
           renderItem={({ value, props, isDragged, isSelected }) => {
             const row = this.renderRow(value, props, isDragged, isSelected);
             return isDragged ? (
-              <Table {...props}>
+              <Table {...props} ref={this.ref}>
                 <tbody style={{ offset: 3, size: 6 }}>{row}</tbody>
               </Table>
             ) : (
@@ -80,7 +64,7 @@ class Itinerary extends Component {
   renderTable(children, props, isDragged) {
     return (
       <Table
-        ref={this.ref}
+        ref="Table"
         responsive
         className="table"
         style={{

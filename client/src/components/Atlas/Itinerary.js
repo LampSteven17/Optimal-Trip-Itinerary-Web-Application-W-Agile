@@ -66,6 +66,24 @@ class Itinerary extends Component {
     );
   }
 
+  updateOrder(oldIndex, newIndex) {
+    let lastIndex = this.props.dests.length - 1;
+    if (oldIndex === 0 && newIndex === lastIndex) {
+      return;
+    } else if (oldIndex === lastIndex && newIndex === 0) {
+      return;
+    } else if (oldIndex === lastIndex && newIndex === 1) {
+      return;
+    } else if (newIndex === lastIndex) {
+      newIndex = 0;
+    } else if (oldIndex === lastIndex) {
+      oldIndex = 0;
+    }
+    let newOrder = arrayMove(this.props.dests, oldIndex, newIndex);
+
+    this.props.handler(newOrder);
+  }
+
   renderTable(children, props, isDragged) {
     return (
       <table
@@ -80,6 +98,16 @@ class Itinerary extends Component {
         <tbody {...props}>{children}</tbody>
       </table>
     );
+  }
+
+  renderHeader() {
+    let head = Object.keys(this.props.dests[0]);
+
+    return head.map((key, index) => {
+      if (key != "id" && key !== "lat" && key !== "lng") {
+        return <th key={index}> {key.toUpperCase()} </th>;
+      }
+    });
   }
 
   renderRow(value, props, isDragged, isSelected) {
@@ -99,34 +127,6 @@ class Itinerary extends Component {
         <td>{total}</td>
       </tr>
     );
-  }
-
-  updateOrder(oldIndex, newIndex) {
-    let lastIndex = this.props.dests.length - 1;
-    if (oldIndex === 0 && newIndex === lastIndex) {
-      return;
-    } else if (oldIndex === lastIndex && newIndex === 0) {
-      return;
-    } else if (oldIndex === lastIndex && newIndex === 1) {
-      return;
-    } else if (newIndex === lastIndex) {
-      newIndex = 0;
-    } else if (oldIndex === lastIndex) {
-      oldIndex = 0;
-    }
-    let newOrder = arrayMove(this.props.dests, oldIndex, newIndex);
-
-    this.props.handler(newOrder);
-  }
-
-  renderHeader() {
-    let head = Object.keys(this.props.dests[0]);
-
-    return head.map((key, index) => {
-      if (key != "id" && key !== "lat" && key !== "lng") {
-        return <th key={index}> {key.toUpperCase()} </th>;
-      }
-    });
   }
 }
 

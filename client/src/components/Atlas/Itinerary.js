@@ -32,7 +32,7 @@ class Itinerary extends Component {
         ref={this.ref}
       >
         <Input
-          placeHolder="Search"
+          placeholder="Search"
           onInput={(t) => console.log(t.target.value)}
         />
         {this.createList()}

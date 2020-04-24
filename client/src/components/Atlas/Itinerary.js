@@ -13,10 +13,6 @@ import { List, arrayMove } from "react-movable";
 class Itinerary extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      dests: this.props.dests,
-      updateList: true
-    };
 
     this.ref = createRef();
     this.updateOrder = this.updateOrder.bind(this);
@@ -94,18 +90,8 @@ class Itinerary extends Component {
     );
   }
 
-  static getDerivedStateFromProps(props, state) {
-    if (props.dests !== state.dests && state.updateList) {
-      return {
-        dests: props.dests,
-      };
-    }
-
-    return null;
-  }
-
   updateOrder(oldIndex, newIndex) {
-    let lastIndex = this.state.dests.length - 1;
+    let lastIndex = this.props.dests.length - 1;
     if (oldIndex === 0 && newIndex === lastIndex) {
       return;
     } else if (oldIndex === lastIndex && newIndex === 0) {
@@ -118,30 +104,8 @@ class Itinerary extends Component {
       oldIndex = 0;
     }
     let newOrder = arrayMove(this.props.dests, oldIndex, newIndex);
-    // this.updateList = false;
-    // this.setState({updateList: false}); // block list from being updated by props
-    // this.setState(
-    //   { dests: newOrder },
-    //   () => {
-    //     this.setState({updateList: true});
-    //     console.log(this.state.dests);
-    //   }
-    //   );
+
     this.props.handler(newOrder);
-  }
-
-  renderData() {
-    return this.state.dests.map((dest) => {
-      const { id, destination, leg, total } = dest;
-
-      return (
-        <tr key={id}>
-          <td>{destination}</td>
-          <td>{leg}</td>
-          <td>{total}</td>
-        </tr>
-      );
-    });
   }
 
   renderHeader() {

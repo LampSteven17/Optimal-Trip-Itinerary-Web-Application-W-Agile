@@ -15,6 +15,7 @@ class Itinerary extends Component {
     super(props);
     this.state = {
       dests: this.props.dests,
+      updateList: true
     };
 
     this.ref = createRef();
@@ -34,8 +35,9 @@ class Itinerary extends Component {
         ref={this.ref}
       >
         <List
+          lockVertically={true}
           ref={this.ref}
-          values={this.state.dests}
+          values={this.props.dests}
           onChange={({ oldIndex, newIndex }) =>
             this.updateOrder(oldIndex, newIndex)
           }
@@ -93,7 +95,7 @@ class Itinerary extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (props.dests !== state.dests) {
+    if (props.dests !== state.dests && state.updateList) {
       return {
         dests: props.dests,
       };
@@ -115,12 +117,17 @@ class Itinerary extends Component {
     } else if (oldIndex === lastIndex) {
       oldIndex = 0;
     }
-    this.setState(
-      { dests: arrayMove(this.state.dests, oldIndex, newIndex) },
-      () => {
-        this.props.handler(arrayMove(this.state.dests, oldIndex, newIndex));
-      }
-    );
+    let newOrder = arrayMove(this.props.dests, oldIndex, newIndex);
+    // this.updateList = false;
+    // this.setState({updateList: false}); // block list from being updated by props
+    // this.setState(
+    //   { dests: newOrder },
+    //   () => {
+    //     this.setState({updateList: true});
+    //     console.log(this.state.dests);
+    //   }
+    //   );
+    this.props.handler(newOrder);
   }
 
   renderData() {

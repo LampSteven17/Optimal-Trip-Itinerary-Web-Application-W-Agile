@@ -266,8 +266,8 @@ export default class Atlas extends Component {
   }
 
   async itenUpdateHandler(newItenData) {
+    this.setState({itenData: newItenData});
     let jsonTemp = this.tripObjTemplate();
-
     newItenData.forEach((item, i) => {
       if (i !== newItenData.length - 1) {
         jsonTemp.places.push({

@@ -1,7 +1,7 @@
 import React, { createRef, Component } from "react";
 import "../tcowebstyle.css";
 import { List, arrayMove } from "react-movable";
-import {Input, Table} from 'reactstrap';
+import { Input, Table } from "reactstrap";
 
 /***************
  * For full References Vist: https://dev.to/abdulbasit313/an-easy-way-to-create-a-customize-dynamic-table-in-react-js-3igg
@@ -14,7 +14,7 @@ class Itinerary extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchText: ""
+      searchText: "",
     };
     this.ref = createRef();
     this.updateOrder = this.updateOrder.bind(this);
@@ -31,29 +31,38 @@ class Itinerary extends Component {
         }}
         ref={this.ref}
       >
-        <Input placeHolder="Search" onInput={t =>console.log(t.target.value)}/>
-        <List
-          lockVertically={true}
-          ref={this.ref}
-          values={this.props.dests}
-          onChange={({ oldIndex, newIndex }) =>
-            this.updateOrder(oldIndex, newIndex)
-          }
-          renderList={({ children, props, isDragged }) => {
-            return this.renderTable(children, props, isDragged);
-          }}
-          renderItem={({ value, props, isDragged, isSelected }) => {
-            const row = this.renderRow(value, props, isDragged, isSelected);
-            return isDragged ? (
-              <table {...props}>
-                <tbody style={{ offset: 3, size: 6 }}>{row}</tbody>
-              </table>
-            ) : (
-              row
-            );
-          }}
+        <Input
+          placeHolder="Search"
+          onInput={(t) => console.log(t.target.value)}
         />
+        {this.createList()}
       </div>
+    );
+  }
+
+  createList() {
+    return (
+      <List
+        lockVertically={true}
+        ref={this.ref}
+        values={this.props.dests}
+        onChange={({ oldIndex, newIndex }) =>
+          this.updateOrder(oldIndex, newIndex)
+        }
+        renderList={({ children, props, isDragged }) => {
+          return this.renderTable(children, props, isDragged);
+        }}
+        renderItem={({ value, props, isDragged, isSelected }) => {
+          const row = this.renderRow(value, props, isDragged, isSelected);
+          return isDragged ? (
+            <table {...props}>
+              <tbody style={{ offset: 3, size: 6 }}>{row}</tbody>
+            </table>
+          ) : (
+            row
+          );
+        }}
+      />
     );
   }
 

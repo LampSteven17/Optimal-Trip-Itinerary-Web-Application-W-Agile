@@ -226,3 +226,39 @@ our calculations to give the most efficient path possible on their trip. We also
 be exceptionally quick in response, to avoid client frustration. 
 
 # Sprint 5
+**USER INTERFACE**
+![GUI SPRINT5 diagram](images/GUI_5.jpeg)
+
+**OPTIMIZATION**
+We will be adding the ability to optimize the trip in the itenerary, since in sprint 4 we were doing nearest neighbor by default. The only optimization algorithm implemented is NN, so this will simply send a nearest neighbor optimization.
+
+**FIND** 
+We will provide the functionality of the find epic, along with a sytem to query by the different parameters specified in the protocol. (e.g. City, county, state, country...)
+
+**ITINERARY**
+We will make the itenary moveable, drag and drop. Rearrange-able. As well as providing the user with the ability to search the itenerary for specific items.
+
+**USER EXPERIENCE**
+This epic will focus on implmenting our new features in an intuitive and user-friendly fashion, while also refactoring where necessary to provide the best user experience possible.
+
+**CLASS OVERVIEW**
+![Class](images/CLASSES_5.jpeg)
+
+**EDIT TRIP**
+We will change our server side to accomodate the lack of 2opt and 3opt, as well as only optimizing if requested.
+
+**FIND** 
+This epic will alow you to search through places. Classes for find will be implemented on the front end, with a user interface option, as well as adding find into the file parsing so proper config requests will be sent. On back end, find classes and potentially a queries class will be created to store the requests from the GSON parsing, and then construct, send the queries and then process the database response.
+
+**COMMUNICATION FLOW CHART**
+
+![Functionality](images/STATE_COMMUNICATION_5.jpeg)
+
+This is how our various functions and features willl communicate within themselves, and how they communicate between front end and back end.
+
+
+
+
+
+
+

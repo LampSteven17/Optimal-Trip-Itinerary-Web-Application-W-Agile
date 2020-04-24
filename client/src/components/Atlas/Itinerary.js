@@ -1,7 +1,7 @@
-import React, { createRef, Component, useRef } from "react";
+import React, { createRef, Component } from "react";
 import "../tcowebstyle.css";
-import { Table } from "reactstrap";
 import { List, arrayMove } from "react-movable";
+import {Input, Table} from 'reactstrap';
 
 /***************
  * For full References Vist: https://dev.to/abdulbasit313/an-easy-way-to-create-a-customize-dynamic-table-in-react-js-3igg
@@ -13,7 +13,9 @@ import { List, arrayMove } from "react-movable";
 class Itinerary extends Component {
   constructor(props) {
     super(props);
-
+    this.state = {
+      searchText: ""
+    };
     this.ref = createRef();
     this.updateOrder = this.updateOrder.bind(this);
   }
@@ -25,11 +27,11 @@ class Itinerary extends Component {
         className="csu-branding"
         style={{
           paddingTop: "1em",
-          display: "flex",
           justifyContent: "center",
         }}
         ref={this.ref}
       >
+        <Input placeHolder="Search" onInput={t =>console.log(t.target.value)}/>
         <List
           lockVertically={true}
           ref={this.ref}

@@ -14,7 +14,7 @@ class Itinerary extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchText: "",
+      searched: this.props.dests,
     };
     this.ref = createRef();
     this.updateOrder = this.updateOrder.bind(this);
@@ -33,7 +33,7 @@ class Itinerary extends Component {
       >
         <Input
           placeholder="Search"
-          onInput={(t) => console.log(t.target.value)}
+          onInput={(t) => this.filterBySearch(t.target.value)}
         />
         {this.createList()}
       </div>
@@ -64,6 +64,20 @@ class Itinerary extends Component {
         }}
       />
     );
+  }
+
+  /******
+   * repurposed from levelupTuts online youtube on search filters and react js
+   * https://youtu.be/OlVkYnVXPl0
+   */
+  filterBySearch(searchText){
+    let filter = this.props.dests.filter(
+        (dest) => {
+          return dest.destination.toLowerCase().includes(searchText.toLowerCase()) === true;
+        }
+    );
+
+    this.setState({searched: filter});
   }
 
   updateOrder(oldIndex, newIndex) {

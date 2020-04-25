@@ -159,6 +159,7 @@ class Itinerary extends Component {
       };
     }
 
+    return null;
   }
 }
 

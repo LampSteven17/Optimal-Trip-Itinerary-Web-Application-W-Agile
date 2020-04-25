@@ -45,7 +45,7 @@ class Itinerary extends Component {
       <List
         lockVertically={true}
         ref={this.ref}
-        values={this.props.dests}
+        values={this.state.searched}
         onChange={({ oldIndex, newIndex }) =>
           this.updateOrder(oldIndex, newIndex)
         }
@@ -141,6 +141,16 @@ class Itinerary extends Component {
         <td>{total}</td>
       </tr>
     );
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.dests !== state.dests) {
+      return {
+        searched: props.dests,
+      };
+    }
+
+    return null;
   }
 }
 

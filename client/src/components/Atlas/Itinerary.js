@@ -144,7 +144,7 @@ class Itinerary extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (props.dests !== state.dests) {
+    if (props.dests !== state.searched) {
       return {
         searched: props.dests,
       };

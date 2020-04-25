@@ -15,6 +15,8 @@ class Itinerary extends Component {
     super(props);
     this.state = {
       searched: this.props.dests,
+      firstTime: true,
+      previousProps: this.props.dests,
     };
     this.ref = createRef();
     this.updateOrder = this.updateOrder.bind(this);
@@ -71,6 +73,7 @@ class Itinerary extends Component {
    * https://youtu.be/OlVkYnVXPl0
    */
   filterBySearch(searchText){
+    this.setState({firstTime: false});
     let filter = this.props.dests.filter(
         (dest) => {
           return dest.destination.toLowerCase().includes(searchText.toLowerCase()) === true;
@@ -144,13 +147,18 @@ class Itinerary extends Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (props.dests !== state.searched) {
+    if(state.previousProps != props.dests){
+      state.previousProps = props.dests;
+      state.firstTime = true;
+    }
+
+
+    if (state.searched !== props.dests && state.firstTime) {
       return {
         searched: props.dests,
       };
     }
 
-    return null;
   }
 }
 

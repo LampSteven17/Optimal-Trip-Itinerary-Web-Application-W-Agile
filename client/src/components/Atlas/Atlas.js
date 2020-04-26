@@ -266,7 +266,7 @@ export default class Atlas extends Component {
   }
 
   async itenUpdateHandler(newItenData) {
-    this.setState({itenData: newItenData});
+    this.setState({ itenData: newItenData });
     let jsonTemp = this.tripObjTemplate();
     newItenData.forEach((item, i) => {
       if (i !== newItenData.length - 1) {
@@ -629,6 +629,9 @@ export default class Atlas extends Component {
   // } KEEPING FOR WHATEVER
 
   appendToItinerary(isLastLeg = false) {
+    let mpEnd = this.state.markerPosition.length - 1;
+    let lat = this.state.markerPosition[mpEnd].lat;
+    let lng = this.state.markerPosition[mpEnd].lng;
     let id = Math.random() * Date.now();
     let name = "Marker " + this.itineraryNameCounter;
     if (!isLastLeg) {
@@ -648,6 +651,8 @@ export default class Atlas extends Component {
             destination: name,
             leg: this.lastDistanceCalculation,
             total: this.distance,
+            lat: lat,
+            lng: lng,
           },
         ],
       };
@@ -661,6 +666,8 @@ export default class Atlas extends Component {
             destination: name,
             leg: this.lastDistanceCalculation,
             total: this.distance,
+            lat: lat,
+            lng: lng,
           },
         ],
       });
@@ -675,6 +682,8 @@ export default class Atlas extends Component {
             destination: name,
             leg: this.lastDistanceCalculation,
             total: this.distance,
+            lat: lat,
+            lng: lng,
           },
         ],
       });
@@ -687,6 +696,8 @@ export default class Atlas extends Component {
             destination: name,
             leg: this.lastDistanceCalculation,
             total: this.distance,
+            lat: lat,
+            lng: lng,
           },
         ],
       });

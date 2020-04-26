@@ -14,7 +14,9 @@ class Itinerary extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchText: "",
+      searched: this.props.dests,
+      firstTime: true,
+      previousProps: this.props.dests,
     };
     this.ref = createRef();
     this.updateOrder = this.updateOrder.bind(this);
@@ -33,7 +35,7 @@ class Itinerary extends Component {
       >
         <Input
           placeholder="Search"
-          onInput={(t) => console.log(t.target.value)}
+          onInput={(t) => this.filterBySearch(t.target.value)}
         />
         {this.createList()}
       </div>
@@ -45,7 +47,7 @@ class Itinerary extends Component {
       <List
         lockVertically={true}
         ref={this.ref}
-        values={this.props.dests}
+        values={this.state.searched}
         onChange={({ oldIndex, newIndex }) =>
           this.updateOrder(oldIndex, newIndex)
         }
@@ -64,6 +66,21 @@ class Itinerary extends Component {
         }}
       />
     );
+  }
+
+  /******
+   * repurposed from levelupTuts online youtube on search filters and react js
+   * https://youtu.be/OlVkYnVXPl0
+   */
+  filterBySearch(searchText){
+    this.setState({firstTime: false});
+    let filter = this.props.dests.filter(
+        (dest) => {
+          return dest.destination.toLowerCase().includes(searchText.toLowerCase()) === true;
+        }
+    );
+
+    this.setState({searched: filter});
   }
 
   updateOrder(oldIndex, newIndex) {
@@ -127,6 +144,22 @@ class Itinerary extends Component {
         <td>{total}</td>
       </tr>
     );
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if(state.previousProps != props.dests){
+      state.previousProps = props.dests;
+      state.firstTime = true;
+    }
+
+
+    if (state.searched !== props.dests && state.firstTime) {
+      return {
+        searched: props.dests,
+      };
+    }
+
+    return null;
   }
 }
 

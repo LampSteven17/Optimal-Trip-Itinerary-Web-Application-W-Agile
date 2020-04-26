@@ -40,13 +40,15 @@ public class TripOptimization {
     }
 
     protected void optimize(List<Map < String, String> > places, double earthRadius, List<Map < String, String> > sorted_places) {
-        // driver for optimization
-        // will call based on what opt is set too (switch statement)
-        // if nothing is provided then it needs to be done anyways?
+
+        if (this.construction != null) {
+            if (this.construction.equals("NONE")) {
+                sorted_places.addAll(places);
+                return;
+            }
+        }
 
         this.earthRadius = earthRadius;
-
-        // Start time
         this.start_time = System.currentTimeMillis();
 
         // initialize 2-d array

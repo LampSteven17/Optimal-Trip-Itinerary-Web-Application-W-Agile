@@ -37,7 +37,11 @@ public class RequestTrip extends RequestHeader{
     private Long[] calculateDistances() {
         List<Map < String, String> > sorted_places = new ArrayList<Map<String, String>>();
 
-        optimize(sorted_places); // for now, optimize
+        if (options.hasOptimization()) {
+            optimize(sorted_places);
+        } else {
+            sorted_places = places;
+        }
 
         if (places.isEmpty()) {
             log.error("In calculateDistances() in RequestTrip.java the variable places is empty. Returning null. ");

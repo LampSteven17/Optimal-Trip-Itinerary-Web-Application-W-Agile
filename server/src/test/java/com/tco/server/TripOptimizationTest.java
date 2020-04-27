@@ -29,10 +29,11 @@ public class TripOptimizationTest {
     @Test
     public void testOptimizationBasic() {
         List<Map< String, String>> placesOptimized = new ArrayList<Map< String, String>>();
-         tripOpt.optimize(setUpPlacesStatic(), 1000.0, placesOptimized);
+        List<Map< String, String>> places = setUpPlacesStatic();
+         tripOpt.optimize(places, 1000.0, placesOptimized);
         // we need to test for time and response
         // only initially going to test for non null response
-        assert placesOptimized.isEmpty() != true : "Test that places was returned non-null";
+        assert placesOptimized.isEmpty() == false : "Test that places was returned non-null";
     }
 
 

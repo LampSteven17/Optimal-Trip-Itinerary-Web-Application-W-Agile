@@ -4,6 +4,7 @@ package com.tco.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,7 @@ public class TripOptimization {
         this.cutoff_time = (this.response * 1000) - 250;
     }
 
-    protected void optimize(List<Map < String, String> > places, double earthRadius, List<Map < String, String> > sorted_places) {
+    protected void optimize(List<Map < String, String> > places, double earthRadius, List<Map < String, String> > sorted_places) throws IOException {
 
         if (this.construction != null) {
             if (this.construction.equals("NONE")) {
@@ -58,12 +59,11 @@ public class TripOptimization {
             if (this.improvement.equals("none")){
                 nearest_neighbor(places, sorted_places);
             } else {
-                // throw 404
                 sorted_places.addAll(places);
+                throw new IOException("2opt and 3opt not supported.");
             }
             return;
         }
-
         // un init means we should choose, hence NN
         nearest_neighbor(places, sorted_places);
         return;

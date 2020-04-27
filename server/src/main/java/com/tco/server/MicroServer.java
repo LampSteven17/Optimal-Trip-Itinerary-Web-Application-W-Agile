@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import spark.Request;
 import spark.Response;
 import spark.Spark;
+//import javax.ws.rs.BadRequestException;
 
 class MicroServer {
 
@@ -107,7 +108,7 @@ class MicroServer {
     response.status(200);
   }
 
-  private String buildJSONResponse(RequestHeader request) {
+  private String buildJSONResponse(RequestHeader request) throws IOException {
     request.buildResponse();
     Gson jsonConverter = new Gson();
     String responseBody = jsonConverter.toJson(request);

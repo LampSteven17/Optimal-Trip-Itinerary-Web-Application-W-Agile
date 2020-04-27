@@ -59,7 +59,6 @@ public class TripOptimization {
             if (this.improvement.equals("none")){
                 nearest_neighbor(places, sorted_places);
             } else {
-                sorted_places.addAll(places);
                 throw new IOException("2opt and 3opt not supported.");
             }
             return;

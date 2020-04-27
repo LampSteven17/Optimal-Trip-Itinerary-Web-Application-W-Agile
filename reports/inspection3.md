@@ -12,6 +12,7 @@
 | ---- | ---- |
 | Austin Soriano | 40 mins |
 |  Steven Lamp|35 mins  |
+| Ryan Kughn | 40 mins |
 
 ### Problems found
 
@@ -27,4 +28,9 @@
 | Atlas.js:815-817| Comparing Decimal and Integer types, not checking and may misfire to units| med| Steven||
 | Atlas.js:790| If state is never correctly set, could break our website with no information|low|Steven||
 | Atlas.js:660| Another initiliazation error, could be detremential if never initialized correctly|low|Steven||
+| Atlas.js:677| Unused parameter prevState in lambda function| low | Ryan| |
+| Atlas.js:633 | Empty markerPosition array could result in a crash | med | Ryan | |
+| Atlas.js:815-817 | line 815 divides by decimal, line 817 divides by int, could result in bad comp | low | Ryan | |
+| Atlas.js:756 | Indexing an array that could be empty, should check | low | Ryan | | 
+| Atlas.js:750 | Treating local variable idForInput as global variable | low | Ryan | |
 

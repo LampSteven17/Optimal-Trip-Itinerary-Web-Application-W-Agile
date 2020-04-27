@@ -79,6 +79,7 @@
 | Date | Tasks closed  | Tasks in progress | Impediments |
 | :--- | :--- | :--- | :--- |
 | 4/24/20 | 2 | 4 |  | 
+| 4/27/20 | 7 | 4 |  |
 
 ### SCRUM 4/24 DAILY
 | Name | Tasks closed  | Tasks in progress |
@@ -87,6 +88,14 @@
 | Steve | #396 | #398 |
 | Austin | #224 | #420 |
 | Cade | 0 | #413 |
+
+### SCRUM 4/24 DAILY
+| Name | Tasks closed  | Tasks in progress |
+| :--- | :--- | :--- |
+| Ryan | #406 | #409 |
+| Steve | #425 | #417 |
+| Austin | #226 #434 #420 | #298 |
+| Cade | #435 #413 | #407 |
 
 ## Review
 

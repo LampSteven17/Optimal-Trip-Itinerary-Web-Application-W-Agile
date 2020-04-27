@@ -13,6 +13,7 @@
 | Austin Soriano | 40 mins |
 |  Steven Lamp|35 mins  |
 | Ryan Kughn | 40 mins |
+| Cade McCumber | 33 mins |
 
 ### Problems found
 
@@ -33,4 +34,11 @@
 | Atlas.js:815-817 | line 815 divides by decimal, line 817 divides by int, could result in bad comp | low | Ryan | |
 | Atlas.js:756 | Indexing an array that could be empty, should check | low | Ryan | | 
 | Atlas.js:750 | Treating local variable idForInput as global variable | low | Ryan | |
+| Atlas.js:648 & 662 & 681 & 692| These are the exact same except an ID | low | Cade | |
+| Atlas.js:714 | What if nothing in name array? | low | Cade | |
+| Atlas.js:771 | could chip off 50 lines just on writing a function for all these | low | Cade | |
+| Atlas.js:821 | returning --, maybe just return 6371.0 | low | Cade | |
+| Atlas.js:638 | If this not reset on all changes, could blow up this process | low | Cade | |
+
+
 

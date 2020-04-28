@@ -1,7 +1,13 @@
 import React, { createRef, Component } from "react";
 import "../tcowebstyle.css";
 import { List, arrayMove } from "react-movable";
-import { Input, Table } from "reactstrap";
+import {
+  Button,
+  Card,
+  CardBody,
+  Input,
+  UncontrolledCollapse,
+} from "reactstrap";
 
 /***************
  * For full References Vist: https://dev.to/abdulbasit313/an-easy-way-to-create-a-customize-dynamic-table-in-react-js-3igg
@@ -72,15 +78,16 @@ class Itinerary extends Component {
    * repurposed from levelupTuts online youtube on search filters and react js
    * https://youtu.be/OlVkYnVXPl0
    */
-  filterBySearch(searchText){
-    this.setState({firstTime: false});
-    let filter = this.props.dests.filter(
-        (dest) => {
-          return dest.destination.toLowerCase().includes(searchText.toLowerCase()) === true;
-        }
-    );
+  filterBySearch(searchText) {
+    this.setState({ firstTime: false });
+    let filter = this.props.dests.filter((dest) => {
+      return (
+        dest.destination.toLowerCase().includes(searchText.toLowerCase()) ===
+        true
+      );
+    });
 
-    this.setState({searched: filter});
+    this.setState({ searched: filter });
   }
 
   updateOrder(oldIndex, newIndex) {
@@ -139,19 +146,41 @@ class Itinerary extends Component {
         }}
         key={id}
       >
-        <td>{destination}</td>
+        <td>
+          {destination}
+          {this.toggleButton()}
+        </td>
         <td>{leg}</td>
         <td>{total}</td>
       </tr>
     );
   }
 
+  toggleButton() {
+    return (
+      <div style={{ paddingTop: "0.5em" }}>
+        <Button id="editToggle" className={"btn-csu"}>
+          Toggle
+        </Button>
+        <UncontrolledCollapse toggler="#editToggle">
+          <Card>
+            <CardBody>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt
+              magni, voluptas debitis similique porro a molestias consequuntur
+              earum odio officiis natus, amet hic, iste sed dignissimos esse
+              fuga! Minus, alias.
+            </CardBody>
+          </Card>
+        </UncontrolledCollapse>
+      </div>
+    );
+  }
+
   static getDerivedStateFromProps(props, state) {
-    if(state.previousProps != props.dests){
+    if (state.previousProps != props.dests) {
       state.previousProps = props.dests;
       state.firstTime = true;
     }
-
 
     if (state.searched !== props.dests && state.firstTime) {
       return {

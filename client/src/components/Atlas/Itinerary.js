@@ -154,7 +154,7 @@ class Itinerary extends Component {
       >
         <td>
           {destination}
-          {this.editButton()}
+          {this.editButton(destination)}
         </td>
         <td>{leg}</td>
         <td>{total}</td>
@@ -162,7 +162,7 @@ class Itinerary extends Component {
     );
   }
 
-  editButton() {
+  editButton(destination) {
     return (
       <span style={{ paddingLeft: "1em" }}>
         <Button
@@ -173,12 +173,20 @@ class Itinerary extends Component {
         >
           Edit
         </Button>
-        {this.renderModal()}
+        {this.renderModal(destination)}
       </span>
     );
   }
 
-  renderModal() {
+  renderModal(destination) {
+    console.log(this.props.dests);
+    let lat,lng = 0;
+    this.props.dests.forEach(dest => {
+      if (dest.destination === destination) {
+        lat = dest.lat;
+        lng = dest.lng;
+      }
+    });
     return (
       <Modal isOpen={this.state.showModal} toggle={() => this.toggleModal()}>
         <ModalHeader>Create Save File</ModalHeader>
@@ -186,12 +194,22 @@ class Itinerary extends Component {
           <Form>
             <FormGroup>
               <Label>Destination Name</Label>
-              <Input id="saveName" placeholder="Destination"></Input>
+              <Input id="destName" defaultValue={destination}></Input>
+            </FormGroup>
+            <FormGroup>
+              <span style={{width:"45%",float:"left"}}>
+                <Label>Latitude</Label>
+                <Input defaultValue={lat}></Input>
+              </span>
+              <span style={{width:"45%", float:"right"}}>
+                <Label>Longitude</Label>
+                <Input defaultValue={lng}></Input>
+              </span>
             </FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={() => this.saveFile()}>
+          <Button color="primary" onClick={() => this.updateDestination()}>
             Save
           </Button>{" "}
           <Button color="secondary" onClick={() => this.toggleModal()}>
@@ -204,6 +222,10 @@ class Itinerary extends Component {
 
   toggleModal() {
     this.setState({ showModal: !this.state.showModal });
+  }
+
+  updateDestination() {
+    this.toggleModal();
   }
 
   static getDerivedStateFromProps(props, state) {

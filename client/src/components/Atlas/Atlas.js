@@ -20,6 +20,7 @@ import LoadFileButton from "./LoadFileButton";
 import MarkerPolyline from "./MarkerPolyline";
 import { PROTOCOL_VERSION } from "../Constants";
 
+
 const FALSECOLOR = "5px solid red";
 const TRUECOLOR = "5px solid green";
 const Coordinates = require("coordinate-parser");
@@ -124,6 +125,8 @@ export default class Atlas extends Component {
           {this.renderHomeButton()}
           {this.renderStuff()}
           {this.renderPlusButton()}
+          {this.saveRenderer()}
+          {this.reverseRenderer()}
         </Row>
       </div>
     );
@@ -160,7 +163,7 @@ export default class Atlas extends Component {
       >
         +
       </Button>,
-      "0rem",
+      "2.3rem",
       0,
       0,
       "auto"
@@ -209,9 +212,7 @@ export default class Atlas extends Component {
       <div>
         <Row style={{ padding: "10px" }}>
           {this.loadFileButtonRenderer()}
-          {this.saveRenderer()}
         </Row>
-        <Row>{this.reverseRenderer()}</Row>
         <Row>{this.itenRenderer()}</Row>
       </div>
     );
@@ -233,12 +234,12 @@ export default class Atlas extends Component {
   reverseRenderer() {
     return this.colRenderer(
       <Button className={"btn-csu"} onClick={() => this.reverseTrip()}>
-        Reverse Trip
+        Flip
       </Button>,
-      null,
-      2,
-      3,
-      12
+      "0rem",
+      0,
+      0,
+      "auto"
     );
   }
 
@@ -258,10 +259,10 @@ export default class Atlas extends Component {
   saveRenderer() {
     return this.colRenderer(
       <Save mpArray={this.state.markerPosition} names={this.namesArray} />,
-      null,
-      6,
-      3,
-      12
+      "4rem",
+      0,
+      0,
+      "auto"
     );
   }
 

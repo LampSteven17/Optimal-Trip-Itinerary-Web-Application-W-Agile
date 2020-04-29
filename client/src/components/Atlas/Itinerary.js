@@ -3,10 +3,14 @@ import "../tcowebstyle.css";
 import { List, arrayMove } from "react-movable";
 import {
   Button,
-  Card,
-  CardBody,
   Input,
-  UncontrolledCollapse,
+  Form,
+  FormGroup,
+  Label,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "reactstrap";
 
 /***************
@@ -23,9 +27,11 @@ class Itinerary extends Component {
       searched: this.props.dests,
       firstTime: true,
       previousProps: this.props.dests,
+      showModal: false,
     };
     this.ref = createRef();
-    this.updateOrder = this.updateOrder.bind(this);
+    this.filterBySearch = this.filterBySearch.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
   }
 
   render() {
@@ -148,7 +154,7 @@ class Itinerary extends Component {
       >
         <td>
           {destination}
-          {this.toggleButton()}
+          {this.editButton()}
         </td>
         <td>{leg}</td>
         <td>{total}</td>
@@ -156,24 +162,48 @@ class Itinerary extends Component {
     );
   }
 
-  toggleButton() {
+  editButton() {
     return (
-      <div style={{ paddingTop: "0.5em" }}>
-        <Button id="editToggle" className={"btn-csu"}>
-          Toggle
+      <span style={{ paddingLeft: "1em" }}>
+        <Button
+          size="sm"
+          id="editToggle"
+          className={"btn-csu"}
+          onClick={() => this.toggleModal()}
+        >
+          Edit
         </Button>
-        <UncontrolledCollapse toggler="#editToggle">
-          <Card>
-            <CardBody>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt
-              magni, voluptas debitis similique porro a molestias consequuntur
-              earum odio officiis natus, amet hic, iste sed dignissimos esse
-              fuga! Minus, alias.
-            </CardBody>
-          </Card>
-        </UncontrolledCollapse>
-      </div>
+        {this.renderModal()}
+      </span>
     );
+  }
+
+  renderModal() {
+    return (
+      <Modal isOpen={this.state.showModal} toggle={() => this.toggleModal()}>
+        <ModalHeader>Create Save File</ModalHeader>
+        <ModalBody>
+          <Form>
+            <FormGroup>
+              <Label>Destination Name</Label>
+              <Input id="saveName" placeholder="Destination"></Input>
+            </FormGroup>
+          </Form>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={() => this.saveFile()}>
+            Save
+          </Button>{" "}
+          <Button color="secondary" onClick={() => this.toggleModal()}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
+    );
+  }
+
+  toggleModal() {
+    this.setState({ showModal: !this.state.showModal });
   }
 
   static getDerivedStateFromProps(props, state) {

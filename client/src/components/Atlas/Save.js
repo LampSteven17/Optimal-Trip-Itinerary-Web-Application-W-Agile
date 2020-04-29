@@ -36,7 +36,7 @@ class Save extends Component {
   }
 
   render() {
-    return (<div>
+    return (<div style={{paddingTop: "1em"}}>
       <Button size="md" className={"btn-csu"} onClick={() => this.toggleModal()}>Save</Button>
       <Modal isOpen={this.state.showModal} toggle={() => this.toggleModal()}>
         <ModalHeader>

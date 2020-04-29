@@ -20,6 +20,9 @@ import LoadFileButton from "./LoadFileButton";
 import MarkerPolyline from "./MarkerPolyline";
 import { PROTOCOL_VERSION } from "../Constants";
 
+import FlipCameraAndroidIcon from '@material-ui/icons/FlipCameraAndroid';
+import HomeIcon from '@material-ui/icons/Home';
+
 const FALSECOLOR = "5px solid red";
 const TRUECOLOR = "5px solid green";
 const Coordinates = require("coordinate-parser");
@@ -124,6 +127,8 @@ export default class Atlas extends Component {
           {this.renderHomeButton()}
           {this.renderStuff()}
           {this.renderPlusButton()}
+          {this.saveRenderer()}
+          {this.reverseRenderer()}
         </Row>
       </div>
     );
@@ -149,7 +154,7 @@ export default class Atlas extends Component {
 
   renderHomeButton() {
     let tempy = this.showHomeButton();
-    return this.colRenderer(tempy, "4.4rem", 0, 3, "auto");
+    return this.colRenderer(tempy, "3.4rem", 0, 3, "auto");
   }
 
   renderPlusButton() {
@@ -160,7 +165,7 @@ export default class Atlas extends Component {
       >
         +
       </Button>,
-      "0rem",
+      "2.3rem",
       0,
       0,
       "auto"
@@ -207,11 +212,9 @@ export default class Atlas extends Component {
   renderItinerary() {
     return (
       <div>
-        <Row style={{ padding: "10px" }}>
+        <Row>
           {this.loadFileButtonRenderer()}
-          {this.saveRenderer()}
         </Row>
-        <Row>{this.reverseRenderer()}</Row>
         <Row>{this.itenRenderer()}</Row>
       </div>
     );
@@ -233,12 +236,12 @@ export default class Atlas extends Component {
   reverseRenderer() {
     return this.colRenderer(
       <Button className={"btn-csu"} onClick={() => this.reverseTrip()}>
-        Reverse Trip
+        <FlipCameraAndroidIcon/>
       </Button>,
-      null,
-      2,
-      3,
-      12
+      "0rem",
+      0,
+      0,
+      "auto"
     );
   }
 
@@ -257,11 +260,11 @@ export default class Atlas extends Component {
 
   saveRenderer() {
     return this.colRenderer(
-      <Save mpArray={this.state.markerPosition} names={this.namesArray} />,
-      null,
-      6,
-      3,
-      12
+      <Save mpArray={this.state.markerPosition} names={this.namesArray}/>,
+      "3.2rem",
+      0,
+      0,
+      "auto"
     );
   }
 
@@ -554,7 +557,7 @@ export default class Atlas extends Component {
     if (this.state.hideButton === false) {
       return (
         <Button className="btn-csu" onClick={() => this.handleHomeClick()}>
-          <strong>Home</strong>
+          <HomeIcon/>
         </Button>
       );
     }

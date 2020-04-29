@@ -30,7 +30,9 @@
     "ulog": "^1.1.0",
     "valid-filename": "^3.1.0",
     "webpack": "^4.28.4",
-    "webpack-cli": "^3.2.1"
+    "webpack-cli": "^3.2.1",
+    "@material-ui/icons": "latest",
+    "@material-ui/core": "latest"
   },
   "devDependencies": {
     "ajv": "^6.10.2",

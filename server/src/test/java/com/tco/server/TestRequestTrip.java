@@ -29,7 +29,7 @@ public class TestRequestTrip {
     @Test
     public void testVersion() {
         int version = trip.getVersion();
-        assertEquals("trip requestVersion", 3, version);
+        assertEquals("trip requestVersion", 5, version);
     }
 
     private void setupForResponse() {

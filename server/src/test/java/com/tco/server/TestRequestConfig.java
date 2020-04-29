@@ -25,7 +25,7 @@ public class TestRequestConfig {
   @Test
   public void testVersion() {
     int version = conf.getVersion();
-    assertEquals("config requestVersion", 3, version);
+    assertEquals("config requestVersion", 5, version);
   }
 
   @Test
@@ -37,6 +37,6 @@ public class TestRequestConfig {
   @Test
   public void testNumberOfRequests() {
     int num = conf.getSupportedRequestLength();
-    assertEquals("config supported requests", 3, num);
+    assertEquals("config supported requests", 4, num);
   }
 }

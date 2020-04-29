@@ -16,6 +16,8 @@ import {
   ModalFooter
 } from 'reactstrap';
 
+import SaveIcon from '@material-ui/icons/Save';
+
 const validFilename = require('valid-filename');
 import { jsonToCSV } from 'react-papaparse';
 import {PROTOCOL_VERSION} from "../Constants";
@@ -37,7 +39,7 @@ class Save extends Component {
 
   render() {
     return (<div>
-      <Button size="md" className={"btn-csu"} onClick={() => this.toggleModal()}>Save</Button>
+      <Button size="md" className={"btn-csu"} onClick={() => this.toggleModal()}><SaveIcon/></Button>
       <Modal isOpen={this.state.showModal} toggle={() => this.toggleModal()}>
         <ModalHeader>
           Create Save File

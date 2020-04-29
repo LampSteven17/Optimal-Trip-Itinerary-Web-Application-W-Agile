@@ -20,6 +20,8 @@ import LoadFileButton from "./LoadFileButton";
 import MarkerPolyline from "./MarkerPolyline";
 import { PROTOCOL_VERSION } from "../Constants";
 
+import FlipCameraAndroidIcon from '@material-ui/icons/FlipCameraAndroid';
+import HomeIcon from '@material-ui/icons/Home';
 
 const FALSECOLOR = "5px solid red";
 const TRUECOLOR = "5px solid green";
@@ -152,7 +154,7 @@ export default class Atlas extends Component {
 
   renderHomeButton() {
     let tempy = this.showHomeButton();
-    return this.colRenderer(tempy, "4.4rem", 0, 3, "auto");
+    return this.colRenderer(tempy, "3.4rem", 0, 3, "auto");
   }
 
   renderPlusButton() {
@@ -210,7 +212,7 @@ export default class Atlas extends Component {
   renderItinerary() {
     return (
       <div>
-        <Row style={{ padding: "10px" }}>
+        <Row>
           {this.loadFileButtonRenderer()}
         </Row>
         <Row>{this.itenRenderer()}</Row>
@@ -234,7 +236,7 @@ export default class Atlas extends Component {
   reverseRenderer() {
     return this.colRenderer(
       <Button className={"btn-csu"} onClick={() => this.reverseTrip()}>
-        Flip
+        <FlipCameraAndroidIcon/>
       </Button>,
       "0rem",
       0,
@@ -258,8 +260,8 @@ export default class Atlas extends Component {
 
   saveRenderer() {
     return this.colRenderer(
-      <Save mpArray={this.state.markerPosition} names={this.namesArray} />,
-      "4rem",
+      <Save mpArray={this.state.markerPosition} names={this.namesArray}/>,
+      "3.2rem",
       0,
       0,
       "auto"
@@ -555,7 +557,7 @@ export default class Atlas extends Component {
     if (this.state.hideButton === false) {
       return (
         <Button className="btn-csu" onClick={() => this.handleHomeClick()}>
-          <strong>Home</strong>
+          <HomeIcon/>
         </Button>
       );
     }

@@ -29,8 +29,8 @@ public class TestOptions {
     @Test
     public void testSetOptimizationBlank() {
         options.setOptimization(optimization);
-        assertEquals("Test Construction", "none", options.getConstruction());
-        assertEquals("Test Improvement", "NONE", options.getImprovement());
+        assertEquals("Test Construction", null, options.getConstruction());
+        assertEquals("Test Improvement", null, options.getImprovement());
         assertEquals("Test Response", (byte) 1, options.getResponse());
     }
 

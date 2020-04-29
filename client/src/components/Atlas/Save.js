@@ -16,8 +16,11 @@ import {
   ModalFooter
 } from 'reactstrap';
 
+import SaveIcon from '@material-ui/icons/Save';
+
 const validFilename = require('valid-filename');
 import { jsonToCSV } from 'react-papaparse';
+import {PROTOCOL_VERSION} from "../Constants";
 
 class Save extends Component {
   constructor(props) {
@@ -36,7 +39,7 @@ class Save extends Component {
 
   render() {
     return (<div>
-      <Button size="md" className={"btn-csu"} onClick={() => this.toggleModal()}>Save</Button>
+      <Button size="md" className={"btn-csu"} onClick={() => this.toggleModal()}><SaveIcon/></Button>
       <Modal isOpen={this.state.showModal} toggle={() => this.toggleModal()}>
         <ModalHeader>
           Create Save File
@@ -115,12 +118,13 @@ class Save extends Component {
     }
     else {
       this.toggleModal();
+      let saveJson = this.createJson();
       switch (this.state.dropdownHeader) {
         case ".json":
-          this.downloadFile('txt/json', this.state.filename + this.state.dropdownHeader, JSON.stringify(this.props.dests));
+          this.downloadFile('txt/json', this.state.filename + this.state.dropdownHeader, JSON.stringify(saveJson));
           break;
         case ".csv":
-          let placesArray = JSON.stringify(this.props.dests.places);
+          let placesArray = JSON.stringify(saveJson.places);
           this.downloadFile('txt/csv', this.state.filename + this.state.dropdownHeader, jsonToCSV(placesArray));
           break;
         case ".kml":
@@ -129,6 +133,27 @@ class Save extends Component {
           break;
       }
     }
+  }
+  createJson() {
+    let saveJson = {
+        requestType: "trip",
+        requestVersion: PROTOCOL_VERSION,
+        options: {
+          title:"Trip",
+          earthRadius:"3959.0",
+          optimization: {
+            construction: "none",
+            improvement: "none",
+            response: "1"
+          }
+        },
+        places: []
+    };
+    this.props.mpArray.forEach((item, i) => {
+      saveJson.places.push({name: this.props.names[i].name, latitude: item.lat.toString(), longitude: item.lng.toString()});
+    });
+
+    return saveJson;
   }
 
   downloadFile(fileType, fileName, fileText) {

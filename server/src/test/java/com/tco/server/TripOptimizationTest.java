@@ -3,6 +3,8 @@ package com.tco.server;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.imageio.IIOException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,10 +31,15 @@ public class TripOptimizationTest {
     @Test
     public void testOptimizationBasic() {
         List<Map< String, String>> placesOptimized = new ArrayList<Map< String, String>>();
-         tripOpt.optimize(setUpPlacesStatic(), 1000.0, placesOptimized);
+        List<Map< String, String>> places = setUpPlacesStatic();
+        try {
+            tripOpt.optimize(places, 1000.0, placesOptimized);
+        } catch (IOException i){
+            System.err.println(i.getMessage());
+        }
         // we need to test for time and response
         // only initially going to test for non null response
-        assert placesOptimized.isEmpty() != true : "Test that places was returned non-null";
+        assert placesOptimized.isEmpty() == false : "Test that places was returned non-null";
     }
 
 

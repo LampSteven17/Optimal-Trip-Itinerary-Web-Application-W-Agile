@@ -7,8 +7,8 @@ wow, here again. thanks gson, this class DOES feel necessary
  */
 public class Optimization {
     //private String construction;
-    private Improvement improvement = Improvement.NONE;
-    private Construction construction = Construction.none;
+    private Improvement improvement;
+    private Construction construction;
     private String response = "1"; // default
 
     private enum Construction {
@@ -24,11 +24,11 @@ public class Optimization {
     }
 
     protected String getConstruction() {
-        return construction.name();
+        return construction != null ? construction.name() : null;
     }
 
     protected String getImprovement() {
-        return improvement.name();
+        return improvement != null ? improvement.name() : null;
     }
 
     protected byte getResponse() {

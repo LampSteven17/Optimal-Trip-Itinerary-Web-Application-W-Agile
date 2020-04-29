@@ -22,14 +22,17 @@
     "react-bootstrap": "^1.0.0-beta.16",
     "react-dom": "^16.7.0",
     "react-leaflet": "^2.2.0",
+    "react-movable": "^2.4.2",
     "react-native-geolocation-service": "^4.0.0",
+    "react-papaparse": "latest",
     "reactstrap": "^7.1.0",
     "style-loader": "^0.23.1",
     "ulog": "^1.1.0",
     "valid-filename": "^3.1.0",
     "webpack": "^4.28.4",
     "webpack-cli": "^3.2.1",
-    "react-papaparse": "latest"
+    "@material-ui/icons": "latest",
+    "@material-ui/core": "latest"
   },
   "devDependencies": {
     "ajv": "^6.10.2",

@@ -13,6 +13,7 @@ import {
 import * as distanceRequestSchema from "../../../schemas/DistanceRequest";
 import * as distanceResponseSchema from "../../../schemas/DistanceResponse";
 import * as tripRequestSchema from "../../../schemas/TripRequest";
+import * as FindRequestSchema from "../../../schemas/FindRequest";
 
 import Itinerary from "./Itinerary";
 import Save from "./Save";
@@ -548,6 +549,18 @@ export default class Atlas extends Component {
     });
   }
 
+
+  async send_find_request(requestBody) {
+    Promise.resolve().then(async () => {
+      await this.sendRequest(requestBody, "find", FindRequestSchema);
+    });
+  }
+
+  promptFind(requestBody) {
+    /// uh yeah do something here with the find response lol 800+ lines leggo boys
+    // use the method above to send-itttt, i did the rest it sends and all that fun shtuff
+  }
+
   async adjustZoomToFitPoints() {
     const group = this.groupRef.current.leafletElement;
     this.map.fitBounds(group.getBounds());
@@ -605,18 +618,13 @@ export default class Atlas extends Component {
     }
     switch (requestType) {
       case "distance":
-        await sendServerRequestWithBody(
-          "distance",
-          request,
-          this.props.serverPort
-        ).then((data) => this.promptDistance(data.body, isLastLeg, isDelete));
+        await sendServerRequestWithBody("distance", request, this.props.serverPort).then((data) => this.promptDistance(data.body, isLastLeg, isDelete));
         break;
       case "trip":
-        await sendServerRequestWithBody(
-          "trip",
-          request,
-          this.props.serverPort
-        ).then((data) => this.promptTrip(data.body));
+        await sendServerRequestWithBody("trip", request, this.props.serverPort).then((data) => this.promptTrip(data.body));
+        break;
+      case "find":
+        await sendServerRequestWithBody("find", request, this.props.serverPort).then((data) => this.promptFind(data.body));
         break;
       default:
         console.error("UNSUPPORTED REQUEST TYPE");

@@ -23,6 +23,7 @@ import { PROTOCOL_VERSION } from "../Constants";
 
 import FlipCameraAndroidIcon from '@material-ui/icons/FlipCameraAndroid';
 import HomeIcon from '@material-ui/icons/Home';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 const FALSECOLOR = "5px solid red";
 const TRUECOLOR = "5px solid green";
@@ -37,10 +38,29 @@ const MAP_LAYER_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const MAP_STYLE_LENGTH = 500;
 const MAP_ZOOM_MAX = 17;
 const MAP_ZOOM_MIN = 1;
+
+/****************************************
+ * Using Pointhi Basic Leaflet Color Markers
+ * https://github.com/pointhi/leaflet-color-markers
+ */
 const MARKER_ICON = L.icon({
-  iconUrl: icon,
-  shadowUrl: iconShadow,
-  iconAnchor: [12, 40], // for proper placement
+  iconUrl: require('./marker-icon-red.png'),
+  shadowUrl: require('./marker-shadow.png'),
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+
+  iconSize: [25, 41],
+  shadowSize: [41, 41]
+});
+
+const EMPTY_ICON = L.icon({
+  iconUrl: require('./marker-icon-red.png'),
+  shadowUrl: require('./marker-shadow.png'),
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+
+  iconSize: [0, 0],
+  shadowSize: [0, 0]
 });
 
 export default class Atlas extends Component {
@@ -61,6 +81,8 @@ export default class Atlas extends Component {
       itenData: [{ id: -1, destination: "", leg: "", total: "" }],
       tripRequestData: {},
       tipDataForMarkers: {},
+      MARKER_ICONN: MARKER_ICON,
+      markersVisible: true,
     };
 
     this.getCurrentLocation();
@@ -96,6 +118,7 @@ export default class Atlas extends Component {
     this.addMarkersForTrip = this.addMarkersForTrip.bind(this);
     this.reverseTrip = this.reverseTrip.bind(this);
     this.itenUpdateHandler = this.itenUpdateHandler.bind(this);
+    this.setRenderMarker = this.setRenderMarker.bind(this);
   }
 
   render() {
@@ -130,9 +153,34 @@ export default class Atlas extends Component {
           {this.renderPlusButton()}
           {this.saveRenderer()}
           {this.reverseRenderer()}
+          {this.renderMarkerToggle()}
         </Row>
       </div>
     );
+  }
+
+  renderMarkerToggle(){
+    return this.colRenderer(
+        <Button className={"btn-csu"} onClick={() => this.setRenderMarker()}>
+          <VisibilityIcon/>
+        </Button>,
+        "0rem",
+        0,
+        3,
+        "auto"
+
+    )
+  }
+
+  setRenderMarker(){
+
+    if(this.state.markersVisible){
+      this.setState({MARKER_ICONN: EMPTY_ICON});
+    }else{
+      this.setState({MARKER_ICONN:MARKER_ICON});
+    }
+
+    this.setState({markersVisible: !this.state.markersVisible});
   }
 
   renderStuff() {
@@ -239,7 +287,7 @@ export default class Atlas extends Component {
       <Button className={"btn-csu"} onClick={() => this.reverseTrip()}>
         <FlipCameraAndroidIcon/>
       </Button>,
-      "0rem",
+      "3.3rem",
       0,
       0,
       "auto"
@@ -344,7 +392,7 @@ export default class Atlas extends Component {
       let markerList = [];
       this.state.markerPosition.forEach((marker, i) => {
         markerList.push(
-          <Marker key={i} position={marker} icon={MARKER_ICON}>
+          <Marker key={i} position={marker} icon={this.state.MARKER_ICONN}>
             <Popup
               offset={[0, -18]}
               style={{ width: "50" }}

@@ -549,28 +549,6 @@ export default class Atlas extends Component {
     });
   }
 
-  ///////// TESTING MEthOD FUCK ME
-  findy() {
-    return {
-      requestType: "find",
-      requestVersion: PROTOCOL_VERSION,
-      match: "cade",
-      narrow: {"type":["airport"], "where":"United States"},
-      limit: 10,
-      found: 0,
-      places: [{"name":"Dave's Airport",
-        "latitude": "40.0332984924",
-        "longitude": "-105.124000549",
-        "id":"0CO1",
-        "altitude":"5170",
-        "municipality":"Louisville",
-        "type":"small_airport",
-        "region":"Colorado",
-        "country":"United States",
-        "continent":"North America"
-      }]
-    };
-  }
 
   async send_find_request(requestBody) {
     Promise.resolve().then(async () => {
@@ -580,6 +558,7 @@ export default class Atlas extends Component {
 
   promptFind(requestBody) {
     /// uh yeah do something here with the find response lol 800+ lines leggo boys
+    // use the method above to send-itttt, i did the rest it sends and all that fun shtuff
   }
 
   async adjustZoomToFitPoints() {
@@ -587,12 +566,10 @@ export default class Atlas extends Component {
     this.map.fitBounds(group.getBounds());
   }
 
-
-  // for mctesting purposes // this.handleHomeClick()
   showHomeButton() {
     if (this.state.hideButton === false) {
       return (
-        <Button className="btn-csu" onClick={() => this.send_find_request(this.findy())}>
+        <Button className="btn-csu" onClick={() => this.handleHomeClick()}>
           <HomeIcon/>
         </Button>
       );

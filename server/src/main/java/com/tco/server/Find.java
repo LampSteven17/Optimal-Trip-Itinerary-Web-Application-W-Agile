@@ -14,6 +14,14 @@ public class Find extends RequestHeader {
     private List<Map<String, String> > places;
     private Narrow narrow;
 
+    public Find() {}
+
+    public Find(String match, int limit, int found) {
+        this.match = match;
+        this.limit = limit;
+        this.found = found;
+    }
+
     @Override
     public void buildResponse() throws IOException {
         // Find something
@@ -38,5 +46,11 @@ public class Find extends RequestHeader {
 
     }
 
+    public String getWhere() { return this.narrow.getWhere();}
+    public String[] getTypes() { return this.narrow.getTypes();}
 
+    public void setForTesting(List<Map<String, String> > places, List<String> type, String where) {
+        this.places = places;
+        this.narrow = new Narrow(type, where);
+    }
 }

@@ -7,7 +7,10 @@ import Footer from '../src/components/Margins/Footer'
 import ServerSettings from '../src/components/Margins/ServerSettings'
 
 const startProperties = {
-    serverSettings: {'serverPort': 'black-bottle.cs.colostate.edu:31400', 'serverConfig': {}},
+    serverSettings: {'serverPort': 'black-bottle.cs.colostate.edu:31400', 'serverConfig': {
+        'serverName': 'test', 'supportedRequests': ['test'],
+            'optimization': {'construction': ['test'], 'improvement': ['test']},
+            'filter': {'where': ['test'], 'type': ['test']}}},
     isOpen: true,
     toggleOpen: jest.fn(),
     updateServerConfig: jest.fn(),

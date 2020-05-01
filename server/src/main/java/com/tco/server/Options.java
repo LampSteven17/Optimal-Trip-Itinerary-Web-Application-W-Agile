@@ -13,8 +13,6 @@ public class Options {
     private String title;
 
     public Options() {
-        System.out.println("used default======");
-        //optimization = new Optimization();
     }
 
     protected Options(String earthRadius, String title) {

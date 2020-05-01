@@ -17,7 +17,7 @@ public class DataBaseAccessor {
     private String DB_URL = DEPLOY_DB_URL;
     // username or password via environment
     private final static String DB_TRAVIS = "root";
-    private final static String DB_HOME_OR_DEPLOY = "root";
+    private final static String DB_HOME_OR_DEPLOY = "cs314-db";
     private final static String DB_PASSWORD_HOME_OR_DEPLOY = "eiK5liet1uej";
     private  String DB_USER = DB_HOME_OR_DEPLOY;
     private String DB_PASSWORD = DB_PASSWORD_HOME_OR_DEPLOY;
@@ -37,7 +37,6 @@ public class DataBaseAccessor {
         String environment_TRAVIS = System.getenv("TRAVIS");
 
         if (environment_TRAVIS != null) {
-
             if (environment_TRAVIS.equals("true")) {
                 DB_URL = TRAVIS_DB_URL;
                 DB_USER = DB_TRAVIS;

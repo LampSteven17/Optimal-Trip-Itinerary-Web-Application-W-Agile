@@ -24,7 +24,7 @@ public class DataBaseAccessor {
 
     // SQL SELECT query statement
     private final static String COLUMN = "id";
-    private final static String QUERY = "SELECT DISTINCT "+ COLUMN +" FROM world ORDER BY "+ COLUMN +" ASC;";
+    private final static String QUERY = "SELECT DISTINCT "+ COLUMN +" FROM colorado ORDER BY "+ COLUMN +" ASC;";
 
     protected DataBaseAccessor() {
         this.set_URL_based_on_environment();

@@ -24,7 +24,7 @@ public class Find extends RequestHeader {
 
     @Override
     public void buildResponse() throws IOException {
-        sanitize();
+        sanitize(); // clean up inputs
         // Find something
     }
 

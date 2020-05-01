@@ -12,9 +12,9 @@ https://github.com/csucs314s20/guide/blob/master/Guides/Database/ExampleFiles/Da
 public class DataBaseAccessor {
     // strings for either home computer or sprint deployment
     private final static String HOME_DEV_DB_URL = "jdbc:mysql://127.0.0.1:56247/cs314";
-    private final static String DEPLOY_DB_URL = "jdbc:mariadb://127.0.0.1:56247/cs314";
+    private final static String DEPLOY_DB_URL = "jdbc:mysql://faure.cs.colostate.edu/cs314";
 
-    private String DB_URL;
+    private String DB_URL = DEPLOY_DB_URL;
 
     // shared user with read-only access
     private final static String DB_USER = "cs314-db";
@@ -28,13 +28,14 @@ public class DataBaseAccessor {
         this.set_URL_based_on_environment();
     }
 
+    // set export CS314_ENV=development
     private void set_URL_based_on_environment() {
-        // TODO make this based on an environment variable. for now just HOME_DEV for testing
-        if (true) { // environment.equals("development")
+        String environment = System.getenv("CS314_ENV");
+        if (environment == null)
+            return;
+
+        if (environment.equals("development"))
             DB_URL = HOME_DEV_DB_URL;
-        } else {
-            DB_URL = DEPLOY_DB_URL;
-        }
     }
 
     // TODO this is gonna need quite a bit of modification to do intended stuff

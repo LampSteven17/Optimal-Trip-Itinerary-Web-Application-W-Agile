@@ -15,7 +15,7 @@ public class TestDataBase {
     }
 
     @Test
-    public void check_enviroment() {
+    public void check_environment() {
         // todo this should actually test something when set up
          String url = db.getURL();
         assertEquals("URL test", "jdbc:mysql://127.0.0.1:56247/cs314", url);
@@ -27,7 +27,7 @@ public class TestDataBase {
         try {
             db.send_query();
         } catch (Exception e){
-            System.out.println("Not connected");
+            System.out.println("Not connected, are you port forwarded??");
         }
     }
 

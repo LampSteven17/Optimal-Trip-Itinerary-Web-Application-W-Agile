@@ -70,7 +70,11 @@ export default class ServerSettings extends Component {
                 {this.render_table_because_code_climate_said_so("Server Name", this.getCurrentServerName())}
                 {this.render_table_because_code_climate_said_so("Request Version", configurationSettings[0])}
                 {this.render_table_because_code_climate_said_so("Request Type", configurationSettings[1])}
-                {this.render_table_because_code_climate_said_so("Supported Requests", "config, distance, trip")}
+                {this.render_table_because_code_climate_said_so("Supported Requests", configurationSettings[2])}
+                {this.render_table_because_code_climate_said_so("Optimization-Improvement", configurationSettings[3])}
+                {this.render_table_because_code_climate_said_so("Optimization-Construction", configurationSettings[4])}
+                {this.render_table_because_code_climate_said_so("Filter-Where", configurationSettings[5])}
+                {this.render_table_because_code_climate_said_so("Filter-Type", configurationSettings[6])}
 
                 </tbody>
             </table>
@@ -88,11 +92,19 @@ export default class ServerSettings extends Component {
 
     process_config_body(){
         if (this.props.serverSettings.serverConfig && this.state.validServer) {
+            console.log(this.props.serverSettings.serverConfig);
            let currentRequestVersion = this.props.serverSettings.serverConfig.requestVersion;
            let currentRequestType = this.props.serverSettings.serverConfig.requestType;
-            return [currentRequestVersion, currentRequestType ];
+           let currentSupportedReq = this.props.serverSettings.serverConfig.supportedRequests;
+           let currentOptImp = this.props.serverSettings.serverConfig.optimization.improvement;
+           let currentOptCon = this.props.serverSettings.serverConfig.optimization.construction;
+           let currentFilterWhere = this.props.serverSettings.serverConfig.filter.where;
+           let currentFilterType = this.props.serverSettings.serverConfig.filter.type;
+            return [currentRequestVersion, currentRequestType, currentSupportedReq.toString(),
+                currentOptImp.toString(), currentOptCon.toString(),
+                currentFilterWhere.toString(), currentFilterType.toString()];
         } else {
-            return ["", ""];
+            return ["", "", "", "", "", "", ""];
         }
     }
 

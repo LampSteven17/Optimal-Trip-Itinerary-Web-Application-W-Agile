@@ -15,8 +15,10 @@ public class TestFind {
 
     @Before
     public void createConfigurationForTestCases(){
-        find = new Find("test", 0, 0);
+        find = new Find("*test--", 0, 0);
         find.requestType = "find"; find.requestVersion = 5;
+        setup();
+
         try {
             find.buildResponse();
         } catch (Exception e) {
@@ -32,12 +34,21 @@ public class TestFind {
     }
 
     @Test
+    public void testSanitize() {
+        // we gave a bad construction string that should be sanitized
+        assertEquals("find sanitize match", "_test__", find.getMatch());
+        assertEquals("find sanitize where", "__where_", find.getWhere());
+    }
+
+    @Test
     public void testNarrowNulls() {
+        assertEquals("find types length", 0, find.getTypes().length);
+    }
+
+    private void setup() {
         List<String> type = new ArrayList<>();
         List<Map<String, String>> places = new ArrayList<Map<String, String>>();
-        find.setForTesting(places, type, "where");
-        assertEquals("find where", "where", find.getWhere());
-        assertEquals("find where", 0, find.getTypes().length);
+        find.setForTesting(places, type, "^$where*");
     }
 
 }

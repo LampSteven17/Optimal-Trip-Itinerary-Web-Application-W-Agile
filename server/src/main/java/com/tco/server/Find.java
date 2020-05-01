@@ -24,8 +24,24 @@ public class Find extends RequestHeader {
 
     @Override
     public void buildResponse() throws IOException {
+        sanitize(); // clean up inputs
         // Find something
     }
+
+
+    private void sanitize() {
+        if (match != null) {
+            match = match.replaceAll("[^a-zA-Z0-9]", "_");
+        }
+        if (narrow == null) {
+            return;
+        }
+        if (narrow.getWhere() != null) {
+            narrow.setWhere(narrow.getWhere().replaceAll("[^a-zA-Z0-9]", "_"));
+        }
+    }
+
+
 
     // quick data structure for narrow cause why not
     protected class Narrow{
@@ -44,6 +60,8 @@ public class Find extends RequestHeader {
             return this.type.toArray(new String[this.type.size()]);
         }
 
+        protected void setWhere(String where) { this.where = where;}
+
     }
 
     public String getWhere() { return this.narrow.getWhere();}
@@ -53,4 +71,6 @@ public class Find extends RequestHeader {
         this.places = places;
         this.narrow = new Narrow(type, where);
     }
+
+    public String getMatch() {return this.match;}
 }

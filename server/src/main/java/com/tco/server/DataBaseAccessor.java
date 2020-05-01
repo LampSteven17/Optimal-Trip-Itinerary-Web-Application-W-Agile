@@ -5,17 +5,16 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 import java.sql.ResultSet;
 
-
 /*
 Adopted from davemattcsu DataBaseExample.java
 https://github.com/csucs314s20/guide/blob/master/Guides/Database/ExampleFiles/DatabaseExample.java
  */
 public class DataBaseAccessor {
-
+    // strings for either home computer or sprint deployment
     private final static String HOME_DEV_DB_URL = "jdbc:mysql://127.0.0.1:56247/cs314";
     private final static String DEPLOY_DB_URL = "jdbc:mariadb://127.0.0.1:56247/cs314";
 
-    private static String DB_URL;
+    private String DB_URL;
 
     // shared user with read-only access
     private final static String DB_USER = "cs314-db";
@@ -38,9 +37,7 @@ public class DataBaseAccessor {
         }
     }
 
-    /*
-    This should be the workhorse for doing a query
-     */
+    // TODO this is gonna need quite a bit of modification to do intended stuff
     protected void send_query() {
         try (
             // connect to the database and query
@@ -59,6 +56,6 @@ public class DataBaseAccessor {
 
     }
 
-
+    public String getURL() { return DB_URL; }
 
 }

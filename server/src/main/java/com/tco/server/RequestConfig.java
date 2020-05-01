@@ -47,12 +47,6 @@ public class RequestConfig extends RequestHeader {
 
   @Override
   public void buildResponse() {
-    System.out.println("\ngearing up for a SQL\n");
-
-    DataBaseAccessor db = new DataBaseAccessor();
-
-    db.send_query(); // lol hope and pray
-
     this.serverName = "t10 Two Hands Up";
     log.trace("buildResponse -> {}", this);
   }

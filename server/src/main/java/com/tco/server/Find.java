@@ -42,6 +42,11 @@ public class Find extends RequestHeader {
     }
 
 
+    private void queryDatabase() {
+        DataBaseAccessor matchQuery = new DataBaseAccessor();
+
+    }
+
 
     // quick data structure for narrow cause why not
     protected class Narrow{

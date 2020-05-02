@@ -3,6 +3,7 @@ package com.tco.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,12 +30,12 @@ public class RequestTrip extends RequestHeader{
     }
 
     @Override
-    public void buildResponse() {
+    public void buildResponse() throws IOException {
         this.distances = calculateDistances();
         log.trace("buildResponse -> {}", this);
     }
 
-    private Long[] calculateDistances() {
+    private Long[] calculateDistances() throws IOException {
         List<Map < String, String> > sorted_places = new ArrayList<Map<String, String>>();
 
         if (options.hasOptimization()) {
@@ -61,7 +62,7 @@ public class RequestTrip extends RequestHeader{
     }
 
 
-    private void optimize(List<Map < String, String> > sorted_places) {
+    private void optimize(List<Map < String, String> > sorted_places) throws IOException {
         TripOptimization tripOpt = new TripOptimization(
                 options.getConstruction(),
                 options.getImprovement(),

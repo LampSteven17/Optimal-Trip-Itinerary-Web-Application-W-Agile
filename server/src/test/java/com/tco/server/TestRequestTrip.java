@@ -3,6 +3,7 @@ package com.tco.server;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +18,11 @@ public class TestRequestTrip {
     public void createConfigurationForTestCases(){
         trip = new RequestTrip();
         setupForResponse();
-        trip.buildResponse();
+        try {
+            trip.buildResponse();
+        } catch (IOException i) {
+            // hmm
+        }
     }
 
     @Test
@@ -29,7 +34,7 @@ public class TestRequestTrip {
     @Test
     public void testVersion() {
         int version = trip.getVersion();
-        assertEquals("trip requestVersion", 3, version);
+        assertEquals("trip requestVersion", 5, version);
     }
 
     private void setupForResponse() {

@@ -3,8 +3,7 @@ package com.tco.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /** This class defines the Config response that provides the client
  * with server specific configuration information.
@@ -23,14 +22,26 @@ public class RequestConfig extends RequestHeader {
   private String serverName;
   private final transient Logger log = LoggerFactory.getLogger(RequestConfig.class);
   private String[] supportedRequests;
+  private Map<String, String[]> optimization;
+  private Map<String, String[]> filter;
+
 
   RequestConfig() {
     this.requestType = "config";
     this.requestVersion = RequestHeader.CURRENT_SUPPORTED_VERSION;
-    this.supportedRequests = new String[3];
-    this.supportedRequests[0] = "config";
-    this.supportedRequests[1] = "distance";
-    this.supportedRequests[2] = "trip";
+    this.supportedRequests = new String[]{"config", "distance", "trip", "find"};
+
+    String[] construction = new String[]{"none", "one"};
+    String[] improvement = new String[]{"none"};
+    this.optimization = new HashMap<String, String[]>();
+    this.optimization.put("construction", construction);
+    this.optimization.put("improvement", improvement);
+
+    String[] type = new String[]{"airport"};
+    String[] where = new String[]{"Nothin but a test babey"};
+    this.filter = new HashMap<String, String[]>();
+    this.filter.put("type", type);
+    this.filter.put("where", where);
   }
 
 

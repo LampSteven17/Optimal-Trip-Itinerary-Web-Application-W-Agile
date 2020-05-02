@@ -3,6 +3,7 @@ package com.tco.server;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ public class TestRequestDistance{
         dist.testDistance(p1, p2, 1000.0);
 
         dist.buildResponse();
+
     }
 
     @Test
@@ -34,6 +36,6 @@ public class TestRequestDistance{
     @Test
     public void testVersion() {
         int version = dist.getVersion();
-        assertEquals("distance requestVersion", 3, version);
+        assertEquals("distance requestVersion", 5, version);
     }
 }

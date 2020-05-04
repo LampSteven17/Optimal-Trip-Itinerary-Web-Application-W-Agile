@@ -21,21 +21,26 @@ public class DataBaseAccessor {
     private final static String DB_PASSWORD = "eiK5liet1uej";
 
     // SQL SELECT query statement
-    private final static String COLUMN = "id";
-    private final static String QUERY = "SELECT DISTINCT "+ COLUMN +" FROM world ORDER BY "+ COLUMN +" ASC;";
-    private String MATCH_STRING;
-    private int LIMIT;
-    private String[] NARROW;
+    private String QUERY;
 
     protected DataBaseAccessor() {
         this.set_URL_based_on_environment();
     }
 
 
-    protected DataBaseAccessor(String match, int limit, String[] narrow) {
-        this.MATCH_STRING = match;
-        this.LIMIT = limit;
-        this.NARROW = narrow;
+    protected DataBaseAccessor(String matchIn, int limit, String narrow) {
+        this.set_URL_based_on_environment();
+        String match = "\"%" + matchIn + "%\"";
+        this.QUERY = "SELECT world.name, world.municipality, region.name, country.name, continent.name " +
+                "FROM continent INNER JOIN country ON continent.id = country.continent " +
+                "INNER JOIN region ON country.id = region.iso_country " +
+                "INNER JOIN world ON region.id = world.iso_region " +
+                "WHERE country.name LIKE " + match + " " +
+                "OR region.name LIKE " + match + " " +
+                "OR world.name LIKE " + match + " " +
+                "OR world.municipality LIKE " + match + " " +
+                "ORDER BY continent.name, country.name, region.name, world.municipality, world.name ASC " +
+                "LIMIT " + limit;
     }
 
 
@@ -49,7 +54,8 @@ public class DataBaseAccessor {
     }
 
     // TODO this is gonna need quite a bit of modification to do intended stuff
-    protected void send_query() {
+    protected ResultSet send_query() {
+        ResultSet output = null;
         try (
             // connect to the database and query
             Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
@@ -58,13 +64,14 @@ public class DataBaseAccessor {
         ) {
             // iterate through query results and print out the column values
             int count = 0;
+            output = results;
             while (results.next()) {
-                System.out.printf("%6d %s\n", ++count, results.getString(COLUMN));
+                System.out.printf("%6d %s\n", ++count, results.getString("region.latitude"));
             }
         } catch (Exception e) {
             System.err.println("Exception: " + e.getMessage());
         }
-
+        return output;
     }
 
     public String getURL() { return DB_URL; }

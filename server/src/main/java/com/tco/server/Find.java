@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.util.*;
 
 public class Find extends RequestHeader {
@@ -25,7 +26,10 @@ public class Find extends RequestHeader {
     @Override
     public void buildResponse() throws IOException {
         sanitize(); // clean up inputs
-        // Find something
+
+        ResultSet output = queryDatabase();
+
+        System.out.println(output);
     }
 
 
@@ -42,9 +46,10 @@ public class Find extends RequestHeader {
     }
 
 
-    private void queryDatabase() {
-        DataBaseAccessor matchQuery = new DataBaseAccessor();
+    private ResultSet queryDatabase() {
+        DataBaseAccessor matchQuery = new DataBaseAccessor(match, 100, "test");
 
+        return matchQuery.send_query();
     }
 
 

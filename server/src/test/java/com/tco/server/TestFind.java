@@ -51,4 +51,18 @@ public class TestFind {
         find.setForTesting(places, type, "^$where*");
     }
 
+    @Before
+    public void configForBasicQuery(){
+        find = new Find("alf", 100, 0);
+        find.requestType = "find";
+        find.requestVersion = 5;
+        setup();
+
+        try {
+            find.buildResponse();;
+        } catch (Exception e) {
+            System.out.println("Build Response FAIL");
+        }
+    }
+
 }

@@ -2,7 +2,7 @@
 
 import subprocess
 
-your_name_string = "cademccu@kabul.cs.colostate.edu"
+your_name_string = "ryanhk@kabul.cs.colostate.edu"
 
 # apparently ports 49152-65535 are good to use for this
 

@@ -195,7 +195,7 @@ class Itinerary extends Component {
     });
     return (
       <Modal isOpen={modalState} toggle={() => this.toggleModal(destination)}>
-        <ModalHeader>Create Save File</ModalHeader>
+        <ModalHeader>Update Marker</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>

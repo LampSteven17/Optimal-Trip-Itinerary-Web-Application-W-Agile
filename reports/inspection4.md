@@ -35,7 +35,6 @@
 |TripOptimization.java: 40| on long time and big list this wouldnt be enough time to send back|med|Cade||
 |TripOptimization.java: 117| needs a time check here too|low|Cade||
 |TripOptimization.java: 90| this is a dirty hack to check for numbers|low|Cade||
-
 |TripOptimization.java: 52| should check if earth radius is negative to not break anything |low|Austin| |
 |TripOptimization.java: 56 | if places is less than 2, we don't need a 2d array |low|Austin| |
 |TripOptimization.java: 59 | if we change this to a switch statement implementation might be cleaner |low|Austin||

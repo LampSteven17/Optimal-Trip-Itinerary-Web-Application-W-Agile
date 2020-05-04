@@ -197,32 +197,7 @@ class Itinerary extends Component {
       <Modal isOpen={modalState} toggle={() => this.toggleModal(destination)}>
         <ModalHeader>Update Marker</ModalHeader>
         <ModalBody>
-          <Form>
-            <FormGroup>
-              <Label>Destination Name</Label>
-              <Input
-                id="destName"
-                defaultValue={destination}
-                onInput={(e) => this.handleName(e.target.value)}
-              ></Input>
-            </FormGroup>
-            <FormGroup>
-              <span style={{ width: "45%", float: "left" }}>
-                <Label>Latitude</Label>
-                <Input
-                  defaultValue={lat}
-                  onInput={(e) => this.handleLat(e.target.value)}
-                ></Input>
-              </span>
-              <span style={{ width: "45%", float: "right" }}>
-                <Label>Longitude</Label>
-                <Input
-                  defaultValue={lng}
-                  onInput={(e) => this.handleLng(e.target.value)}
-                ></Input>
-              </span>
-            </FormGroup>
-          </Form>
+         {this.renderForm(destination, lat, lng)}
         </ModalBody>
         <ModalFooter>
           <Button
@@ -239,6 +214,37 @@ class Itinerary extends Component {
           </Button>
         </ModalFooter>
       </Modal>
+    );
+  }
+
+  renderForm(destination, lat, lng) {
+    return (
+      <Form>
+      <FormGroup>
+        <Label>Destination Name</Label>
+        <Input
+          id="destName"
+          defaultValue={destination}
+          onInput={(e) => this.handleName(e.target.value)}
+        ></Input>
+      </FormGroup>
+      <FormGroup>
+        <span style={{ width: "45%", float: "left" }}>
+          <Label>Latitude</Label>
+          <Input
+            defaultValue={lat}
+            onInput={(e) => this.handleLat(e.target.value)}
+          ></Input>
+        </span>
+        <span style={{ width: "45%", float: "right" }}>
+          <Label>Longitude</Label>
+          <Input
+            defaultValue={lng}
+            onInput={(e) => this.handleLng(e.target.value)}
+          ></Input>
+        </span>
+      </FormGroup>
+    </Form>
     );
   }
 

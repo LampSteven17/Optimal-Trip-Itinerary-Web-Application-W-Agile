@@ -274,6 +274,7 @@ export default class Atlas extends Component {
           name: item.destination,
           latitude: item.lat.toString(),
           longitude: item.lng.toString(),
+          modal: false,
         });
       }
     });
@@ -653,6 +654,7 @@ export default class Atlas extends Component {
             total: this.distance,
             lat: lat,
             lng: lng,
+            modal: false,
           },
         ],
       };
@@ -684,6 +686,7 @@ export default class Atlas extends Component {
             total: this.distance,
             lat: lat,
             lng: lng,
+            modal: false,
           },
         ],
       });
@@ -698,6 +701,7 @@ export default class Atlas extends Component {
             total: this.distance,
             lat: lat,
             lng: lng,
+            modal: false,
           },
         ],
       });
@@ -721,6 +725,7 @@ export default class Atlas extends Component {
             total: "0",
             lat: this.state.markerPosition[0].lat,
             lng: this.state.markerPosition[0].lng,
+            modal: false,
           },
         ],
       });

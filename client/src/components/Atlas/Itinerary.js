@@ -134,7 +134,7 @@ class Itinerary extends Component {
     let head = Object.keys(this.props.dests[0]);
 
     return head.map((key, index) => {
-      if (key != "id" && key !== "lat" && key !== "lng") {
+      if (key != "id" && key !== "lat" && key !== "lng" && key !== "modal") {
         return <th key={index}> {key.toUpperCase()} </th>;
       }
     });
@@ -169,7 +169,7 @@ class Itinerary extends Component {
           size="sm"
           id="editToggle"
           className={"btn-csu"}
-          onClick={() => this.toggleModal()}
+          onClick={() => this.toggleModal(destination)}
         >
           Edit
         </Button>
@@ -179,16 +179,18 @@ class Itinerary extends Component {
   }
 
   renderModal(destination) {
-    console.log(this.props.dests);
-    let lat,lng = 0;
-    this.props.dests.forEach(dest => {
+    let lat,
+      lng = 0;
+    let modalState;
+    this.state.searched.forEach((dest, i) => {
       if (dest.destination === destination) {
         lat = dest.lat;
         lng = dest.lng;
+        modalState = this.state.searched[i].modal;
       }
     });
     return (
-      <Modal isOpen={this.state.showModal} toggle={() => this.toggleModal()}>
+      <Modal isOpen={modalState} toggle={() => this.toggleModal(destination)}>
         <ModalHeader>Create Save File</ModalHeader>
         <ModalBody>
           <Form>
@@ -197,11 +199,11 @@ class Itinerary extends Component {
               <Input id="destName" defaultValue={destination}></Input>
             </FormGroup>
             <FormGroup>
-              <span style={{width:"45%",float:"left"}}>
+              <span style={{ width: "45%", float: "left" }}>
                 <Label>Latitude</Label>
                 <Input defaultValue={lat}></Input>
               </span>
-              <span style={{width:"45%", float:"right"}}>
+              <span style={{ width: "45%", float: "right" }}>
                 <Label>Longitude</Label>
                 <Input defaultValue={lng}></Input>
               </span>
@@ -209,10 +211,16 @@ class Itinerary extends Component {
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={() => this.updateDestination()}>
+          <Button
+            color="primary"
+            onClick={() => this.updateDestination(destination)}
+          >
             Save
           </Button>{" "}
-          <Button color="secondary" onClick={() => this.toggleModal()}>
+          <Button
+            color="secondary"
+            onClick={() => this.toggleModal(destination)}
+          >
             Cancel
           </Button>
         </ModalFooter>
@@ -220,12 +228,17 @@ class Itinerary extends Component {
     );
   }
 
-  toggleModal() {
-    this.setState({ showModal: !this.state.showModal });
+  toggleModal(destination) {
+    let newSearched = this.state.searched;
+    newSearched.forEach((dest, i) => {
+      if (dest.destination === destination)
+        newSearched[i].modal = !newSearched[i].modal;
+    });
+    this.setState({searched: newSearched});
   }
 
-  updateDestination() {
-    this.toggleModal();
+  updateDestination(destination) {
+    this.toggleModal(destination);
   }
 
   static getDerivedStateFromProps(props, state) {

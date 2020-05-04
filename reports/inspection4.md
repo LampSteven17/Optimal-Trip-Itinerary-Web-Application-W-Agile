@@ -12,6 +12,7 @@
 | ---- | ---- |
 |Steven Lamp|35 mins|
 |Ryan Kughn|30 mins|
+|Cade McCumber|30 mins|
 
 ### Problems found
 
@@ -28,6 +29,15 @@
 |TripOptimization: 32 | Unused log variable, is this needed? | low | Ryan | |
 |TripOptimization: 68 | Return on a void method, maybe remove? | low | Ryan | |
 |TripOptimization: 146 | The method setEarthRadius is never used | low | Ryan | |
+|Find.java: 75| no null check on getter| med | Cade||
+|Find.java: 75| need to set up logic on null inputs| low | Cade||
+|TripOptimization.java: 40| on long time and big list this wouldnt be enough time to send back|med|Cade||
+|TripOptimization.java: 117| needs a time check here too|low|Cade||
+|TripOptimization.java: 90| this is a dirty hack to check for numbers|low|Cade||
+
+| | | | |
+| | | | |
+| | | | |
  
 
 

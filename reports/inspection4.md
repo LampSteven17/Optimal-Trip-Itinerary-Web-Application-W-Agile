@@ -13,6 +13,7 @@
 |Steven Lamp|35 mins|
 |Ryan Kughn|30 mins|
 |Cade McCumber|30 mins|
+|Austin Soriano| 35 mins |
 
 ### Problems found
 
@@ -34,10 +35,11 @@
 |TripOptimization.java: 40| on long time and big list this wouldnt be enough time to send back|med|Cade||
 |TripOptimization.java: 117| needs a time check here too|low|Cade||
 |TripOptimization.java: 90| this is a dirty hack to check for numbers|low|Cade||
-
-| | | | |
-| | | | |
-| | | | |
+|TripOptimization.java: 52| should check if earth radius is negative to not break anything |low|Austin| |
+|TripOptimization.java: 56 | if places is less than 2, we don't need a 2d array |low|Austin| |
+|TripOptimization.java: 59 | if we change this to a switch statement implementation might be cleaner |low|Austin||
+|Find.java: 11 | There is a lot of class variables which is kind of bad practice | low| Austin||
+|Find.java: 47| Class within class is bad practice. Might make it it's own file | low | Austin | |
  
 
 

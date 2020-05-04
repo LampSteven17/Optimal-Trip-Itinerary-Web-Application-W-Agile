@@ -28,10 +28,14 @@ class Itinerary extends Component {
       firstTime: true,
       previousProps: this.props.dests,
       showModal: false,
+      updatedLat: null,
+      updatedLng: null,
+      updatedName: null,
     };
     this.ref = createRef();
     this.filterBySearch = this.filterBySearch.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
+    this.updateDestination = this.updateDestination.bind(this);
   }
 
   render() {
@@ -196,16 +200,26 @@ class Itinerary extends Component {
           <Form>
             <FormGroup>
               <Label>Destination Name</Label>
-              <Input id="destName" defaultValue={destination}></Input>
+              <Input
+                id="destName"
+                defaultValue={destination}
+                onInput={(e) => this.handleName(e.target.value)}
+              ></Input>
             </FormGroup>
             <FormGroup>
               <span style={{ width: "45%", float: "left" }}>
                 <Label>Latitude</Label>
-                <Input defaultValue={lat}></Input>
+                <Input
+                  defaultValue={lat}
+                  onInput={(e) => this.handleLat(e.target.value)}
+                ></Input>
               </span>
               <span style={{ width: "45%", float: "right" }}>
                 <Label>Longitude</Label>
-                <Input defaultValue={lng}></Input>
+                <Input
+                  defaultValue={lng}
+                  onInput={(e) => this.handleLng(e.target.value)}
+                ></Input>
               </span>
             </FormGroup>
           </Form>
@@ -228,17 +242,45 @@ class Itinerary extends Component {
     );
   }
 
-  toggleModal(destination) {
+  toggleModal(destination, resetLatLng = true) {
     let newSearched = this.state.searched;
     newSearched.forEach((dest, i) => {
       if (dest.destination === destination)
         newSearched[i].modal = !newSearched[i].modal;
     });
-    this.setState({searched: newSearched});
+    this.setState({ searched: newSearched });
+    if (resetLatLng) {
+      this.setState({ handleLat: null, handleLng: null, handleName: null });
+    }
   }
 
   updateDestination(destination) {
-    this.toggleModal(destination);
+    this.toggleModal(destination, false);
+    let name = this.state.updatedName;
+    let lat = this.state.updatedLat;
+    let lng = this.state.updatedLng;
+    let newSearched = this.state.searched;
+    newSearched.forEach(item => {
+      if (item.destination === destination) {
+        if (name !== null) item.destination = name;
+        if (lat !== null) item.lat = Number(lat);
+        if (lng !== null) item.lng = Number(lng);
+      }
+    });
+    this.props.handler(newSearched);
+    this.setState({ handleLat: null, handleLng: null, handleName: null });
+  }
+
+  handleName(e) {
+    this.setState({ updatedName: e });
+  }
+
+  handleLat(e) {
+    this.setState({ updatedLat: e });
+  }
+
+  handleLng(e) {
+    this.setState({ updatedLng: e });
   }
 
   static getDerivedStateFromProps(props, state) {

@@ -1,7 +1,17 @@
 import React, { createRef, Component } from "react";
 import "../tcowebstyle.css";
 import { List, arrayMove } from "react-movable";
-import { Input, Table } from "reactstrap";
+import {
+  Button,
+  Input,
+  Form,
+  FormGroup,
+  Label,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "reactstrap";
 
 /***************
  * For full References Vist: https://dev.to/abdulbasit313/an-easy-way-to-create-a-customize-dynamic-table-in-react-js-3igg
@@ -17,9 +27,15 @@ class Itinerary extends Component {
       searched: this.props.dests,
       firstTime: true,
       previousProps: this.props.dests,
+      showModal: false,
+      updatedLat: null,
+      updatedLng: null,
+      updatedName: null,
     };
     this.ref = createRef();
-    this.updateOrder = this.updateOrder.bind(this);
+    this.filterBySearch = this.filterBySearch.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
+    this.updateDestination = this.updateDestination.bind(this);
   }
 
   render() {
@@ -72,15 +88,16 @@ class Itinerary extends Component {
    * repurposed from levelupTuts online youtube on search filters and react js
    * https://youtu.be/OlVkYnVXPl0
    */
-  filterBySearch(searchText){
-    this.setState({firstTime: false});
-    let filter = this.props.dests.filter(
-        (dest) => {
-          return dest.destination.toLowerCase().includes(searchText.toLowerCase()) === true;
-        }
-    );
+  filterBySearch(searchText) {
+    this.setState({ firstTime: false });
+    let filter = this.props.dests.filter((dest) => {
+      return (
+        dest.destination.toLowerCase().includes(searchText.toLowerCase()) ===
+        true
+      );
+    });
 
-    this.setState({searched: filter});
+    this.setState({ searched: filter });
   }
 
   updateOrder(oldIndex, newIndex) {
@@ -121,7 +138,7 @@ class Itinerary extends Component {
     let head = Object.keys(this.props.dests[0]);
 
     return head.map((key, index) => {
-      if (key != "id" && key !== "lat" && key !== "lng") {
+      if (key != "id" && key !== "lat" && key !== "lng" && key !== "modal") {
         return <th key={index}> {key.toUpperCase()} </th>;
       }
     });
@@ -139,19 +156,154 @@ class Itinerary extends Component {
         }}
         key={id}
       >
-        <td>{destination}</td>
+        <td>
+          {destination}
+          {this.editButton(destination)}
+        </td>
         <td>{leg}</td>
         <td>{total}</td>
       </tr>
     );
   }
 
+  editButton(destination) {
+    return (
+      <span style={{ paddingLeft: "1em" }}>
+        <Button
+          size="sm"
+          id="editToggle"
+          className={"btn-csu"}
+          onClick={() => this.toggleModal(destination)}
+        >
+          Edit
+        </Button>
+        {this.renderModal(destination)}
+      </span>
+    );
+  }
+
+  renderModal(destination) {
+    let lat,
+      lng = 0;
+    let modalState;
+    this.state.searched.forEach((dest, i) => {
+      if (dest.destination === destination) {
+        lat = dest.lat;
+        lng = dest.lng;
+        modalState = this.state.searched[i].modal;
+      }
+    });
+    return (
+      <Modal isOpen={modalState} toggle={() => this.toggleModal(destination)}>
+        <ModalHeader>Update Marker</ModalHeader>
+        <ModalBody>{this.renderForm(destination, lat, lng)}</ModalBody>
+        <ModalFooter>
+          <Button
+            color="primary"
+            onClick={() => this.updateDestination(destination)}
+          >
+            Save
+          </Button>{" "}
+          <Button
+            color="secondary"
+            onClick={() => this.toggleModal(destination)}
+          >
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
+    );
+  }
+
+  renderForm(destination, lat, lng) {
+    return (
+      <Form>
+        {this.destinationRender(destination)}
+        {this.latlngRender(lat, lng)}
+      </Form>
+    );
+  }
+
+  destinationRender(destination) {
+    return (
+      <FormGroup>
+        <Label>Destination Name</Label>
+        <Input
+          id="destName"
+          defaultValue={destination}
+          onInput={(e) => this.handleName(e.target.value)}
+        ></Input>
+      </FormGroup>
+    );
+  }
+
+  latlngRender(lat, lng) {
+    return (
+      <FormGroup>
+        <span style={{ width: "45%", float: "left" }}>
+          <Label>Latitude</Label>
+          <Input
+            defaultValue={lat}
+            onInput={(e) => this.handleLat(e.target.value)}
+          ></Input>
+        </span>
+        <span style={{ width: "45%", float: "right" }}>
+          <Label>Longitude</Label>
+          <Input
+            defaultValue={lng}
+            onInput={(e) => this.handleLng(e.target.value)}
+          ></Input>
+        </span>
+      </FormGroup>
+    );
+  }
+
+  toggleModal(destination, resetLatLng = true) {
+    let newSearched = this.state.searched;
+    newSearched.forEach((dest, i) => {
+      if (dest.destination === destination)
+        newSearched[i].modal = !newSearched[i].modal;
+    });
+    this.setState({ searched: newSearched });
+    if (resetLatLng) {
+      this.setState({ handleLat: null, handleLng: null, handleName: null });
+    }
+  }
+
+  updateDestination(destination) {
+    this.toggleModal(destination, false);
+    let name = this.state.updatedName;
+    let lat = this.state.updatedLat;
+    let lng = this.state.updatedLng;
+    let newSearched = this.state.searched;
+    newSearched.forEach((item) => {
+      if (item.destination === destination) {
+        if (name !== null) item.destination = name;
+        if (lat !== null) item.lat = Number(lat);
+        if (lng !== null) item.lng = Number(lng);
+      }
+    });
+    this.props.handler(newSearched);
+    this.setState({ handleLat: null, handleLng: null, handleName: null });
+  }
+
+  handleName(e) {
+    this.setState({ updatedName: e });
+  }
+
+  handleLat(e) {
+    this.setState({ updatedLat: e });
+  }
+
+  handleLng(e) {
+    this.setState({ updatedLng: e });
+  }
+
   static getDerivedStateFromProps(props, state) {
-    if(state.previousProps != props.dests){
+    if (state.previousProps != props.dests) {
       state.previousProps = props.dests;
       state.firstTime = true;
     }
-
 
     if (state.searched !== props.dests && state.firstTime) {
       return {

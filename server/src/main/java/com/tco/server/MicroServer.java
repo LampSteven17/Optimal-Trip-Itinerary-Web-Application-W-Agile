@@ -17,7 +17,7 @@ import spark.Spark;
 
 class MicroServer {
 
-  private final String CONFIG_REQUEST_BODY = "{\"requestType\" : \"config\", \"requestVersion\" : 4}";
+  private final String CONFIG_REQUEST_BODY = "{\"requestType\" : \"config\", \"requestVersion\" : 5}";
   private final Logger log = LoggerFactory.getLogger(MicroServer.class);
   private DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
@@ -60,6 +60,7 @@ class MicroServer {
     Spark.post("/api/config", this::processPostConfigRequest);
     Spark.post("/api/distance",this::processPostDistanceRequest);
     Spark.post("/api/trip",this::processPostTripRequest);
+    Spark.post("/api/find", this::processPostFindRequest);
   }
 
   private String processPostTripRequest(Request request, Response response) {
@@ -80,6 +81,11 @@ class MicroServer {
   private String processPostDistanceRequest(Request request, Response response) {
     logRequest(request);
     return processHttpRequest(RequestDistance.class, request.body(), response);
+  }
+
+  private String processPostFindRequest(Request request, Response response) {
+    logRequest(request);
+    return processHttpRequest(Find.class, request.body(), response);
   }
 
 

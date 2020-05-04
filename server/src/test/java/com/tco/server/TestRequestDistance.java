@@ -36,6 +36,6 @@ public class TestRequestDistance{
     @Test
     public void testVersion() {
         int version = dist.getVersion();
-        assertEquals("distance requestVersion", 3, version);
+        assertEquals("distance requestVersion", 5, version);
     }
 }

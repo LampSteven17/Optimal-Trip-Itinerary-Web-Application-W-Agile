@@ -21,7 +21,7 @@
 | --- | --- | :---: | :---: | --- |
 |Find.java: 17| Default constructor does not initialize anything, could run empty instance of class| med| Steven Lamp||
 |Find.java: 70| Testing method is a setter that is public, needs to be changed to private for protection of vars| low| Steven Lamp||
-|Find.java: 75| Getmatch returns an empty uninitialized string, could be not empty| high| Steven Lamp||
+|Find.java: 75| Getmatch returns an empty uninitialized string, could be not empty| high| Steven Lamp|issue #469|
 |TripOptimization.java: 110| Could accidentally send a -1 from the hasmap, may break logic|low|Steven Lamp||
 |TripOptimization.java: 28-29| Time is not default instantiated to 1minute. Relying on it being passed|med|Steven Lamp||
 |TripOptimization.java: 8| Importing Array-Lists but not actually using them, should remove|high|Steven Lamp||
@@ -30,7 +30,7 @@
 |TripOptimization: 32 | Unused log variable, is this needed? | low | Ryan | |
 |TripOptimization: 68 | Return on a void method, maybe remove? | low | Ryan | |
 |TripOptimization: 146 | The method setEarthRadius is never used | low | Ryan | |
-|Find.java: 75| no null check on getter| med | Cade||
+|Find.java: 75| no null check on getter| med | Cade| #470|
 |Find.java: 75| need to set up logic on null inputs| low | Cade||
 |TripOptimization.java: 40| on long time and big list this wouldnt be enough time to send back|med|Cade||
 |TripOptimization.java: 117| needs a time check here too|low|Cade||

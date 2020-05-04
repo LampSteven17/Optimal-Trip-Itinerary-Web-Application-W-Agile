@@ -11,7 +11,8 @@ public class TestDataBase {
 
     @Before
     public void createConfigurationForTestCases(){
-        db = new DataBaseAccessor(); // just construct
+
+        db = new DataBaseAccessor("alf", 100, "test"); // just construct
     }
 
     @Test

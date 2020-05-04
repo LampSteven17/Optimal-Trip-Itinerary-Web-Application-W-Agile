@@ -19,7 +19,16 @@ public class TestDataBase {
     public void check_environment() {
         // todo this should actually test something when set up
          String url = db.getURL();
-        assertEquals("URL test", "jdbc:mysql://127.0.0.1:56247/cs314", url);
+
+        String environment_home = System.getenv("CS314_ENV");
+        String environment_TRAVIS = System.getenv("TRAVIS");
+        if (environment_home != null) {
+            if (environment_home.equals("development") )
+                assertEquals("URL test", "jdbc:mysql://127.0.0.1:56247/cs314", url);
+        } else if (environment_TRAVIS != null) {
+            if (environment_TRAVIS.equals("true"))
+                assertEquals("URL test", "jdbc:mysql://127.0.0.1/cs314", url);
+        }
     }
 
     @Test

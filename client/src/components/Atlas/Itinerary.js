@@ -196,9 +196,7 @@ class Itinerary extends Component {
     return (
       <Modal isOpen={modalState} toggle={() => this.toggleModal(destination)}>
         <ModalHeader>Update Marker</ModalHeader>
-        <ModalBody>
-         {this.renderForm(destination, lat, lng)}
-        </ModalBody>
+        <ModalBody>{this.renderForm(destination, lat, lng)}</ModalBody>
         <ModalFooter>
           <Button
             color="primary"
@@ -220,6 +218,14 @@ class Itinerary extends Component {
   renderForm(destination, lat, lng) {
     return (
       <Form>
+        {this.destinationRender(destination)}
+        {this.latlngRender(lat, lng)}
+      </Form>
+    );
+  }
+
+  destinationRender(destination) {
+    return (
       <FormGroup>
         <Label>Destination Name</Label>
         <Input
@@ -228,6 +234,11 @@ class Itinerary extends Component {
           onInput={(e) => this.handleName(e.target.value)}
         ></Input>
       </FormGroup>
+    );
+  }
+
+  latlngRender(lat, lng) {
+    return (
       <FormGroup>
         <span style={{ width: "45%", float: "left" }}>
           <Label>Latitude</Label>
@@ -244,7 +255,6 @@ class Itinerary extends Component {
           ></Input>
         </span>
       </FormGroup>
-    </Form>
     );
   }
 
@@ -266,7 +276,7 @@ class Itinerary extends Component {
     let lat = this.state.updatedLat;
     let lng = this.state.updatedLng;
     let newSearched = this.state.searched;
-    newSearched.forEach(item => {
+    newSearched.forEach((item) => {
       if (item.destination === destination) {
         if (name !== null) item.destination = name;
         if (lat !== null) item.lat = Number(lat);

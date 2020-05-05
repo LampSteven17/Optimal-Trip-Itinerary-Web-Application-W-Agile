@@ -25,31 +25,45 @@ public class DataBaseAccessor {
     // SQL SELECT query statement
     private String QUERY;
 
+    private final int MAX_LIMIT = 100;
+
     private String where;
     private String[] types;
+    private String match;
+    private int limit;
 
     protected DataBaseAccessor() {
         this.set_URL_based_on_environment();
     }
 
 
-    protected DataBaseAccessor(String matchIn, int limit, String narrowWhere, String[] narrowType) {
-        this.set_URL_based_on_environment();
-        String match = "\"%" + matchIn + "%\"";
+    protected void setMatch(String match) {
+        this.match = "\"%" + match + "%\"";
         this.QUERY = "SELECT world.name, world.municipality, region.name, country.name, continent.name " +
                 "FROM continent INNER JOIN country ON continent.id = country.continent " +
                 "INNER JOIN region ON country.id = region.iso_country " +
                 "INNER JOIN world ON region.id = world.iso_region " +
-                "WHERE country.name LIKE " + match + " " +
-                "OR region.name LIKE " + match + " " +
-                "OR world.name LIKE " + match + " " +
-                "OR world.municipality LIKE " + match + " " +
-                "ORDER BY continent.name, country.name, region.name, world.municipality, world.name ASC " +
-                "LIMIT " + limit;
+                "WHERE country.name LIKE " + this.match + " " +
+                "OR region.name LIKE " + this.match + " " +
+                "OR world.name LIKE " + this.match + " " +
+                "OR world.municipality LIKE " + this.match + " " +
+                "ORDER BY continent.name, country.name, region.name, world.municipality, world.name ASC ";
     }
 
-    protected void setNarrowVariables(String[] types, String where) {
+    protected void setWhere(String where) {
+        this.where = where;
+    }
 
+    protected void setTypes(String[] types) {
+        this.types = types;
+    }
+
+    protected void setLimit(int limit) {
+        if (limit < 1 || limit > MAX_LIMIT) {
+            this.limit = MAX_LIMIT;
+        } else {
+            this.limit = limit;
+        }
     }
 
 
@@ -89,6 +103,7 @@ public class DataBaseAccessor {
             while (results.next()) {
                 System.out.printf("%6d %s\n", ++count, results.getString("region.latitude"));
             }
+            System.out.println(results.getFetchSize());
         } catch (Exception e) {
             System.err.println("Exception: " + e.getMessage());
         }

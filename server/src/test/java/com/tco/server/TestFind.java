@@ -15,7 +15,7 @@ public class TestFind {
 
     @Before
     public void createConfigurationForTestCases(){
-        find = new Find("*test--", 0, 0);
+        find = new Find("*test--", 0);
         find.requestType = "find"; find.requestVersion = 5;
         setup();
 
@@ -53,7 +53,7 @@ public class TestFind {
 
     @Before
     public void configForBasicQuery(){
-        find = new Find("alf", 100, 0);
+        find = new Find("match", 69);
         find.requestType = "find";
         find.requestVersion = 5;
         setup();

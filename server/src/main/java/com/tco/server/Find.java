@@ -11,7 +11,7 @@ import java.util.*;
 public class Find extends RequestHeader {
 
     private String match;
-    private int limit;
+    private int limit = -1;
     private int found;
     private List<Map<String, String> > places;
     private Narrow narrow;
@@ -48,10 +48,30 @@ public class Find extends RequestHeader {
 
 
     private ResultSet queryDatabase() {
-        DataBaseAccessor matchQuery = new DataBaseAccessor(match, 100, narrow.getWhere(), narrow.getTypes());
+        DataBaseAccessor matchQuery = new DataBaseAccessor();
+
+        if (getLimit() > 0) {
+            matchQuery.setLimit(this.limit);
+        }
 
         return matchQuery.send_query();
     }
+
+    private void setUpDataBase(DataBaseAccessor matchQuery) {
+        if (getMatch() == null)
+            return;
+
+        matchQuery.setMatch(this.match);
+        if (this.narrow == null)
+            return;
+
+        if (this.narrow.getWhere() != null) {
+            matchQuery.setWhere(this.getWhere());
+        }
+        if (this.narrow.getTypes() != null) {
+            matchQuery.setTypes(this.narrow.getTypes());
+        }
+     }
 
 
     // quick data structure for narrow cause why not
@@ -83,5 +103,7 @@ public class Find extends RequestHeader {
         this.narrow = new Narrow(type, where);
     }
 
-    public String getMatch() {return this.match;}
+    public String getMatch() {return this.match != null ? this.match : null;}
+    public int getLimit() {return this.limit < 0 ? this.limit : -1;}
+    public void setMatch(String match) { this.match = match; }
 }

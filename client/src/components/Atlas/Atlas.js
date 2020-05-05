@@ -319,20 +319,36 @@ export default class Atlas extends Component {
 
   async itenUpdateHandler(newItenData) {
     this.setState({ itenData: newItenData });
-    let jsonTemp = this.tripObjTemplate();
-    newItenData.forEach((item, i) => {
-      if (i !== newItenData.length - 1) {
-        jsonTemp.places.push({
-          name: item.destination,
-          latitude: item.lat.toString(),
-          longitude: item.lng.toString(),
-        });
-      }
-    });
 
-    Promise.resolve().then(async () => {
-      await this.sendRequest(jsonTemp, "trip", tripRequestSchema);
-    });
+    if (newItenData.length === 1) {
+      let id = this.state.markerPosition[0].id;
+      this.namesArray[0] = { name: newItenData[0].destination };
+      Promise.resolve()
+        .then(() => {
+          this.setState({
+            markerPosition: [
+              { lat: newItenData[0].lat, lng: newItenData[0].lng, id: id },
+            ],
+          });
+        })
+        .then(() => this.adjustZoomToFitPoints());
+    } else {
+      let jsonTemp = this.tripObjTemplate();
+      newItenData.forEach((item, i) => {
+        if (i !== newItenData.length - 1) {
+          jsonTemp.places.push({
+            name: item.destination,
+            latitude: item.lat.toString(),
+            longitude: item.lng.toString(),
+            modal: false,
+          });
+        }
+      });
+
+      Promise.resolve().then(async () => {
+        await this.sendRequest(jsonTemp, "trip", tripRequestSchema);
+      });
+    }
   }
 
   changeStateInLoadFileButton() {
@@ -712,6 +728,7 @@ export default class Atlas extends Component {
             total: this.distance,
             lat: lat,
             lng: lng,
+            modal: false,
           },
         ],
       };
@@ -743,6 +760,7 @@ export default class Atlas extends Component {
             total: this.distance,
             lat: lat,
             lng: lng,
+            modal: false,
           },
         ],
       });
@@ -757,6 +775,7 @@ export default class Atlas extends Component {
             total: this.distance,
             lat: lat,
             lng: lng,
+            modal: false,
           },
         ],
       });
@@ -780,6 +799,7 @@ export default class Atlas extends Component {
             total: "0",
             lat: this.state.markerPosition[0].lat,
             lng: this.state.markerPosition[0].lng,
+            modal: false,
           },
         ],
       });

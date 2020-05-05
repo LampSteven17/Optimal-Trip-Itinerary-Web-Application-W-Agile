@@ -18,10 +18,10 @@ public class Find extends RequestHeader {
 
     public Find() {}
 
-    public Find(String match, int limit, int found) {
+    public Find(String match, int limit) {
         this.match = match;
         this.limit = limit;
-        this.found = found;
+
     }
 
     @Override
@@ -48,7 +48,7 @@ public class Find extends RequestHeader {
 
 
     private ResultSet queryDatabase() {
-        DataBaseAccessor matchQuery = new DataBaseAccessor(match, 100, "test");
+        DataBaseAccessor matchQuery = new DataBaseAccessor(match, 100, narrow.getWhere(), narrow.getTypes());
 
         return matchQuery.send_query();
     }

@@ -30,7 +30,7 @@ public class DataBaseAccessor {
     }
 
 
-    protected DataBaseAccessor(String matchIn, int limit, String narrow) {
+    protected DataBaseAccessor(String matchIn, int limit, String narrowWhere, String[] narrowType) {
         this.set_URL_based_on_environment();
         String match = "\"%" + matchIn + "%\"";
         this.QUERY = "SELECT world.name, world.municipality, region.name, country.name, continent.name " +

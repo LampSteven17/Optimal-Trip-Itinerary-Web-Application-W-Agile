@@ -25,6 +25,9 @@ public class DataBaseAccessor {
     // SQL SELECT query statement
     private String QUERY;
 
+    private String where;
+    private String[] types;
+
     protected DataBaseAccessor() {
         this.set_URL_based_on_environment();
     }
@@ -43,6 +46,10 @@ public class DataBaseAccessor {
                 "OR world.municipality LIKE " + match + " " +
                 "ORDER BY continent.name, country.name, region.name, world.municipality, world.name ASC " +
                 "LIMIT " + limit;
+    }
+
+    protected void setNarrowVariables(String[] types, String where) {
+
     }
 
 

@@ -15,9 +15,11 @@ class Find extends Component {
     this.state = {
       findToggle: false,
       narrowFilter: ["airport", "balloonport", "heliport"],
+      where: "",
     };
     this.findToggle = this.findToggle.bind(this);
     this.toggleNarrowFilter = this.toggleNarrowFilter.bind(this);
+    this.setWhere = this.setWhere.bind(this);
   }
 
   render() {
@@ -40,39 +42,69 @@ class Find extends Component {
           <Button className={"btn-csu"} onClick={() => this.findToggle()}>
             Find Filter
           </Button>
-          <Collapse isOpen={this.state.findToggle}>
-            <Card>
-              <CardBody>
-                <ButtonGroup>
-                  <Button
-                    onClick={() => this.toggleNarrowFilter("airport")}
-                    outline={!this.state.narrowFilter.includes("airport")}
-                  >
-                    Airport
-                  </Button>
-                  <Button
-                    onClick={() => this.toggleNarrowFilter("balloonport")}
-                    outline={!this.state.narrowFilter.includes("balloonport")}
-                  >
-                    Balloonport
-                  </Button>
-                  <Button 
-                    onClick={() => this.toggleNarrowFilter("heliport")}
-                    outline={!this.state.narrowFilter.includes("heliport")}
-                  >
-                    Heliport
-                  </Button>
-                </ButtonGroup>
-              </CardBody>
-            </Card>
-          </Collapse>
+          {this.renderFilter()}
         </div>
       </div>
     );
   }
 
+  renderFilter() {
+    return (
+      <Collapse isOpen={this.state.findToggle}>
+        <Card>
+          <CardBody>
+            <div style={{ width: "100%" }}>
+              <Label>
+                <strong>Filter</strong>
+              </Label>
+            </div>
+            <div>{this.filterButtons()}</div>
+            <div style={{ width: "100%", paddingTop: "1em" }}>
+              <Label><strong>Where:</strong></Label>
+            </div>
+            <div style={{ width: "50%"}}>
+              <Input
+                placeholder="Place"
+                onInput={(t) => this.setWhere(t.target.value)}
+              />
+            </div>
+          </CardBody>
+        </Card>
+      </Collapse>
+    );
+  }
+
+  filterButtons() {
+    return (
+      <ButtonGroup>
+        <Button
+          onClick={() => this.toggleNarrowFilter("airport")}
+          outline={!this.state.narrowFilter.includes("airport")}
+        >
+          Airport
+        </Button>
+        <Button
+          onClick={() => this.toggleNarrowFilter("balloonport")}
+          outline={!this.state.narrowFilter.includes("balloonport")}
+        >
+          Balloonport
+        </Button>
+        <Button
+          onClick={() => this.toggleNarrowFilter("heliport")}
+          outline={!this.state.narrowFilter.includes("heliport")}
+        >
+          Heliport
+        </Button>
+      </ButtonGroup>
+    );
+  }
+
+  setWhere(where) {
+    this.setState({where: where});
+  }
+
   findLocation(loc) {
-    this.props.handler(loc);
+    this.props.handler(loc, this.state.narrowFilter, this.state.where);
   }
 
   findToggle() {
@@ -82,14 +114,12 @@ class Find extends Component {
   toggleNarrowFilter(place) {
     let tmpNarrowFilter = this.state.narrowFilter;
     if (tmpNarrowFilter.includes(place)) {
-      tmpNarrowFilter = tmpNarrowFilter.filter(pl => pl !== place);
+      tmpNarrowFilter = tmpNarrowFilter.filter((pl) => pl !== place);
       this.setState({ narrowFilter: tmpNarrowFilter });
-    }
-    else {
+    } else {
       tmpNarrowFilter.push(place);
       this.setState({ narrowFilter: tmpNarrowFilter });
     }
-    console.log(tmpNarrowFilter);
   }
 }
 

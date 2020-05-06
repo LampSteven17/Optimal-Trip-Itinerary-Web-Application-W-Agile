@@ -163,7 +163,6 @@ export default class Atlas extends Component {
 
   renderMarkerToggle() {
     return this.colRenderer(
-
       <Button className={"btn-csu"} onClick={() => this.setRenderMarker()}>
         <VisibilityIcon />
       </Button>,
@@ -270,21 +269,35 @@ export default class Atlas extends Component {
   }
 
   renderFind() {
-    return this.colRenderer(<Find handler={this.handleFilterRequest} />, null, 6, 3, 12);
+    return this.colRenderer(
+      <Find handler={this.handleFilterRequest} />,
+      null,
+      6,
+      3,
+      12
+    );
   }
 
-  handleFilterRequest(request) {
+  handleFilterRequest(request, type, where) {
     if (request !== "") {
-      let findObj = this.buildFindObject(request);
+      let findObj = this.buildFindObject(request, type, where);
       this.sendFindRequest(findObj);
     }
   }
 
-  buildFindObject(request) {
+  buildFindObject(request, type, where) {
+    let narrow;
+    if (where !== "") {
+      narrow = { type: type, where: where };
+    }
+    else {
+      narrow = {type: type};
+    }
     return {
       requestVersion: PROTOCOL_VERSION,
       requestType: "find",
-      match: request.toString()
+      match: request.toString(),
+      narrow: narrow,
     };
   }
 
@@ -633,6 +646,7 @@ export default class Atlas extends Component {
   }
 
   async sendFindRequest(requestBody) {
+    console.log(requestBody);
     Promise.resolve().then(async () => {
       await this.sendRequest(requestBody, "find", FindRequestSchema);
     });
@@ -641,6 +655,7 @@ export default class Atlas extends Component {
   promptFind(requestBody) {
     /// uh yeah do something here with the find response lol 800+ lines leggo boys
     // use the method above to send-itttt, i did the rest it sends and all that fun shtuff
+    console.log(requestBody);
   }
 
   async adjustZoomToFitPoints() {
@@ -698,7 +713,6 @@ export default class Atlas extends Component {
       console.error(requestType + "REQUEST INVALID");
       return;
     }
-    console.log(request);
     switch (requestType) {
       case "distance":
         await sendServerRequestWithBody(
@@ -708,6 +722,7 @@ export default class Atlas extends Component {
         ).then((data) => this.promptDistance(data.body, isLastLeg, isDelete));
         break;
       case "trip":
+        console.log(request);
         await sendServerRequestWithBody(
           "trip",
           request,

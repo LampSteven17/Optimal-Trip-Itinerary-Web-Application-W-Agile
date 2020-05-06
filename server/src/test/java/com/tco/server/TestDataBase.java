@@ -12,7 +12,9 @@ public class TestDataBase {
     @Before
     public void createConfigurationForTestCases(){
 
-        db = new DataBaseAccessor("alf", 100, "test"); // just construct
+        db = new DataBaseAccessor(); // just construct ("alf", 100, "test");
+        db.setMatch("alf");
+        db.setLimit(69);
     }
 
     @Test

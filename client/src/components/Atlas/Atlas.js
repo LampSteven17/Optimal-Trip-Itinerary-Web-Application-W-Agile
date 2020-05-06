@@ -166,7 +166,7 @@ export default class Atlas extends Component {
         </Button>,
         "0rem",
         0,
-        3,
+        0,
         "auto"
 
     )

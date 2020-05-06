@@ -163,12 +163,13 @@ export default class Atlas extends Component {
 
   renderMarkerToggle() {
     return this.colRenderer(
+
       <Button className={"btn-csu"} onClick={() => this.setRenderMarker()}>
         <VisibilityIcon />
       </Button>,
       "0rem",
       0,
-      3,
+      0,
       "auto"
     );
   }

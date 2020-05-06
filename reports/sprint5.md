@@ -124,6 +124,14 @@
 | Austin | #298 | #453 |
 | Cade | #449 #448 | #400 |
 
+### SCRUM 5/6 DAILY
+| Name | Tasks closed  | Tasks in progress |
+| :--- | :--- | :--- |
+| Ryan | #473|#466 |
+| Steve | #443| #436 |
+| Austin | #402| #477|
+| Cade | #469|#400 |
+
 ## Review
 
 ### Epics done  

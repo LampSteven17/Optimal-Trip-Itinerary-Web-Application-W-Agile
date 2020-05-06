@@ -17,13 +17,14 @@ import * as FindRequestSchema from "../../../schemas/FindRequest";
 
 import Itinerary from "./Itinerary";
 import Save from "./Save";
+import Find from "./Find";
 import LoadFileButton from "./LoadFileButton";
 import MarkerPolyline from "./MarkerPolyline";
 import { PROTOCOL_VERSION } from "../Constants";
 
-import FlipCameraAndroidIcon from '@material-ui/icons/FlipCameraAndroid';
-import HomeIcon from '@material-ui/icons/Home';
-import VisibilityIcon from '@material-ui/icons/Visibility';
+import FlipCameraAndroidIcon from "@material-ui/icons/FlipCameraAndroid";
+import HomeIcon from "@material-ui/icons/Home";
+import VisibilityIcon from "@material-ui/icons/Visibility";
 
 const FALSECOLOR = "5px solid red";
 const TRUECOLOR = "5px solid green";
@@ -44,23 +45,23 @@ const MAP_ZOOM_MIN = 1;
  * https://github.com/pointhi/leaflet-color-markers
  */
 const MARKER_ICON = L.icon({
-  iconUrl: require('./marker-icon-red.png'),
-  shadowUrl: require('./marker-shadow.png'),
+  iconUrl: require("./marker-icon-red.png"),
+  shadowUrl: require("./marker-shadow.png"),
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
 
   iconSize: [25, 41],
-  shadowSize: [41, 41]
+  shadowSize: [41, 41],
 });
 
 const EMPTY_ICON = L.icon({
-  iconUrl: require('./marker-icon-red.png'),
-  shadowUrl: require('./marker-shadow.png'),
+  iconUrl: require("./marker-icon-red.png"),
+  shadowUrl: require("./marker-shadow.png"),
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
 
   iconSize: [0, 0],
-  shadowSize: [0, 0]
+  shadowSize: [0, 0],
 });
 
 export default class Atlas extends Component {
@@ -118,6 +119,7 @@ export default class Atlas extends Component {
     this.addMarkersForTrip = this.addMarkersForTrip.bind(this);
     this.reverseTrip = this.reverseTrip.bind(this);
     this.itenUpdateHandler = this.itenUpdateHandler.bind(this);
+    this.handleFilterRequest = this.handleFilterRequest.bind(this);
     this.setRenderMarker = this.setRenderMarker.bind(this);
   }
 
@@ -159,28 +161,27 @@ export default class Atlas extends Component {
     );
   }
 
-  renderMarkerToggle(){
+  renderMarkerToggle() {
     return this.colRenderer(
-        <Button className={"btn-csu"} onClick={() => this.setRenderMarker()}>
-          <VisibilityIcon/>
-        </Button>,
-        "0rem",
-        0,
-        0,
-        "auto"
 
-    )
+      <Button className={"btn-csu"} onClick={() => this.setRenderMarker()}>
+        <VisibilityIcon />
+      </Button>,
+      "0rem",
+      0,
+      0,
+      "auto"
+    );
   }
 
-  setRenderMarker(){
-
-    if(this.state.markersVisible){
-      this.setState({MARKER_ICONN: EMPTY_ICON});
-    }else{
-      this.setState({MARKER_ICONN:MARKER_ICON});
+  setRenderMarker() {
+    if (this.state.markersVisible) {
+      this.setState({ MARKER_ICONN: EMPTY_ICON });
+    } else {
+      this.setState({ MARKER_ICONN: MARKER_ICON });
     }
 
-    this.setState({markersVisible: !this.state.markersVisible});
+    this.setState({ markersVisible: !this.state.markersVisible });
   }
 
   renderStuff() {
@@ -261,12 +262,28 @@ export default class Atlas extends Component {
   renderItinerary() {
     return (
       <div>
-        <Row>
-          {this.loadFileButtonRenderer()}
-        </Row>
+        <Row>{this.loadFileButtonRenderer()}</Row>
+        <Row>{this.renderFind()}</Row>
         <Row>{this.itenRenderer()}</Row>
       </div>
     );
+  }
+
+  renderFind() {
+    return this.colRenderer(<Find handler={this.handleFilterRequest} />, null, 6, 3, 12);
+  }
+
+  handleFilterRequest(request) {
+    let findObj = this.buildFindObject(request);
+    this.sendFindRequest(findObj);
+  }
+
+  buildFindObject(request) {
+    return {
+      requestVersion: PROTOCOL_VERSION,
+      requestType: "find",
+      match: request.toString()
+    };
   }
 
   itenRenderer() {
@@ -285,7 +302,7 @@ export default class Atlas extends Component {
   reverseRenderer() {
     return this.colRenderer(
       <Button className={"btn-csu"} onClick={() => this.reverseTrip()}>
-        <FlipCameraAndroidIcon/>
+        <FlipCameraAndroidIcon />
       </Button>,
       "3.3rem",
       0,
@@ -309,7 +326,7 @@ export default class Atlas extends Component {
 
   saveRenderer() {
     return this.colRenderer(
-      <Save mpArray={this.state.markerPosition} names={this.namesArray}/>,
+      <Save mpArray={this.state.markerPosition} names={this.namesArray} />,
       "3.2rem",
       0,
       0,
@@ -613,8 +630,7 @@ export default class Atlas extends Component {
     });
   }
 
-
-  async send_find_request(requestBody) {
+  async sendFindRequest(requestBody) {
     Promise.resolve().then(async () => {
       await this.sendRequest(requestBody, "find", FindRequestSchema);
     });
@@ -634,7 +650,7 @@ export default class Atlas extends Component {
     if (this.state.hideButton === false) {
       return (
         <Button className="btn-csu" onClick={() => this.handleHomeClick()}>
-          <HomeIcon/>
+          <HomeIcon />
         </Button>
       );
     }
@@ -680,15 +696,28 @@ export default class Atlas extends Component {
       console.error(requestType + "REQUEST INVALID");
       return;
     }
+    console.log(request);
     switch (requestType) {
       case "distance":
-        await sendServerRequestWithBody("distance", request, this.props.serverPort).then((data) => this.promptDistance(data.body, isLastLeg, isDelete));
+        await sendServerRequestWithBody(
+          "distance",
+          request,
+          this.props.serverPort
+        ).then((data) => this.promptDistance(data.body, isLastLeg, isDelete));
         break;
       case "trip":
-        await sendServerRequestWithBody("trip", request, this.props.serverPort).then((data) => this.promptTrip(data.body));
+        await sendServerRequestWithBody(
+          "trip",
+          request,
+          this.props.serverPort
+        ).then((data) => this.promptTrip(data.body));
         break;
       case "find":
-        await sendServerRequestWithBody("find", request, this.props.serverPort).then((data) => this.promptFind(data.body));
+        await sendServerRequestWithBody(
+          "find",
+          request,
+          this.props.serverPort
+        ).then((data) => this.promptFind(data.body));
         break;
       default:
         console.error("UNSUPPORTED REQUEST TYPE");

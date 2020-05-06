@@ -187,6 +187,35 @@ function testTestResponse() {
   expect(testfalse).toEqual(false);
 }
 
+function superLegitTesterFunction(){
+  jest.mock('leaflet');
+  let obj = mount(<Atlas />);
+
+  let data = {places: [
+      {id: "kaseda", name: "Phantom Canyon Brewing Co", municipality: "Colorado Springs", latitude: "38.83418", longitude: "-104.82497", altitude: "6035"},
+      {id: "lnarmour", name: "Equinox Brewing", municipality: "Fort Collins", latitude: "40.586345", longitude: "-105.075813", altitude: "5003"},
+      {id: "bmckee", name: "Oskar Blue Brewery", municipality: "Longmont", latitude: "40.14055556", longitude: "-105.13111111", altitude: "5019"}]
+  };
+
+  let test = obj.instance().promptDistance(0,0,0);
+  expect(test).toEqual(undefined); //NO ERROR THROWN
+  let test2 = obj.instance().reverseTrip();
+  expect(test2).toEqual(undefined);
+
+  try{expect(obj.instance().appendToItinerary()).toEqual(undefined);}catch(exception){}
+  try{let test3 = obj.instance().parseData(data,1,1);}catch(exception){}
+
+}
+
+function testRenderFuncs(){
+  jest.mock('leaflet');
+  let obj = mount(<Atlas />);
+  let testConsts =obj.instance().MAP_LAYER_ATTRIBUTION;
+
+  let test1= obj.instance().errorCallback("BAD DATA");
+  expect(test1).toEqual(undefined);
+}
+
 test("Testing Atlas's Initial State", testInitialAppState);
 test("Testing Atlas's Handle Input", testInitialHandleInput);
 test("Testing Atlas's Store Input Position",testStoreInputPosition);
@@ -199,3 +228,5 @@ test("Testing Atlas's home button method", testHomeButton);
 test("Testing Atlas's addMarkersForTrip", testAddMarkersForTrip);
 test("Testing Atlas's state change in LFB method", testStateChangeLFB);
 test("Testing Atlas's testResponse function", testTestResponse);
+test("Testing Atlas's render functions",superLegitTesterFunction);
+test("Testing Atlas's base functions",testRenderFuncs);

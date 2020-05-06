@@ -49,6 +49,7 @@ class Itinerary extends Component {
         }}
         ref={this.ref}
       >
+        <Label><strong>Search Itinerary</strong></Label>
         <Input
           placeholder="Search"
           onInput={(t) => this.filterBySearch(t.target.value)}

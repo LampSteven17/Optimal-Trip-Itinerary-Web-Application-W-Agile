@@ -274,8 +274,10 @@ export default class Atlas extends Component {
   }
 
   handleFilterRequest(request) {
-    let findObj = this.buildFindObject(request);
-    this.sendFindRequest(findObj);
+    if (request !== "") {
+      let findObj = this.buildFindObject(request);
+      this.sendFindRequest(findObj);
+    }
   }
 
   buildFindObject(request) {

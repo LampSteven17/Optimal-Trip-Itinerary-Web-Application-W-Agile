@@ -9,6 +9,12 @@ import {
   Label,
   Input,
 } from "reactstrap";
+import AirportIcon from '@material-ui/icons/LocalAirport';
+import HeliIcon from '@material-ui/icons/Toys';
+import BalloonIcon from '@material-ui/icons/NatureRounded';
+
+
+
 class Find extends Component {
   constructor(props) {
     super(props);
@@ -83,19 +89,19 @@ class Find extends Component {
           onClick={() => this.toggleNarrowFilter("airport")}
           outline={!this.state.narrowFilter.includes("airport")}
         >
-          Airport
+          <AirportIcon/>
         </Button>
         <Button
           onClick={() => this.toggleNarrowFilter("balloonport")}
           outline={!this.state.narrowFilter.includes("balloonport")}
         >
-          Balloonport
+          <BalloonIcon/>
         </Button>
         <Button
           onClick={() => this.toggleNarrowFilter("heliport")}
           outline={!this.state.narrowFilter.includes("heliport")}
         >
-          Heliport
+          <HeliIcon/>
         </Button>
       </ButtonGroup>
     );

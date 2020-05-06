@@ -14,10 +14,12 @@ class Find extends Component {
     super(props);
     this.state = {
       findToggle: false,
+      loc: "",
       narrowFilter: ["airport", "balloonport", "heliport"],
       where: "",
     };
     this.findToggle = this.findToggle.bind(this);
+    this.findLocation = this.findLocation.bind(this);
     this.toggleNarrowFilter = this.toggleNarrowFilter.bind(this);
     this.setWhere = this.setWhere.bind(this);
   }
@@ -101,9 +103,11 @@ class Find extends Component {
 
   setWhere(where) {
     this.setState({where: where});
+    this.findLocation(this.state.loc);
   }
 
   findLocation(loc) {
+    this.setState({loc: loc});
     this.props.handler(loc, this.state.narrowFilter, this.state.where);
   }
 

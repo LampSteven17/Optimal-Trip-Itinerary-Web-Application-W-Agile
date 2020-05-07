@@ -122,7 +122,9 @@ public class DataBaseAccessor {
     }
 
     private void createQuery() {
-        this.QUERY = "SELECT world.name, world.municipality, region.name, country.name, continent.name " +
+        this.QUERY = "SELECT world.name, world.municipality, region.name, " +
+                "country.name, continent.name, world.latitude, world.longitude, world.altitude, " +
+                "world.type " +
                 "FROM continent INNER JOIN country ON continent.id = country.continent " +
                 "INNER JOIN region ON country.id = region.iso_country " +
                 "INNER JOIN world ON region.id = world.iso_region " +
@@ -151,17 +153,15 @@ public class DataBaseAccessor {
                 if (this.found < this.limit) {
                     tempMap = new HashMap<>();
 
-                    tempMap.put("name", results.getString("name"));
-                    tempMap.put("municipality", results.getString("municipality"));
-                    tempMap.put("id", results.getString("id"));
-                    tempMap.put("latitude", results.getString("latitude"));
-                    tempMap.put("longitude", results.getString("longitude"));
-                    tempMap.put("altitude", results.getString("altitude"));
-                    tempMap.put("type", results.getString("type"));
-                    //tempMap.put("region", results.getString("region"));
-                    //tempMap.put("country", results.getString("country"));
-                    //tempMap.put("continent", results.getString("continent"));
-
+                    tempMap.put("name", results.getString("world.name"));
+                    tempMap.put("municipality", results.getString("world.municipality"));
+                    tempMap.put("region", results.getString("region.name"));
+                    tempMap.put("country", results.getString("country.name"));
+                    tempMap.put("continent", results.getString("continent.name"));
+                    tempMap.put("latitude", results.getString("world.latitude"));
+                    tempMap.put("longitude", results.getString("world.longitude"));
+                    tempMap.put("altitude", results.getString("world.altitude"));
+                    tempMap.put("type", results.getString("world.type"));
                     places.add(tempMap);
                 }
                 found++;

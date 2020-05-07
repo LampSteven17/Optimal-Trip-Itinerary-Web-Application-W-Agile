@@ -9,11 +9,9 @@ import {
   Label,
   Input,
 } from "reactstrap";
-import AirportIcon from '@material-ui/icons/LocalAirport';
-import HeliIcon from '@material-ui/icons/Toys';
-import BalloonIcon from '@material-ui/icons/NatureRounded';
-
-
+import AirportIcon from "@material-ui/icons/LocalAirport";
+import HeliIcon from "@material-ui/icons/Toys";
+import BalloonIcon from "@material-ui/icons/NatureRounded";
 
 class Find extends Component {
   constructor(props) {
@@ -24,6 +22,8 @@ class Find extends Component {
       narrowFilter: ["airport", "balloonport", "heliport"],
       where: "",
     };
+
+    this.showLocations = false;
     this.findToggle = this.findToggle.bind(this);
     this.findLocation = this.findLocation.bind(this);
     this.toggleNarrowFilter = this.toggleNarrowFilter.bind(this);
@@ -31,6 +31,7 @@ class Find extends Component {
   }
 
   render() {
+    this.showLocations = (this.props.places.length > 0);
     return (
       <div
         className="csu-branding"
@@ -52,6 +53,7 @@ class Find extends Component {
           </Button>
           {this.renderFilter()}
         </div>
+        {this.renderPlaces()}
       </div>
     );
   }
@@ -68,9 +70,11 @@ class Find extends Component {
             </div>
             <div>{this.filterButtons()}</div>
             <div style={{ width: "100%", paddingTop: "1em" }}>
-              <Label><strong>Where:</strong></Label>
+              <Label>
+                <strong>Where:</strong>
+              </Label>
             </div>
-            <div style={{ width: "50%"}}>
+            <div style={{ width: "50%" }}>
               <Input
                 placeholder="Place"
                 onInput={(t) => this.setWhere(t.target.value)}
@@ -89,31 +93,41 @@ class Find extends Component {
           onClick={() => this.toggleNarrowFilter("airport")}
           outline={!this.state.narrowFilter.includes("airport")}
         >
-          <AirportIcon/>
+          <AirportIcon />
         </Button>
         <Button
           onClick={() => this.toggleNarrowFilter("balloonport")}
           outline={!this.state.narrowFilter.includes("balloonport")}
         >
-          <BalloonIcon/>
+          <BalloonIcon />
         </Button>
         <Button
           onClick={() => this.toggleNarrowFilter("heliport")}
           outline={!this.state.narrowFilter.includes("heliport")}
         >
-          <HeliIcon/>
+          <HeliIcon />
         </Button>
       </ButtonGroup>
     );
   }
 
+  renderPlaces() {
+    return (
+      <Collapse isOpen={this.showLocations}>
+        <Card>
+          <CardBody>REEEEE</CardBody>
+        </Card>
+      </Collapse>
+    );
+  }
+
   setWhere(where) {
-    this.setState({where: where});
+    this.setState({ where: where });
     this.findLocation(this.state.loc);
   }
 
   findLocation(loc) {
-    this.setState({loc: loc});
+    this.setState({ loc: loc });
     this.props.handler(loc, this.state.narrowFilter, this.state.where);
   }
 

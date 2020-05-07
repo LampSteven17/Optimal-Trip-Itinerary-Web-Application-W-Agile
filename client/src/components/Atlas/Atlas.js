@@ -80,6 +80,7 @@ export default class Atlas extends Component {
       displayUnit: "",
       totalDistance: 0,
       itenData: [{ id: -1, destination: "", leg: "", total: "" }],
+      findData: [],
       tripRequestData: {},
       tipDataForMarkers: {},
       MARKER_ICONN: MARKER_ICON,
@@ -121,6 +122,7 @@ export default class Atlas extends Component {
     this.itenUpdateHandler = this.itenUpdateHandler.bind(this);
     this.handleFilterRequest = this.handleFilterRequest.bind(this);
     this.setRenderMarker = this.setRenderMarker.bind(this);
+    this.promptFind = this.promptFind.bind(this);
   }
 
   render() {
@@ -270,7 +272,7 @@ export default class Atlas extends Component {
 
   renderFind() {
     return this.colRenderer(
-      <Find handler={this.handleFilterRequest} />,
+      <Find handler={this.handleFilterRequest} places={this.state.findData} />,
       null,
       6,
       3,
@@ -289,9 +291,8 @@ export default class Atlas extends Component {
     let narrow;
     if (where !== "") {
       narrow = { type: type, where: where };
-    }
-    else {
-      narrow = {type: type};
+    } else {
+      narrow = { type: type };
     }
     return {
       requestVersion: PROTOCOL_VERSION,
@@ -653,7 +654,17 @@ export default class Atlas extends Component {
   }
 
   promptFind(requestBody) {
-    //console.log(requestBody); // uncomment if you want to see whats coming back
+    console.log(requestBody); // uncomment if you want to see whats coming back
+    requestBody.places = [
+      {
+        id: "EU",
+        latitude: "43.7514431",
+        longitude: "10.8073791",
+        name: "Europe",
+        type: "small_airport",
+      },
+    ];
+    this.setState({ findData: requestBody.places });
   }
 
   async adjustZoomToFitPoints() {

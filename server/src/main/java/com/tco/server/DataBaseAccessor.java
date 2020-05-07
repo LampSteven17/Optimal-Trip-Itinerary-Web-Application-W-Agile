@@ -88,8 +88,47 @@ public class DataBaseAccessor {
         }
     }
 
+    private String addTypes() {
+        StringBuilder typesString = new StringBuilder();
+        if(this.types != null && this.types.length > 0) {
+            typesString.append(" AND (world.type LIKE \"%").append(this.types[0]).append("%\"");
+            for (int i = 1; i < this.types.length; i++) {
+                if(this.types[i] != null)
+                    typesString.append(" OR world.type LIKE \"%").append(this.types[i]).append("%\"");
+            }
+            typesString.append(")");
+        }
+        return typesString.toString();
+    }
+
+    private String addWhere() {
+        StringBuilder whereString = new StringBuilder();
+        if(this.where != null) {
+            whereString.append(" AND (country.name LIKE \"%").append(this.where).append("%\"")
+                    .append(" OR region.name LIKE \"%").append(this.where).append("%\"")
+                    .append(" OR world.municipality LIKE \"%").append(this.where).append("%\")");
+
+        }
+        return whereString.toString();
+    }
+
+    private void createQuery() {
+        this.QUERY = "SELECT world.name, world.municipality, region.name, country.name, continent.name " +
+                "FROM continent INNER JOIN country ON continent.id = country.continent " +
+                "INNER JOIN region ON country.id = region.iso_country " +
+                "INNER JOIN world ON region.id = world.iso_region " +
+                "WHERE country.name LIKE " + this.match + " " +
+                "OR region.name LIKE " + this.match + " " +
+                "OR world.name LIKE " + this.match + " " +
+                "OR world.municipality LIKE " + this.match +
+                addTypes()  + addWhere() + " " +
+                "ORDER BY continent.name, country.name, region.name, world.municipality, world.name ASC ";
+    }
+
     // TODO this is gonna need quite a bit of modification to do intended stuff
     protected ResultSet send_query() {
+        if (match != null)
+            createQuery();
         ResultSet output = null;
         try (
             // connect to the database and query
@@ -101,7 +140,7 @@ public class DataBaseAccessor {
             int count = 0;
             output = results;
             while (results.next()) {
-                System.out.printf("%6d %s\n", ++count, results.getString("region.latitude"));
+                System.out.printf("%6d %s\n", ++count, results.getString("world.municipality"));
             }
             System.out.println(results.getFetchSize());
         } catch (Exception e) {

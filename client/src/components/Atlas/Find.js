@@ -8,6 +8,7 @@ import {
   Collapse,
   Label,
   Input,
+  Table,
 } from "reactstrap";
 import AirportIcon from "@material-ui/icons/LocalAirport";
 import HeliIcon from "@material-ui/icons/Toys";
@@ -31,7 +32,7 @@ class Find extends Component {
   }
 
   render() {
-    this.showLocations = (this.props.places.length > 0);
+    this.showLocations = this.props.places.length > 0;
     return (
       <div
         className="csu-branding"
@@ -115,10 +116,36 @@ class Find extends Component {
     return (
       <Collapse isOpen={this.showLocations}>
         <Card>
-          <CardBody>REEEEE</CardBody>
+          <CardBody>
+            <Table borderless>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Latitude</th>
+                  <th>Longitude</th>
+                </tr>
+              </thead>
+              <tbody>{this.buildTable()}</tbody>
+            </Table>
+          </CardBody>
         </Card>
       </Collapse>
     );
+  }
+
+  buildTable() {
+    let tableData = [];
+    this.props.places.forEach((place) => {
+      tableData.push(
+        <tr key={Date.now() * Math.random()}>
+          <td>{place.name}</td>
+          <td>{place.latitude}</td>
+          <td>{place.longitude}</td>
+        </tr>
+      );
+    });
+
+    return tableData;
   }
 
   setWhere(where) {

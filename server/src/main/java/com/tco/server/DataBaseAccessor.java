@@ -108,16 +108,18 @@ public class DataBaseAccessor {
             while(results.next()) {
                 if (this.found < this.limit) {
                     tempMap = new HashMap<>();
-                    if (tempMap.containsKey("name")) tempMap.put("name", results.getString("name"));
-                    if (tempMap.containsKey("latitude")) tempMap.put("latitude", results.getString("latitude"));
-                    //tempMap.put("name", results.getString("name"));
-                    //tempMap.put("name", results.getString("name"));
-                    //tempMap.put("name", results.getString("name"));
-                    //tempMap.put("name", results.getString("name"));
-                    //tempMap.put("name", results.getString("name"));
-                    //tempMap.put("name", results.getString("name"));
-                    //tempMap.put("name", results.getString("name"));
-                    //tempMap.put("name", results.getString("name"));
+
+                    tempMap.put("name", results.getString("name"));
+                    tempMap.put("municipality", results.getString("municipality"));
+                    //tempMap.put("id", results.getString("id"));
+                    //tempMap.put("latitude", results.getString("latitude"));
+                    //tempMap.put("longitude", results.getString("longitude"));
+                    //tempMap.put("altitude", results.getString("altitude"));
+                    //tempMap.put("type", results.getString("type"));
+                    //tempMap.put("region", results.getString("region"));
+                    //tempMap.put("country", results.getString("country"));
+                    //tempMap.put("continent", results.getString("continent"));
+
                     places.add(tempMap);
                 }
                 found++;

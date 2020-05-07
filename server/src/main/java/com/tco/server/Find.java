@@ -5,13 +5,15 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 
-public class Find extends RequestHeader {
 
+public class Find extends RequestHeader {
+    private final transient Logger log = LoggerFactory.getLogger(Find.class);
     private String match;
-    private int limit = -1;
+    private Integer limit;
     private int found;
     private List<Map<String, String> > places;
     private Narrow narrow;
@@ -26,13 +28,9 @@ public class Find extends RequestHeader {
 
     @Override
     public void buildResponse() throws IOException {
-        sanitize(); // clean up inputs
-
-        ResultSet output = queryDatabase();
-
-        System.out.println(output);
+        sanitize();                                                                                                     // clean up inputs
+        queryDatabase();                                                                                                // actually send query
     }
-
 
     private void sanitize() {
         if (match != null) {
@@ -47,14 +45,15 @@ public class Find extends RequestHeader {
     }
 
 
-    private ResultSet queryDatabase() {
+    private void queryDatabase() {
         DataBaseAccessor matchQuery = new DataBaseAccessor();
 
-        if (getLimit() > 0) {
-            matchQuery.setLimit(this.limit);
-        }
+        if (getLimit() != null) { matchQuery.setLimit(this.limit); }                                                    // Only set if not null
+        setUpDataBase(matchQuery);                                                                                      // Set other variables IFF not null from gson
 
-        return matchQuery.send_query();
+        this.places = matchQuery.send_query();
+        if (matchQuery.getFound() == null) this.found = 0;                                                              // not my greatest checks but hey, it works
+        this.found = matchQuery.getFound() > 0 ? matchQuery.getFound() : 0;                                             // dont want to return it if - found
     }
 
     private void setUpDataBase(DataBaseAccessor matchQuery) {
@@ -104,6 +103,6 @@ public class Find extends RequestHeader {
     }
 
     public String getMatch() {return this.match != null ? this.match : null;}
-    public int getLimit() {return this.limit < 0 ? this.limit : -1;}
+    public Integer getLimit() {return this.limit != null ? this.limit : null;}
     public void setMatch(String match) { this.match = match; }
 }

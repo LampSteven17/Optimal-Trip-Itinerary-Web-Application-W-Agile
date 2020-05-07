@@ -655,15 +655,15 @@ export default class Atlas extends Component {
 
   promptFind(requestBody) {
     console.log(requestBody); // uncomment if you want to see whats coming back
-    requestBody.places = [
-      {
-        id: "EU",
-        latitude: "43.7514431",
-        longitude: "10.8073791",
-        name: "Europe",
-        type: "small_airport",
-      },
-    ];
+    // requestBody.places = [
+    //   {
+    //     id: "EU",
+    //     latitude: "43.7514431",
+    //     longitude: "10.8073791",
+    //     name: "Europe",
+    //     type: "small_airport",
+    //   },
+    // ];
     this.setState({ findData: requestBody.places });
   }
 

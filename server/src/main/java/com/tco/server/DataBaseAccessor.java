@@ -45,7 +45,7 @@ public class DataBaseAccessor {
 
     protected void setMatch(String match) {
         this.match = "\"%" + match + "%\"";
-        this.QUERY = "SELECT world.name, world.municipality, region.name, country.name, continent.name " +
+        this.QUERY = "SELECT * " +   ///SELECT world.name, world.municipality, region.name, country.name, continent.name,
                 "FROM continent INNER JOIN country ON continent.id = country.continent " +
                 "INNER JOIN region ON country.id = region.iso_country " +
                 "INNER JOIN world ON region.id = world.iso_region " +
@@ -111,11 +111,11 @@ public class DataBaseAccessor {
 
                     tempMap.put("name", results.getString("name"));
                     tempMap.put("municipality", results.getString("municipality"));
-                    //tempMap.put("id", results.getString("id"));
-                    //tempMap.put("latitude", results.getString("latitude"));
-                    //tempMap.put("longitude", results.getString("longitude"));
-                    //tempMap.put("altitude", results.getString("altitude"));
-                    //tempMap.put("type", results.getString("type"));
+                    tempMap.put("id", results.getString("id"));
+                    tempMap.put("latitude", results.getString("latitude"));
+                    tempMap.put("longitude", results.getString("longitude"));
+                    tempMap.put("altitude", results.getString("altitude"));
+                    tempMap.put("type", results.getString("type"));
                     //tempMap.put("region", results.getString("region"));
                     //tempMap.put("country", results.getString("country"));
                     //tempMap.put("continent", results.getString("continent"));

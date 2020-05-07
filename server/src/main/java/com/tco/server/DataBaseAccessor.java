@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /*
 Adopted from davemattcsu DataBaseExample.java
@@ -30,10 +34,12 @@ public class DataBaseAccessor {
     private String where;
     private String[] types;
     private String match;
-    private int limit;
+    private int limit = MAX_LIMIT;
+    private int found;
 
     protected DataBaseAccessor() {
         this.set_URL_based_on_environment();
+        this.found = 0;
     }
 
 
@@ -59,11 +65,13 @@ public class DataBaseAccessor {
     }
 
     protected void setLimit(int limit) {
-        if (limit < 1 || limit > MAX_LIMIT) {
-            this.limit = MAX_LIMIT;
-        } else {
+        if (limit < this.MAX_LIMIT && limit > 0) {                                                                                   // Only set if less than max limit
             this.limit = limit;
         }
+    }
+
+    protected Integer getFound() {
+        return this.found;
     }
 
 
@@ -88,27 +96,39 @@ public class DataBaseAccessor {
         }
     }
 
-    // TODO this is gonna need quite a bit of modification to do intended stuff
-    protected ResultSet send_query() {
-        ResultSet output = null;
+    protected List<Map<String, String>> send_query() {
+        List<Map<String, String>> places = new ArrayList<>();
+        Map<String, String> tempMap;
         try (
             // connect to the database and query
             Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             Statement query = conn.createStatement();
             ResultSet results = query.executeQuery(QUERY)
         ) {
-            // iterate through query results and print out the column values
-            int count = 0;
-            output = results;
-            while (results.next()) {
-                System.out.printf("%6d %s\n", ++count, results.getString("region.latitude"));
+            while(results.next()) {
+                if (this.found < this.limit) {
+                    tempMap = new HashMap<>();
+                    if (tempMap.containsKey("name")) tempMap.put("name", results.getString("name"));
+                    if (tempMap.containsKey("latitude")) tempMap.put("latitude", results.getString("latitude"));
+                    //tempMap.put("name", results.getString("name"));
+                    //tempMap.put("name", results.getString("name"));
+                    //tempMap.put("name", results.getString("name"));
+                    //tempMap.put("name", results.getString("name"));
+                    //tempMap.put("name", results.getString("name"));
+                    //tempMap.put("name", results.getString("name"));
+                    //tempMap.put("name", results.getString("name"));
+                    //tempMap.put("name", results.getString("name"));
+                    places.add(tempMap);
+                }
+                found++;
             }
-            System.out.println(results.getFetchSize());
         } catch (Exception e) {
             System.err.println("Exception: " + e.getMessage());
         }
-        return output;
+        return places;
     }
+
+
 
     public String getURL() { return DB_URL; }
 

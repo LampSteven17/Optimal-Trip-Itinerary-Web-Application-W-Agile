@@ -637,6 +637,7 @@ export default class Atlas extends Component {
   }
 
   promptFind(requestBody) {
+    console.log(requestBody);
     /// uh yeah do something here with the find response lol 800+ lines leggo boys
     // use the method above to send-itttt, i did the rest it sends and all that fun shtuff
   }

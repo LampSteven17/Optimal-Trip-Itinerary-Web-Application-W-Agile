@@ -187,7 +187,7 @@ function testTestResponse() {
   expect(testfalse).toEqual(false);
 }
 
-function superLegitTesterFunction(){
+function testNoReturns(){
   jest.mock('leaflet');
   let obj = mount(<Atlas />);
 
@@ -228,5 +228,5 @@ test("Testing Atlas's home button method", testHomeButton);
 test("Testing Atlas's addMarkersForTrip", testAddMarkersForTrip);
 test("Testing Atlas's state change in LFB method", testStateChangeLFB);
 test("Testing Atlas's testResponse function", testTestResponse);
-test("Testing Atlas's render functions",superLegitTesterFunction);
+test("Testing Atlas's render functions",testNoReturns);
 test("Testing Atlas's base functions",testRenderFuncs);

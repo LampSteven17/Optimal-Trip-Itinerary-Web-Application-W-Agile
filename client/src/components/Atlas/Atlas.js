@@ -653,7 +653,7 @@ export default class Atlas extends Component {
   }
 
   promptFind(requestBody) {
-    //console.log(requestBody); // uncomment if you want to see whats coming back
+    console.log(requestBody); // uncomment if you want to see whats coming back
   }
 
   async adjustZoomToFitPoints() {

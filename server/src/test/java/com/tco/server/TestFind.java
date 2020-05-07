@@ -15,7 +15,7 @@ public class TestFind {
 
     @Before
     public void createConfigurationForTestCases(){
-        find = new Find("*test--", 0, 0);
+        find = new Find("alf*", 0);
         find.requestType = "find"; find.requestVersion = 5;
         setup();
 
@@ -36,7 +36,7 @@ public class TestFind {
     @Test
     public void testSanitize() {
         // we gave a bad construction string that should be sanitized
-        assertEquals("find sanitize match", "_test__", find.getMatch());
+        assertEquals("find sanitize match", "alf_", find.getMatch());
         assertEquals("find sanitize where", "__where_", find.getWhere());
     }
 
@@ -53,7 +53,7 @@ public class TestFind {
 
     @Before
     public void configForBasicQuery(){
-        find = new Find("alf", 100, 0);
+        find = new Find("match", 69);
         find.requestType = "find";
         find.requestVersion = 5;
         setup();

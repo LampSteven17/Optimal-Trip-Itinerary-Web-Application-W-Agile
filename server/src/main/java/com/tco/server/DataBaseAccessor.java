@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /*
 Adopted from davemattcsu DataBaseExample.java
@@ -25,25 +29,49 @@ public class DataBaseAccessor {
     // SQL SELECT query statement
     private String QUERY;
 
+    private final int MAX_LIMIT = 100;
+
+    private String where;
+    private String[] types;
+    private String match;
+    private int limit = MAX_LIMIT;
+    private int found;
+
     protected DataBaseAccessor() {
         this.set_URL_based_on_environment();
+        this.found = 0;
     }
 
 
-
-    protected DataBaseAccessor(String matchIn, int limit, String narrow) {
-        this.set_URL_based_on_environment();
-        String match = "\"%" + matchIn + "%\"";
-        this.QUERY = "SELECT world.name, world.municipality, region.name, country.name, continent.name " +
+    protected void setMatch(String match) {
+        this.match = "\"%" + match + "%\"";
+        this.QUERY = "SELECT * " +   ///SELECT world.name, world.municipality, region.name, country.name, continent.name,
                 "FROM continent INNER JOIN country ON continent.id = country.continent " +
                 "INNER JOIN region ON country.id = region.iso_country " +
                 "INNER JOIN world ON region.id = world.iso_region " +
-                "WHERE country.name LIKE " + match + " " +
-                "OR region.name LIKE " + match + " " +
-                "OR world.name LIKE " + match + " " +
-                "OR world.municipality LIKE " + match + " " +
-                "ORDER BY continent.name, country.name, region.name, world.municipality, world.name ASC " +
-                "LIMIT " + limit;
+                "WHERE country.name LIKE " + this.match + " " +
+                "OR region.name LIKE " + this.match + " " +
+                "OR world.name LIKE " + this.match + " " +
+                "OR world.municipality LIKE " + this.match + " " +
+                "ORDER BY continent.name, country.name, region.name, world.municipality, world.name ASC ";
+    }
+
+    protected void setWhere(String where) {
+        this.where = where;
+    }
+
+    protected void setTypes(String[] types) {
+        this.types = types;
+    }
+
+    protected void setLimit(int limit) {
+        if (limit < this.MAX_LIMIT && limit > 0) {                                                                                   // Only set if less than max limit
+            this.limit = limit;
+        }
+    }
+
+    protected Integer getFound() {
+        return this.found;
     }
 
 
@@ -68,26 +96,83 @@ public class DataBaseAccessor {
         }
     }
 
-    // TODO this is gonna need quite a bit of modification to do intended stuff
-    protected ResultSet send_query() {
-        ResultSet output = null;
+
+    private String addTypes() {
+        StringBuilder typesString = new StringBuilder();
+        if(this.types != null && this.types.length > 0) {
+            typesString.append(" AND (world.type LIKE \"%").append(this.types[0]).append("%\"");
+            for (int i = 1; i < this.types.length; i++) {
+                if(this.types[i] != null)
+                    typesString.append(" OR world.type LIKE \"%").append(this.types[i]).append("%\"");
+            }
+            typesString.append(")");
+        }
+        return typesString.toString();
+    }
+
+    private String addWhere() {
+        StringBuilder whereString = new StringBuilder();
+        if(this.where != null) {
+            whereString.append(" AND (country.name LIKE \"%").append(this.where).append("%\"")
+                    .append(" OR region.name LIKE \"%").append(this.where).append("%\"")
+                    .append(" OR world.municipality LIKE \"%").append(this.where).append("%\")");
+
+        }
+        return whereString.toString();
+    }
+
+    private void createQuery() {
+        this.QUERY = "SELECT world.name, world.municipality, region.name, country.name, continent.name " +
+                "FROM continent INNER JOIN country ON continent.id = country.continent " +
+                "INNER JOIN region ON country.id = region.iso_country " +
+                "INNER JOIN world ON region.id = world.iso_region " +
+                "WHERE country.name LIKE " + this.match + " " +
+                "OR region.name LIKE " + this.match + " " +
+                "OR world.name LIKE " + this.match + " " +
+                "OR world.municipality LIKE " + this.match +
+                addTypes()  + addWhere() + " " +
+                "ORDER BY continent.name, country.name, region.name, world.municipality, world.name ASC ";
+    }
+
+
+    protected List<Map<String, String>> send_query() {
+        List<Map<String, String>> places = new ArrayList<>();
+        Map<String, String> tempMap;
+        if (match != null)
+            createQuery();
+
         try (
             // connect to the database and query
             Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             Statement query = conn.createStatement();
             ResultSet results = query.executeQuery(QUERY)
         ) {
-            // iterate through query results and print out the column values
-            int count = 0;
-            output = results;
-            while (results.next()) {
-                System.out.printf("%6d %s\n", ++count, results.getString("region.latitude"));
+            while(results.next()) {
+                if (this.found < this.limit) {
+                    tempMap = new HashMap<>();
+
+                    tempMap.put("name", results.getString("name"));
+                    tempMap.put("municipality", results.getString("municipality"));
+                    tempMap.put("id", results.getString("id"));
+                    tempMap.put("latitude", results.getString("latitude"));
+                    tempMap.put("longitude", results.getString("longitude"));
+                    tempMap.put("altitude", results.getString("altitude"));
+                    tempMap.put("type", results.getString("type"));
+                    //tempMap.put("region", results.getString("region"));
+                    //tempMap.put("country", results.getString("country"));
+                    //tempMap.put("continent", results.getString("continent"));
+
+                    places.add(tempMap);
+                }
+                found++;
             }
         } catch (Exception e) {
             System.err.println("Exception: " + e.getMessage());
         }
-        return output;
+        return places;
     }
+
+
 
     public String getURL() { return DB_URL; }
 

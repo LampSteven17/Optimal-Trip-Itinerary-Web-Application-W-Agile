@@ -5,34 +5,32 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 
-public class Find extends RequestHeader {
 
+public class Find extends RequestHeader {
+    private final transient Logger log = LoggerFactory.getLogger(Find.class);
     private String match;
-    private int limit;
+    private Integer limit;
     private int found;
     private List<Map<String, String> > places;
     private Narrow narrow;
 
     public Find() {}
 
-    public Find(String match, int limit, int found) {
+    public Find(String match, int limit) {
         this.match = match;
         this.limit = limit;
-        this.found = found;
+
     }
 
     @Override
     public void buildResponse() throws IOException {
-        sanitize(); // clean up inputs
-
-        ResultSet output = queryDatabase();
-
-        System.out.println(output);
+        sanitize();                                                                                                     // clean up inputs
+        queryDatabase();                                                                                                // actually send query
     }
-
 
     private void sanitize() {
         if (match != null) {
@@ -47,11 +45,32 @@ public class Find extends RequestHeader {
     }
 
 
-    private ResultSet queryDatabase() {
-        DataBaseAccessor matchQuery = new DataBaseAccessor(match, 100, "test");
+    private void queryDatabase() {
+        DataBaseAccessor matchQuery = new DataBaseAccessor();
 
-        return matchQuery.send_query();
+        if (getLimit() != null) { matchQuery.setLimit(this.limit); }                                                    // Only set if not null
+        setUpDataBase(matchQuery);                                                                                      // Set other variables IFF not null from gson
+
+        this.places = matchQuery.send_query();
+        if (matchQuery.getFound() == null) this.found = 0;                                                              // not my greatest checks but hey, it works
+        this.found = matchQuery.getFound() > 0 ? matchQuery.getFound() : 0;                                             // dont want to return it if - found
     }
+
+    private void setUpDataBase(DataBaseAccessor matchQuery) {
+        if (getMatch() == null)
+            return;
+
+        matchQuery.setMatch(this.match);
+        if (this.narrow == null)
+            return;
+
+        if (this.narrow.getWhere() != null) {
+            matchQuery.setWhere(this.getWhere());
+        }
+        if (this.narrow.getTypes() != null) {
+            matchQuery.setTypes(this.narrow.getTypes());
+        }
+     }
 
 
     // quick data structure for narrow cause why not
@@ -83,5 +102,7 @@ public class Find extends RequestHeader {
         this.narrow = new Narrow(type, where);
     }
 
-    public String getMatch() {return this.match;}
+    public String getMatch() {return this.match != null ? this.match : null;}
+    public Integer getLimit() {return this.limit != null ? this.limit : null;}
+    public void setMatch(String match) { this.match = match; }
 }

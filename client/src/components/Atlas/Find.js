@@ -166,7 +166,9 @@ class Find extends Component {
           <td>{Number(place.latitude).toFixed(5)}</td>
           <td>{Number(place.longitude).toFixed(5)}</td>
           <td>
-            <Button onClick={() => this.addMarker(place)}>+</Button>
+            <Button className={"btn-csu"} onClick={() => this.addMarker(place)}>
+              +
+            </Button>
           </td>
         </tr>
       );

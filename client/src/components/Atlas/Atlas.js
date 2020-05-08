@@ -350,6 +350,7 @@ export default class Atlas extends Component {
       requestType: "find",
       match: request.toString(),
       narrow: narrow,
+      limit: 15,
     };
   }
 

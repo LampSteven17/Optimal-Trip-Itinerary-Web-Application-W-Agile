@@ -55,7 +55,6 @@ public class TestDataBase {
     public void configForNoMatch() {
         db = new DataBaseAccessor();
         check_environment();
-        System.out.println("RANDOM");
         send_query();
     }
 

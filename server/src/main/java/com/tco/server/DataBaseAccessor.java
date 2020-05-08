@@ -180,7 +180,6 @@ public class DataBaseAccessor {
                 }
                 found++;
             }
-            System.out.println(places + "\n\n\n");
         } catch (Exception e) {
             System.err.println("Exception: " + e.getMessage());
         }

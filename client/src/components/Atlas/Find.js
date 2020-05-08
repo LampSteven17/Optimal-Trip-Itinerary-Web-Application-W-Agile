@@ -140,12 +140,13 @@ class Find extends Component {
       <Collapse isOpen={this.state.showLocations}>
         <Card>
           <CardBody>
-            <Table borderless>
+            <Table>
               <thead>
                 <tr>
                   <th>Name</th>
                   <th>Latitude</th>
                   <th>Longitude</th>
+                  <th> </th>
                 </tr>
               </thead>
               <tbody>{this.buildTable(this.props.places)}</tbody>
@@ -162,13 +163,20 @@ class Find extends Component {
       tableData.push(
         <tr key={Date.now() * Math.random()}>
           <td>{place.name}</td>
-          <td>{place.latitude}</td>
-          <td>{place.longitude}</td>
+          <td>{Number(place.latitude).toFixed(5)}</td>
+          <td>{Number(place.longitude).toFixed(5)}</td>
+          <td>
+            <Button onClick={() => this.addMarker(place)}>+</Button>
+          </td>
         </tr>
       );
     });
 
     return tableData;
+  }
+
+  addMarker(place) {
+    this.props.addMarker(place);
   }
 
   setWhere(where) {

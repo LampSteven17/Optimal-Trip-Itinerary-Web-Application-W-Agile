@@ -123,6 +123,7 @@ export default class Atlas extends Component {
     this.handleFilterRequest = this.handleFilterRequest.bind(this);
     this.setRenderMarker = this.setRenderMarker.bind(this);
     this.promptFind = this.promptFind.bind(this);
+    this.handleAddFromFilter = this.handleAddFromFilter.bind(this);
   }
 
   render() {
@@ -272,7 +273,11 @@ export default class Atlas extends Component {
 
   renderFind() {
     return this.colRenderer(
-      <Find handler={this.handleFilterRequest} places={this.state.findData} />,
+      <Find
+        handler={this.handleFilterRequest}
+        places={this.state.findData}
+        addMarker={this.handleAddFromFilter}
+      />,
       null,
       6,
       3,
@@ -280,11 +285,57 @@ export default class Atlas extends Component {
     );
   }
 
-  handleFilterRequest(request, type, where) {
+  async handleFilterRequest(request, type, where) {
     if (request !== "") {
       let findObj = this.buildFindObject(request, type, where);
-      this.sendFindRequest(findObj);
+      await this.sendFindRequest(findObj);
     }
+  }
+
+  handleAddFromFilter(place) {
+    console.log(place);
+    let itinObj = {
+      destination: place.name,
+      id: Math.random() * Date.now(),
+      lat: Number(place.latitude),
+      lng: Number(place.longitude),
+    };
+    let newItin = this.state.itenData;
+    if (newItin[0].id === -1) {
+      this.namesArray[0] = { name: place.name };
+      Promise.resolve()
+        .then(() => {
+          this.setState({
+            itenData: [{ id: Math.random() * Date.now(), destination: place.name, leg: "0", total: "0" }],
+            markerPosition: [
+              {
+                lat: Number(place.latitude),
+                lng: Number(place.longitude),
+                id: Math.random() * Date.now(),
+              },
+            ],
+          });
+        })
+        .then(() => this.adjustZoomToFitPoints());
+      return;
+    } else if (newItin.length > 1) {
+      newItin.pop();
+    }
+
+    newItin.push(itinObj);
+    let jsonTemp = this.tripObjTemplate();
+      newItin.forEach((item, i) => {
+        jsonTemp.places.push({
+          name: item.destination,
+          latitude: item.lat.toString(),
+          longitude: item.lng.toString(),
+          modal: false,
+        });
+      });
+
+      Promise.resolve().then(async () => {
+        await this.sendRequest(jsonTemp, "trip", tripRequestSchema);
+      });
   }
 
   buildFindObject(request, type, where) {

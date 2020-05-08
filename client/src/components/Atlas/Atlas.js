@@ -293,7 +293,6 @@ export default class Atlas extends Component {
   }
 
   handleAddFromFilter(place) {
-    console.log(place);
     let itinObj = {
       destination: place.name,
       id: Math.random() * Date.now(),

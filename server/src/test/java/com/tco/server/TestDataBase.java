@@ -51,4 +51,13 @@ public class TestDataBase {
         }
     }
 
+    @Before
+    public void configForNoMatch() {
+        db = new DataBaseAccessor();
+        check_environment();
+        send_query();
+    }
+
+
 }
+

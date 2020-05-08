@@ -128,7 +128,7 @@ class Itinerary extends Component {
         }}
       >
         <thead>
-          <tr>{this.renderHeader()}</tr>
+          {this.renderHeader()}
         </thead>
         <tbody {...props}>{children}</tbody>
       </table>
@@ -136,13 +136,13 @@ class Itinerary extends Component {
   }
 
   renderHeader() {
-    let head = Object.keys(this.props.dests[0]);
-
-    return head.map((key, index) => {
-      if (key != "id" && key !== "lat" && key !== "lng" && key !== "modal") {
-        return <th key={index}> {key.toUpperCase()} </th>;
-      }
-    });
+    return (
+      <tr>
+        <th key={0}> Destination </th>
+        <th key={1}> Leg </th>
+        <th key={2}> Total </th>
+      </tr>
+    );
   }
 
   renderRow(value, props, isDragged, isSelected) {
@@ -168,19 +168,21 @@ class Itinerary extends Component {
   }
 
   editButton(destination) {
-    return (
-      <span style={{ paddingLeft: "1em" }}>
-        <Button
-          size="sm"
-          id="editToggle"
-          className={"btn-csu"}
-          onClick={() => this.toggleModal(destination)}
-        >
-          Edit
-        </Button>
-        {this.renderModal(destination)}
-      </span>
-    );
+    if (this.props.dests[0].id !== -1) {
+      return (
+        <span style={{ paddingLeft: "1em" }}>
+          <Button
+            size="sm"
+            id="editToggle"
+            className={"btn-csu"}
+            onClick={() => this.toggleModal(destination)}
+          >
+            Edit
+          </Button>
+          {this.renderModal(destination)}
+        </span>
+      );
+    }
   }
 
   renderModal(destination) {

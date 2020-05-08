@@ -5,9 +5,12 @@ import {
   ButtonGroup,
   Card,
   CardBody,
+  Col,
   Collapse,
+  Container,
   Label,
   Input,
+  Row,
   Table,
 } from "reactstrap";
 import AirportIcon from "@material-ui/icons/LocalAirport";
@@ -22,6 +25,7 @@ class Find extends Component {
       loc: "",
       narrowFilter: ["airport", "balloonport", "heliport"],
       where: "",
+      showLocations: false,
     };
 
     this.showLocations = false;
@@ -44,10 +48,21 @@ class Find extends Component {
         <Label>
           <strong>Find Location</strong>
         </Label>
-        <Input
-          placeholder="Search"
-          onInput={(t) => this.findLocation(t.target.value)}
-        />
+        <Container style={{ width: "100%" }}>
+          <Row>
+            <Input
+              style={{ width: "80%" }}
+              placeholder="Search"
+              onInput={(t) => this.setLocation(t.target.value)}
+            />
+            <Button
+              className={"btn-csu"}
+              onClick={() => this.findLocation(this.state.loc)}
+            >
+              Search
+            </Button>
+          </Row>
+        </Container>
         <div style={{ paddingTop: "1em" }}>
           <Button className={"btn-csu"} onClick={() => this.findToggle()}>
             Find Filter
@@ -57,6 +72,14 @@ class Find extends Component {
         {this.renderPlaces()}
       </div>
     );
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.places.length > 0) {
+      this.setState({ showLocations: true });
+    } else {
+      this.setState({ showLocations: false });
+    }
   }
 
   renderFilter() {
@@ -114,18 +137,19 @@ class Find extends Component {
 
   renderPlaces() {
     return (
-      <Collapse isOpen={this.showLocations}>
+      <Collapse isOpen={this.state.showLocations}>
         <Card>
           <CardBody>
-            <Table borderless>
+            <Table>
               <thead>
                 <tr>
                   <th>Name</th>
                   <th>Latitude</th>
                   <th>Longitude</th>
+                  <th> </th>
                 </tr>
               </thead>
-              <tbody>{this.buildTable()}</tbody>
+              <tbody>{this.buildTable(this.props.places)}</tbody>
             </Table>
           </CardBody>
         </Card>
@@ -133,19 +157,28 @@ class Find extends Component {
     );
   }
 
-  buildTable() {
+  buildTable(array) {
     let tableData = [];
-    this.props.places.forEach((place) => {
+    array.forEach((place) => {
       tableData.push(
         <tr key={Date.now() * Math.random()}>
           <td>{place.name}</td>
-          <td>{place.latitude}</td>
-          <td>{place.longitude}</td>
+          <td>{Number(place.latitude).toFixed(5)}</td>
+          <td>{Number(place.longitude).toFixed(5)}</td>
+          <td>
+            <Button className={"btn-csu"} onClick={() => this.addMarker(place)}>
+              +
+            </Button>
+          </td>
         </tr>
       );
     });
 
     return tableData;
+  }
+
+  addMarker(place) {
+    this.props.addMarker(place);
   }
 
   setWhere(where) {
@@ -154,8 +187,15 @@ class Find extends Component {
   }
 
   findLocation(loc) {
+    if (loc === "") {
+      this.setState({ showLocations: false });
+    }
     this.setState({ loc: loc });
     this.props.handler(loc, this.state.narrowFilter, this.state.where);
+  }
+
+  setLocation(loc) {
+    this.setState({ loc: loc });
   }
 
   findToggle() {

@@ -123,6 +123,7 @@ export default class Atlas extends Component {
     this.handleFilterRequest = this.handleFilterRequest.bind(this);
     this.setRenderMarker = this.setRenderMarker.bind(this);
     this.promptFind = this.promptFind.bind(this);
+    this.handleAddFromFilter = this.handleAddFromFilter.bind(this);
   }
 
   render() {
@@ -272,7 +273,11 @@ export default class Atlas extends Component {
 
   renderFind() {
     return this.colRenderer(
-      <Find handler={this.handleFilterRequest} places={this.state.findData} />,
+      <Find
+        handler={this.handleFilterRequest}
+        places={this.state.findData}
+        addMarker={this.handleAddFromFilter}
+      />,
       null,
       6,
       3,
@@ -280,11 +285,56 @@ export default class Atlas extends Component {
     );
   }
 
-  handleFilterRequest(request, type, where) {
+  async handleFilterRequest(request, type, where) {
     if (request !== "") {
       let findObj = this.buildFindObject(request, type, where);
-      this.sendFindRequest(findObj);
+      await this.sendFindRequest(findObj);
     }
+  }
+
+  handleAddFromFilter(place) {
+    let itinObj = {
+      destination: place.name,
+      id: Math.random() * Date.now(),
+      lat: Number(place.latitude),
+      lng: Number(place.longitude),
+    };
+    let newItin = this.state.itenData;
+    if (newItin[0].id === -1) {
+      this.namesArray[0] = { name: place.name };
+      Promise.resolve()
+        .then(() => {
+          this.setState({
+            itenData: [{ id: Math.random() * Date.now(), destination: place.name, leg: "0", total: "0" }],
+            markerPosition: [
+              {
+                lat: Number(place.latitude),
+                lng: Number(place.longitude),
+                id: Math.random() * Date.now(),
+              },
+            ],
+          });
+        })
+        .then(() => this.adjustZoomToFitPoints());
+      return;
+    } else if (newItin.length > 1) {
+      newItin.pop();
+    }
+
+    newItin.push(itinObj);
+    let jsonTemp = this.tripObjTemplate();
+      newItin.forEach((item, i) => {
+        jsonTemp.places.push({
+          name: item.destination,
+          latitude: item.lat.toString(),
+          longitude: item.lng.toString(),
+          modal: false,
+        });
+      });
+
+      Promise.resolve().then(async () => {
+        await this.sendRequest(jsonTemp, "trip", tripRequestSchema);
+      });
   }
 
   buildFindObject(request, type, where) {
@@ -299,6 +349,7 @@ export default class Atlas extends Component {
       requestType: "find",
       match: request.toString(),
       narrow: narrow,
+      limit: 15,
     };
   }
 
@@ -647,23 +698,12 @@ export default class Atlas extends Component {
   }
 
   async sendFindRequest(requestBody) {
-    console.log(requestBody);
     Promise.resolve().then(async () => {
       await this.sendRequest(requestBody, "find", FindRequestSchema);
     });
   }
 
   promptFind(requestBody) {
-    console.log(requestBody); // uncomment if you want to see whats coming back
-    // requestBody.places = [
-    //   {
-    //     id: "EU",
-    //     latitude: "43.7514431",
-    //     longitude: "10.8073791",
-    //     name: "Europe",
-    //     type: "small_airport",
-    //   },
-    // ];
     this.setState({ findData: requestBody.places });
   }
 
@@ -731,7 +771,6 @@ export default class Atlas extends Component {
         ).then((data) => this.promptDistance(data.body, isLastLeg, isDelete));
         break;
       case "trip":
-        console.log(request);
         await sendServerRequestWithBody(
           "trip",
           request,

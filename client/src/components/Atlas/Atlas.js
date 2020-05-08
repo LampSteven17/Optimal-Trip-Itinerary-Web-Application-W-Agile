@@ -698,23 +698,12 @@ export default class Atlas extends Component {
   }
 
   async sendFindRequest(requestBody) {
-    console.log(requestBody);
     Promise.resolve().then(async () => {
       await this.sendRequest(requestBody, "find", FindRequestSchema);
     });
   }
 
   promptFind(requestBody) {
-    console.log(requestBody); // uncomment if you want to see whats coming back
-    // requestBody.places = [
-    //   {
-    //     id: "EU",
-    //     latitude: "43.7514431",
-    //     longitude: "10.8073791",
-    //     name: "Europe",
-    //     type: "small_airport",
-    //   },
-    // ];
     this.setState({ findData: requestBody.places });
   }
 
@@ -782,7 +771,6 @@ export default class Atlas extends Component {
         ).then((data) => this.promptDistance(data.body, isLastLeg, isDelete));
         break;
       case "trip":
-        console.log(request);
         await sendServerRequestWithBody(
           "trip",
           request,

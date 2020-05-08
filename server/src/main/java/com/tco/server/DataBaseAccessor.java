@@ -133,7 +133,19 @@ public class DataBaseAccessor {
                 "OR world.name LIKE " + this.match + " " +
                 "OR world.municipality LIKE " + this.match +
                 addTypes()  + addWhere() + " " +
-                "ORDER BY continent.name, country.name, region.name, world.municipality, world.name ASC ";
+                "ORDER BY continent.name, country.name, region.name, world.municipality, world.name ASC;";
+    }
+
+
+    private void createRandomQuery() {
+        this.QUERY = "SELECT world.name, world.municipality, region.name, " +
+                "country.name, continent.name, world.latitude, world.longitude, world.altitude, " +
+                "world.type " +
+                "FROM continent INNER JOIN country ON continent.id = country.continent " +
+                "INNER JOIN region ON country.id = region.iso_country " +
+                "INNER JOIN world ON region.id = world.iso_region " +
+                "ORDER BY RAND() " +
+                "LIMIT 1;";
     }
 
 
@@ -142,6 +154,8 @@ public class DataBaseAccessor {
         Map<String, String> tempMap;
         if (match != null)
             createQuery();
+        else
+            createRandomQuery();
 
         try (
             // connect to the database and query
@@ -166,6 +180,7 @@ public class DataBaseAccessor {
                 }
                 found++;
             }
+            System.out.println(places + "\n\n\n");
         } catch (Exception e) {
             System.err.println("Exception: " + e.getMessage());
         }
